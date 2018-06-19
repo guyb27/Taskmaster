@@ -54,11 +54,13 @@ void	ft_init_job(t_job *job)
 	job->env = NULL;
 }
 
-void	ft_parse_line(t_tm *tm, char *line)
+void	ft_parse_next_token(t_tm *tm, char *line)
 {
 	(void)tm;
-	ft_printf("line: [%r]\n", line);
+	(void)line;
+//	ft_printf("line: [%r]\n", line);
 //	if (!ft_strncmp(line, "    "))
+	
 }
 
 void	ft_parse_config(t_tm *tm, char *config_file)
@@ -71,11 +73,26 @@ void	ft_parse_config(t_tm *tm, char *config_file)
 	fd = open(config_file, O_RDONLY);
 	while (get_next_line(fd, &line))
 	{
-		ft_sprintf(&token, "%.*s", ft_strchr(line, ':') - line, line);
-		ft_printf("token: [%s], value: [%s]\n", token, line - ft_strchr(line, ':'));
-		if (ft_strlen(line) > 5)
+		if (!ft_strcmp(line, "\n\n"))
 		{
-			ft_parse_line(tm, line);
+			// add new job
+		}
+		else if (ft_strchr(line, ':'))
+		{
+			ft_sprintf(&token, "%.*s", ft_strchr(line, ':') - line, line);
+			ft_printf("token: [%s], value: [%s]\n", token, line + (ft_strchr(line, ':') - line) + 2);
+			if (ft_strlen(line) > 5)
+			{
+				ft_parse_line(tm, line);
+			}
+		}
+		else if (!ft_strcmp(line, "\t-"))
+		{
+
+		}
+		else
+		{
+
 		}
 		free(line);
 	}
