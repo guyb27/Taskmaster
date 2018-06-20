@@ -6,8 +6,8 @@ workingdir: /tmp
 autostart: true
 autorestart: unexpected
 exitcodes:
-    -0
-    -2 
+-0
+-2 
 startretries: 3
 starttime: 5
 stopsignal: TERM
@@ -15,10 +15,10 @@ stoptime: 10
 stdout: /tmp/nginx.stdout
 stderr: /tmp/nginx.stderr
 env:
-    STARTED_BY: taskmaster
-    ANSWER: 42
+_STARTED_BY: taskmaster
+_ANSWER: 42
 
-name: vogsphere:
+name: vogsphere
 cmd: "/usr/local/bin/vogsphere-worker --no-prefork"
 numprocs: 8
 umask: 077
