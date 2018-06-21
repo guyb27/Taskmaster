@@ -51,6 +51,7 @@ typedef struct		s_tm
 	t_status		status[1000];
 	int				jobs_cnt;
 	char			**env;
+	char			*cmd;
 }					t_tm;
 
 void	ft_init_job(t_job *job)
@@ -221,7 +222,7 @@ void	ft_init_status(t_status *status)
 
 void	ft_exec_job(t_tm *tm, int id_job)
 {
-	pid_t pid;
+/*	pid_t pid;
 
 	ft_init_status(&tm->status[id_job]);
 	pid = fork();
@@ -234,16 +235,97 @@ void	ft_exec_job(t_tm *tm, int id_job)
 		ft_printf("on dirait que lexec a merdée");
 	}
 	if (pid > 0)
-		wait(&pid);
+		wait(&pid);*/
+	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
+	tm->status[job_id].
+
+
+	endID = waitpid(childID, &status, WNOHANG|WUNTRACED);
+	//   -1: error
+	//    0: child still running
+	// else: child ended
 }
 
-void	ft_exec_all_jobs(t_tm *tm)
+void	ft_get_job_status(t_tm *tm, int id_job)
+{
+	// name RUNNING pid uptime
+	ft_printf("%-20s", tm->jobs[id_job].name);
+	ft_printf("%-10s", "RUNNING");
+	ft_printf("%-10s", "pid 365,");
+	ft_printf("%-10s\n", "uptime 0:05:03");
+}
+
+void	ft_cmd_start(t_tm *tm, char *name)
 {
 	int i;
 
 	i = -1;
 	while (++i < tm->jobs_cnt)
-		ft_exec_job(tm, i);
+		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
+			ft_exec_job(tm, i);
+}
+
+void	ft_cmd_status(t_tm *tmp, char *name)
+{
+	int i;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
+			ft_exec_job(tm, i);
+}
+
+void	ft_autostart_jobs(t_tm *tm)
+{
+	int i;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+	{
+		if (tm->jobs[i].autostart == 1)
+			ft_exec_job(tm, i);
+	}
+}
+//------------------------------------------------------------------------------
+
+void	ft_process_cmd(t_tm *tm)
+{
+	if (!ft_strcmp(tm->cmd, "exit"))
+		exit(0);
+	else if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
+	{
+		ft_printf("starting: [%s]\n", tm->cmd + 6);
+		ft_cmd_start(tm, tm->cmd + 6);
+	}
+	else if (!strncmp(tm->cmd, "restart", 7) && (ft_strlen(tm->cmd) > 8))
+	{
+		ft_printf("restarting: [%s]\n", tm->cmd + 8);
+	}
+	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
+	{
+		ft_printf("stopping: [%s]\n", tm->cmd + 5);
+	}
+	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
+	{
+		ft_printf("getting status of: [%s]\n", tm->cmd + 7);
+	}
+	else if (!strcmp(tm->cmd, "reload"))
+	{
+		ft_printf("reloading config file\n");
+	}
+	else if (!strcmp(tm->cmd, "shutdown"))
+	{
+		ft_printf("Quitting taskmaster\n");
+		exit(0);
+	}
+}
+
+void	ft_get_user_input(t_tm *tm)
+{
+	if (tm->cmd)
+		free(tm->cmd);
+	ft_printf("$> ");
+	get_next_line(0, &tm->cmd);	
 }
 
 int		main(int argc, char *argv[], char *env[])
@@ -257,7 +339,12 @@ int		main(int argc, char *argv[], char *env[])
 		ft_parse_config(&tm, argv[1]);
 		for (int i = 0; i < tm.jobs_cnt; i++)
 			ft_debug_job(&tm, i);
-		ft_exec_all_jobs(&tm);
+	//	ft_autostart_jobs(tm);
+		while (1)
+		{
+			ft_get_user_input(&tm);
+			ft_process_cmd(&tm);
+		}
 	}
 	else
 		ft_printf("usage: taskmaster config_file\n");
