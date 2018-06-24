@@ -41,6 +41,11 @@ typedef struct		s_job
 
 typedef struct		s_status
 {
+	pid_t			pid;
+	enum {
+					stopped,
+					running
+	};
 	int				started_time;
 	int				stopped_time;
 }					t_status;
@@ -52,6 +57,7 @@ typedef struct		s_tm
 	int				jobs_cnt;
 	char			**env;
 	char			*cmd;
+	pid_t			jobs_watcher;
 }					t_tm;
 
 void	ft_init_job(t_job *job)
@@ -214,6 +220,32 @@ void	ft_parse_config(t_tm *tm, char *config_file)
 }
 
 //------------------------------------------------------------------------------
+void	ft_process_watcher(t_tm *tm)
+{
+	pid_t	pid;
+	int		i;
+int	cnt = -1;
+
+	i = -1;
+	while (++cnt < 5 && ++i < tm->jobs_cnt)
+	{
+		pid = waitpid(tm->status[i].pid, NULL, WNOHANG|WUNTRACED);
+		if (pid == 0)
+			ft_printf("process: [%s] is still running.\n", tm->jobs[i].name);
+		else if (pid == -1)
+			ft_printf("What da fuk is going on ? c dla merde waitpid ou quoi ?\n");
+		else
+			ft_printf("process: [%s] is not running.\n", tm->jobs[i].name);
+		sleep(1);
+	}
+}
+
+void	ft_start_process_watcher(t_tm *tm)
+{
+	ft_printf("Starting process watcher.\n");
+	ft_process_watcher(tm);
+}
+//------------------------------------------------------------------------------
 void	ft_init_status(t_status *status)
 {
 	status->started_time = 0;
@@ -237,13 +269,29 @@ void	ft_exec_job(t_tm *tm, int id_job)
 	if (pid > 0)
 		wait(&pid);*/
 	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
-	tm->status[job_id].
+//	tm->status[job_id].
 
 
-	endID = waitpid(childID, &status, WNOHANG|WUNTRACED);
+//	endID = waitpid(childID, &status, WNOHANG|WUNTRACED);
 	//   -1: error
 	//    0: child still running
 	// else: child ended
+
+	pid_t	father;
+	char	**args;
+
+	ft_init_status(&tm->status[id_job]);
+	father = fork();
+	if (!father)
+	{
+		args = NULL;
+		args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
+		if (args && execve(args[0], args, tm->env) < 0)
+			ft_printf("{red}Error executing '%s'{eoc}\n", tm->jobs[id_job].name);
+		ft_free_list(args);
+		exit(0);
+	}
+//	if (father > 0)
 }
 
 void	ft_get_job_status(t_tm *tm, int id_job)
@@ -265,14 +313,14 @@ void	ft_cmd_start(t_tm *tm, char *name)
 			ft_exec_job(tm, i);
 }
 
-void	ft_cmd_status(t_tm *tmp, char *name)
+void	ft_cmd_status(t_tm *tm, char *name)
 {
 	int i;
 
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
-			ft_exec_job(tm, i);
+			ft_get_job_status(tm, i);
 }
 
 void	ft_autostart_jobs(t_tm *tm)
@@ -308,6 +356,7 @@ void	ft_process_cmd(t_tm *tm)
 	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
 	{
 		ft_printf("getting status of: [%s]\n", tm->cmd + 7);
+		ft_cmd_status(tm, tm->cmd + 7);
 	}
 	else if (!strcmp(tm->cmd, "reload"))
 	{
@@ -325,7 +374,7 @@ void	ft_get_user_input(t_tm *tm)
 	if (tm->cmd)
 		free(tm->cmd);
 	ft_printf("$> ");
-	get_next_line(0, &tm->cmd);	
+	get_next_line(0, &tm->cmd);
 }
 
 int		main(int argc, char *argv[], char *env[])
@@ -340,6 +389,7 @@ int		main(int argc, char *argv[], char *env[])
 		for (int i = 0; i < tm.jobs_cnt; i++)
 			ft_debug_job(&tm, i);
 	//	ft_autostart_jobs(tm);
+	ft_start_process_watcher(&tm);
 		while (1)
 		{
 			ft_get_user_input(&tm);

@@ -1,5 +1,5 @@
 name: ls
-cmd: "/bin/ls -la"
+cmd: /bin/ls -la
 numprocs: 1
 umask: 022
 workingdir: /tmp
