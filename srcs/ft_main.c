@@ -59,6 +59,13 @@ typedef struct		s_shared
 	t_status		status[500];
 }					t_shared;
 
+typedef struct		s_htime
+{
+	int				h;
+	int				m;
+	int				s;
+}					t_htime;
+
 typedef struct		s_tm
 {
 	t_job			jobs[1000];
@@ -69,7 +76,7 @@ typedef struct		s_tm
 	char			**env;
 	char			*cmd;
 	pid_t			jobs_watcher;
-	
+	char			**argv;
 }					t_tm;
 
 void	ft_init_job(t_job *job)
@@ -234,17 +241,12 @@ void	ft_parse_config(t_tm *tm, char *config_file)
 //------------------------------------------------------------------------------
 void	ft_process_watcher(t_tm *tm)
 {
-//	pid_t	pid;
 	int		i;
 	int		res;
 
-//while (1)
-//{
 	i = -1;
 	while (++i < tm->jobs_cnt)
 	{
-	//	pid = waitpid(tm->status[i].pid, NULL, WNOHANG|WUNTRACED);
-//		pid = waitpid(tm->shared->status[i].pid, NULL, WNOHANG|WUNTRACED);
 		if (!tm->shared->status[i].pid)
 			res = 99;
 		else
@@ -252,46 +254,29 @@ void	ft_process_watcher(t_tm *tm)
 		if (res == 0)
 		{
 	//		ft_printf("process: [%s] is still running.\n", tm->jobs[i].name);
+			if (tm->shared->status[i].state == stopped)
+				tm->shared->status[i].started_time = time(NULL);
 			tm->shared->status[i].state = running;
-			tm->shared->status[i].started_time = time(NULL);
+			
 		}
-//		else if (res == -1)
-//		{
-			// maybe we should remove current pid or retry
-		//	ft_printf("waitpid error for process '%s' (pid %d)\n", tm->jobs[i].name, tm->status[i].pid);
-	//		ft_printf("waitpid error for process '%s' (pid %d)\n", tm->jobs[i].name, tm->shared->status[i].pid);
-//			ft_printf("process watcher error checking: [%s]\n", tm->jobs[i].name);
-//		}
-//		else if (res > 0)
 		else
 		{
 //			ft_printf("process: [%s] terminated.\n", tm->jobs[i].name);
+			if (tm->shared->status[i].state == running ||
+				!tm->shared->status[i].stopped_time)
+				tm->shared->status[i].stopped_time = time(NULL);
 			tm->shared->status[i].state = stopped;
-			tm->shared->status[i].stopped_time = time(NULL);
+			// restart if needed
 		}
-		sleep(3);
+		sleep(1);
 	}
-//}
 }
 
 void	ft_start_process_watcher(t_tm *tm)
 {
 	pid_t	father;
-//	t_status	*shared;
-//	pthread_t thread1;
 
-//	for (int cnt = 0; cnt < 5; cnt++)
-
-//	if(pthread_create(&thread1, NULL, ft_process_watcher(tm), NULL) == -1) {
-//		perror("pthread_create");
-
-//int shm_id = shmget(IPC_PRIVATE, sizeof(t_status), IPC_CREAT | 0666);
-//shm = shmat(shm_id, 0, 0);
-(void)tm;
-//shared = (t_status*)mmap(NULL, sizeof(t_status), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
-//shared->state = 1;
-//ft_printf("Genial: [%d]\n", shared->state);
-
+	(void)tm;
 	father = fork();
 	if (!father)
 	{
@@ -323,38 +308,15 @@ void	ft_init_status(t_status *status)
 
 void	ft_exec_job(t_tm *tm, int id_job)
 {
-/*	pid_t pid;
-
-	ft_init_status(&tm->status[id_job]);
-	pid = fork();
-	if (!pid)
-	{
-		ft_printf("Starting program: [%s]\n", tm->jobs[id_job].name);
-		char *args[3] = { "ls", "-l", NULL };
-		execve("/bin/ls", args, tm->env);
-		tm->status[id_job].started_time = time(NULL);
-		ft_printf("on dirait que lexec a merdée");
-	}
-	if (pid > 0)
-		wait(&pid);*/
 	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
-//	tm->status[job_id].
-
-
-//	endID = waitpid(childID, &status, WNOHANG|WUNTRACED);
-	//   -1: error
-	//    0: child still running
-	// else: child ended
 
 	pid_t	father;
 	char	**args;
 
-//	ft_init_status(&tm->status[id_job]);
-ft_init_status(&tm->shared->status[id_job]);
+	ft_init_status(&tm->shared->status[id_job]);
 	father = fork();
 	if (!father)
 	{
-		
 		args = NULL;
 		args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
 		if (args && execve(args[0], args, tm->env) < 0)
@@ -369,28 +331,44 @@ ft_init_status(&tm->shared->status[id_job]);
 	}
 }
 
+void	ft_get_htime(t_htime *htime, time_t time)
+{
+	if (time > 3600)
+    {
+        htime->m = time / 60;
+        htime->h = htime->m / 60;
+        htime->s = time % 60;
+        htime->m = htime->m % 60;
+    }
+    else
+    {
+        htime->h = 0;
+        htime->m = time / 60;
+        htime->s = time % 60;
+    }
+}
+
 void	ft_get_job_status(t_tm *tm, int id_job)
 {
-/*	struct stat		fs;
-	char			*process_path;
-	
-	process_path = NULL;
-	ft_sprintf(&process_path, "/proc/%d", tm->shared->status[id_job].pid);
-	ft_printf("p_path: [%s]\n", process_path);
-	int res = stat(process_path, &fs);
-	ft_printf("res: [%d]\n", res);
-	ft_printf("omfg: [%s]\n", ctime(&fs.st_mtime));*/
+	t_htime htime;
 
-	// name RUNNING pid uptime
-//	ft_printf("state: [%d]\n", tm->status[id_job].state);
 	ft_printf("%s", tm->shared->status[id_job].state ? "\e[92m" : "\e[91m");
 	ft_printf("%-20s ", tm->jobs[id_job].name);
 	ft_printf("%-10s ", tm->shared->status[id_job].state ? "RUNNING" : "STOPPED");
 	ft_printf("pid %-10d", tm->shared->status[id_job].pid);
-//	ft_printf("%-10s\n", "uptime 0:05:03");
-	ft_printf("uptime %-10d\n", time(NULL) - tm->shared->status[id_job].started_time);
-	ft_printf("{eoc}");
-//	ft_printf("Uptime: ", time(NULL) - tm->status[id_job].stopped_time);
+	if (tm->shared->status[id_job].state == running)
+	{
+		ft_get_htime(&htime, time(NULL) - tm->shared->status[id_job].started_time);
+		ft_printf("uptime   %02d:%02d:%02d", htime.h, htime.m, htime.s);
+	}
+	else if (tm->shared->status[id_job].stopped_time)
+	{
+		ft_get_htime(&htime, time(NULL) - tm->shared->status[id_job].stopped_time);
+		ft_printf("downtime %02d:%02d:%02d", htime.h, htime.m, htime.s);
+	}
+	else
+		ft_printf("N/A");
+	ft_printf("{eoc}\n");
 }
 
 void	ft_cmd_start(t_tm *tm, char *name)
@@ -471,6 +449,7 @@ int		main(int argc, char *argv[], char *env[])
 {
 	t_tm	tm;
 
+	tm.argv = argv;
 	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
 	tm.shared = (t_shared*)mmap(NULL, sizeof(t_shared), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 	tm.env = env;
