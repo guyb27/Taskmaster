@@ -37,7 +37,7 @@ typedef struct		s_job
 	int				start_retries;
 	int				start_time;
 	int				stop_time;
-	char			stop_signal[10];
+	int				stop_signal;
 	char			stdout[1000];
 	char			stderr[1000];
 	t_keyval		*env;
@@ -95,7 +95,8 @@ void	ft_init_job(t_job *job)
 	job->start_retries = 0;
 	job->start_time = 0;
 	job->stop_time = 0;
-	ft_bzero(job->stop_signal, 10);
+	job->stop_signal = 3;
+//	ft_bzero(job->stop_signal, 10);
 	ft_bzero(job->stdout, 1000);
 	ft_bzero(job->stderr, 1000);
 	job->env = NULL;
@@ -115,7 +116,7 @@ void	ft_debug_job(t_tm *tm, int job_id)
 	ft_printf("startretries:\t[%d]\n", tm->jobs[job_id].start_retries);
 	ft_printf("starttime:\t[%d]\n", tm->jobs[job_id].start_time);
 	ft_printf("stoptime:\t[%d]\n", tm->jobs[job_id].stop_time);
-	ft_printf("stopsignal:\t'%s'\n", tm->jobs[job_id].stop_signal);
+	ft_printf("stopsignal:\t[%d]\n", tm->jobs[job_id].stop_signal);
 	ft_printf("stdout:\t\t'%s'\n", tm->jobs[job_id].stdout);
 	ft_printf("stderr:\t\t'%s'\n", tm->jobs[job_id].stderr);
 	ft_printf("exitcodes:\t");
@@ -180,8 +181,9 @@ void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 		tm->jobs[current_job].start_time = ft_atoi(value);
 	else if (!ft_strcmp(token, "stoptime"))
 		tm->jobs[current_job].stop_time = ft_atoi(value);
-	else if (!ft_strcmp(token, "stopsignal"))
-		ft_strcpy(tm->jobs[current_job].stop_signal, value);
+	else if (!ft_strcmp(token, "stopsignal") && ft_atoi(value) > 0)
+		tm->jobs[current_job].stop_signal = ft_atoi(value);
+	//	ft_strcpy(tm->jobs[current_job].stop_signal, value);
 	else if (!ft_strcmp(token, "stdout"))
 		ft_strcpy(tm->jobs[current_job].stdout, value);
 	else if (!ft_strcmp(token, "stderr"))
@@ -221,16 +223,23 @@ void	ft_parse_config(t_tm *tm, char *config_file)
 	int		fd;
 	char	*line;
 	int		current_job;
+	int		empty_line;
 	
+	empty_line = 0;
 	current_job = 0;
 	ft_init_job(&tm->jobs[current_job]);
 	fd = open(config_file, O_RDONLY);
 	while (get_next_line(fd, &line))
 	{
 		if (line && !line[0])
-			ft_init_job(&tm->jobs[++current_job]);
-		else
+			empty_line = 1;
+		else if (line[0] != '#')
+		{
+			if (empty_line && tm->jobs[current_job].name[0])
+				ft_init_job(&tm->jobs[++current_job]);
 			ft_parse_next_token(tm, line, current_job);
+			empty_line = 0;
+		}
 		free(line);
 	}
 	free(line);
@@ -328,6 +337,8 @@ void	ft_exec_job(t_tm *tm, int id_job)
 	{
 		tm->shared->status[id_job].pid = father;
 		ft_printf("process id: [%d]\n", father);
+		tm->shared->status[id_job].started_time = time(NULL);
+		tm->shared->status[id_job].state = running;
 	}
 }
 
@@ -377,8 +388,22 @@ void	ft_cmd_start(t_tm *tm, char *name)
 
 	i = -1;
 	while (++i < tm->jobs_cnt)
-		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
+		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")) &&
+			tm->shared->status[i].state == stopped)
 			ft_exec_job(tm, i);
+}
+
+void	ft_cmd_restart(t_tm *tm, char *name)
+{
+	int i;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")))
+		{
+			kill(tm->shared->status[i].pid, tm->jobs[i].stop_signal);
+			ft_exec_job(tm, i);
+		}
 }
 
 void	ft_cmd_status(t_tm *tm, char *name)
@@ -416,6 +441,7 @@ void	ft_process_cmd(t_tm *tm)
 	else if (!strncmp(tm->cmd, "restart", 7) && (ft_strlen(tm->cmd) > 8))
 	{
 		ft_printf("restarting: [%s]\n", tm->cmd + 8);
+		ft_cmd_start(tm, tm->cmd + 8);
 	}
 	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
 	{

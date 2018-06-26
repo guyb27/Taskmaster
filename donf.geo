@@ -1,3 +1,7 @@
+# Geo easyparsing file format
+#
+# stopsignal: 0-31
+
 name: ls
 cmd: /bin/ls -la
 numprocs: 1
