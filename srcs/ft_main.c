@@ -50,8 +50,8 @@ typedef struct		s_status
 					stopped,
 					running
 	}				state;
-	int				started_time;
-	int				stopped_time;
+	time_t			started_time;
+	time_t			stopped_time;
 }					t_status;
 
 typedef struct		s_shared
@@ -271,7 +271,7 @@ void	ft_process_watcher(t_tm *tm)
 		else
 		{
 //			ft_printf("process: [%s] terminated.\n", tm->jobs[i].name);
-			if (tm->shared->status[i].state == running ||
+			if (tm->shared->status[i].state == running &&
 				!tm->shared->status[i].stopped_time)
 				tm->shared->status[i].stopped_time = time(NULL);
 			tm->shared->status[i].state = stopped;
@@ -326,6 +326,11 @@ void	ft_exec_job(t_tm *tm, int id_job)
 	father = fork();
 	if (!father)
 	{
+	//	if (tm->jobs[id_job].stdout[0])
+	//	{
+	//		int fd = open(tm->jobs[id_job].stdout, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	//		dup2(fd, STDOUT_FILENO);
+	//	}
 		args = NULL;
 		args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
 		if (args && execve(args[0], args, tm->env) < 0)
@@ -366,7 +371,10 @@ void	ft_get_job_status(t_tm *tm, int id_job)
 	ft_printf("%s", tm->shared->status[id_job].state ? "\e[92m" : "\e[91m");
 	ft_printf("%-20s ", tm->jobs[id_job].name);
 	ft_printf("%-10s ", tm->shared->status[id_job].state ? "RUNNING" : "STOPPED");
-	ft_printf("pid %-10d", tm->shared->status[id_job].pid);
+	if (tm->shared->status[id_job].pid > 0 && tm->shared->status[id_job].state)
+		ft_printf("pid %-10d", tm->shared->status[id_job].pid);
+	else
+		ft_printf("pid %-10s", "N/A");
 	if (tm->shared->status[id_job].state == running)
 	{
 		ft_get_htime(&htime, time(NULL) - tm->shared->status[id_job].started_time);
@@ -378,7 +386,7 @@ void	ft_get_job_status(t_tm *tm, int id_job)
 		ft_printf("downtime %02d:%02d:%02d", htime.h, htime.m, htime.s);
 	}
 	else
-		ft_printf("N/A");
+		ft_printf("uptime   N/A");
 	ft_printf("{eoc}\n");
 }
 

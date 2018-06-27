@@ -16,8 +16,8 @@ startretries: 3
 starttime: 5
 stopsignal: TERM
 stoptime: 10
-stdout: /tmp/nginx.stdout
-stderr: /tmp/nginx.stderr
+stdout: /tmp/my_ls.stdout
+stderr: /tmp/my_ls.stderr
 env:
 _STARTED_BY: taskmaster
 _ANSWER: 42
