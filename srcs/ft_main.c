@@ -315,29 +315,70 @@ void	ft_init_status(t_status *status)
 	status->stopped_time = 0;
 }
 
+void	ft_exec_job_inner(t_tm *tm, int id_job)
+{
+	pid_t	father;
+	char	**args;
+	int		fd_stdout;
+	int		fd_stderr;
+
+	args = NULL;
+	args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
+	if (args)
+	{
+		tm->shared->status[id_job].started_time = time(NULL);
+		tm->shared->status[id_job].state = running;
+	}
+	// stdout
+	fd_stdout = 0;
+	if (tm->jobs[id_job].stdout[0])
+	{
+		fd_stdout = open(tm->jobs[id_job].stdout, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		dup2(fd_stdout, STDOUT_FILENO);
+	}
+	// stderr
+	fd_stderr = 0;
+	if (tm->jobs[id_job].stderr[0])
+	{
+		fd_stderr = open(tm->jobs[id_job].stderr, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		dup2(fd_stderr, STDERR_FILENO);
+	}
+	// umask
+	if (tm->jobs[id_job].stderr[0])
+		umask(tm->jobs[id_job].stderr[0]);
+
+	father = fork();
+	if (!father)
+	{	
+		if (args && execve(args[0], args, tm->env) < 0)
+			ft_printf("{red}Error executing '%s'{eoc}\n", tm->jobs[id_job].name);
+		exit(0);
+	}
+	else
+	{
+		wait(&father);
+		ft_free_list(args);
+		tm->shared->status[id_job].stopped_time = time(NULL);
+		tm->shared->status[id_job].state = stopped;
+		if (fd_stdout > 0)
+			close(fd_stdout);
+		if (fd_stderr > 0)
+			close(fd_stderr);
+		ft_printf("program: [%s] just finished.\n", tm->jobs[id_job].name);
+		exit(0);
+	}
+}
+
 void	ft_exec_job(t_tm *tm, int id_job)
 {
 	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
 
 	pid_t	father;
-	char	**args;
 
 	ft_init_status(&tm->shared->status[id_job]);
 	father = fork();
 	if (!father)
-	{
-	//	if (tm->jobs[id_job].stdout[0])
-	//	{
-	//		int fd = open(tm->jobs[id_job].stdout, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	//		dup2(fd, STDOUT_FILENO);
-	//	}
-		args = NULL;
-		args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
-		if (args && execve(args[0], args, tm->env) < 0)
-			ft_printf("{red}Error executing '%s'{eoc}\n", tm->jobs[id_job].name);
-		ft_free_list(args);
-		exit(0);
-	}
+		ft_exec_job_inner(tm, id_job);
 	if (father > 0)
 	{
 		tm->shared->status[id_job].pid = father;
@@ -449,7 +490,7 @@ void	ft_process_cmd(t_tm *tm)
 	else if (!strncmp(tm->cmd, "restart", 7) && (ft_strlen(tm->cmd) > 8))
 	{
 		ft_printf("restarting: [%s]\n", tm->cmd + 8);
-		ft_cmd_start(tm, tm->cmd + 8);
+		ft_cmd_restart(tm, tm->cmd + 8);
 	}
 	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
 	{
@@ -494,7 +535,7 @@ int		main(int argc, char *argv[], char *env[])
 		for (int i = 0; i < tm.jobs_cnt; i++)
 			ft_debug_job(&tm, i);
 	//	ft_autostart_jobs(tm);
-	ft_start_process_watcher(&tm);
+//	ft_start_process_watcher(&tm);
 		while (1)
 		{
 			ft_get_user_input(&tm);
@@ -504,6 +545,6 @@ int		main(int argc, char *argv[], char *env[])
 	}
 	else
 		ft_printf("usage: taskmaster config_file\n");
-munmap(tm.shared, sizeof(t_shared));
+	munmap(tm.shared, sizeof(t_shared));
 	return (0);
 }
