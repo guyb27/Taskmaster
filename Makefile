@@ -8,8 +8,12 @@ INC = -I libft/ft_printf/srcs/ -I libft/get_next_line -I libft/srcs
 SRCS_PATH = srcs
 OBJS_PATH = objs
 
-SRCS_NAME =	ft_main.c		\
-			cJSON.c
+SRCS_NAME =	ft_main.c			\
+			ft_exec_jobs.c		\
+			ft_commands.c		\
+			ft_status.c			\
+			ft_parse_config.c	\
+			ft_utils.c
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))

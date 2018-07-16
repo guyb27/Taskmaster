@@ -17,6 +17,102 @@
 # include "get_next_line.h"
 # include "libft.h"
 # include "ft_printf.h"
-# include <math.h>
+# include <sys/mman.h>
+# include <signal.h>
+
+typedef struct		s_keyval
+{
+	char			*key;
+	char			*value;
+	struct s_keyval	*next;
+}					t_keyval;
+
+typedef struct		s_job
+{
+	char			name[1000];
+	char			cmd[1000];
+	int				nb_procs;
+	char			umask[5];
+	char			working_dir[1000];
+	int				autostart;
+	int				autorestart;
+	int				exit_codes[10];
+	int				start_retries;
+	int				start_time;
+	int				stop_time;
+	int				stop_signal;
+	char			stdout[1000];
+	char			stderr[1000];
+	t_keyval		*env;
+}					t_job;
+
+typedef struct		s_status
+{
+	pid_t			pid;
+	enum {
+					stopped,
+					running
+	}				state;
+	time_t			started_time;
+	time_t			stopped_time;
+    struct s_status *next;
+}					t_status;
+
+typedef struct		s_shared
+{
+	t_status		status[500];
+}					t_shared;
+
+typedef struct		s_htime
+{
+	int				h;
+	int				m;
+	int				s;
+}					t_htime;
+
+typedef struct		s_tm
+{
+	t_job			jobs[1000];
+//	t_status		status[1000];
+//	t_status		*status;
+	t_shared		*shared;
+	int				jobs_cnt;
+	char			**env;
+	char			*cmd;
+	pid_t			jobs_watcher;
+	char			**argv;
+}					t_tm;
+
+/*
+**  ft_commands.c
+*/
+void                ft_cmd_start(t_tm *tm, char *name);
+void	            ft_cmd_restart(t_tm *tm, char *name);
+void	            ft_cmd_status(t_tm *tm, char *name);
+
+/*
+**  ft_exec_jobs.c
+*/
+void                ft_exec_job(t_tm *tm, int id_job);
+
+/*
+**  ft_parse_config.c
+*/
+void                ft_parse_config(t_tm *tm, char *config_file);
+
+/*
+**  ft_status.c
+*/
+void	ft_debug_status(t_status *status);
+void                ft_init_status(t_status *status);
+void                ft_get_job_status(t_tm *tm, int id_job);
+void                ft_parse_config(t_tm *tm, char *config_file);
+
+/*
+**  ft_utils.c
+*/
+t_status            *ft_get_last_status(t_status *list);
+void	            ft_init_job(t_job *job);
+void	            ft_debug_job(t_tm *tm, int job_id);
 
 #endif
