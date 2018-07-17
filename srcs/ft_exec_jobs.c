@@ -66,7 +66,11 @@ status->pid = father;
 //ft_fprintf(fd, "2nd process id: [%d]\n", father);
 status->started_time = time(NULL);
 status->state = running;
+
+
 		wait(&father);
+
+
 		ft_free_list(args);
 		tm->shared->status[id_job].stopped_time = time(NULL);
 		tm->shared->status[id_job].state = stopped;
@@ -84,22 +88,28 @@ void	ft_exec_job(t_tm *tm, int id_job)
 	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
 	pid_t       father;
     t_status    *status;
+	int			i;
 
     status = ft_get_last_status(&tm->shared->status[id_job]);
 //	ft_init_status(&tm->shared->status[id_job]);
     ft_init_status(status);
-	father = fork();
-	if (!father)
-		ft_exec_job_inner(tm, id_job);
-	if (father > 0)
+	i = -1;
+	while (++i < tm->jobs[id_job].nb_procs)
 	{
-	//	tm->shared->status[id_job].pid = father;
-	//	ft_printf("process id: [%d]\n", father);
-	//	tm->shared->status[id_job].started_time = time(NULL);
-	//	tm->shared->status[id_job].state = running;
-//        status->pid = father;
-		ft_printf("1st process id: [%d]\n", father);
-//		status->started_time = time(NULL);
-//		status->state = running;
+		father = fork();
+		if (!father)
+			ft_exec_job_inner(tm, id_job);
+		if (father > 0)
+		{
+		//	tm->shared->status[id_job].pid = father;
+		//	ft_printf("process id: [%d]\n", father);
+		//	tm->shared->status[id_job].started_time = time(NULL);
+		//	tm->shared->status[id_job].state = running;
+	//        status->pid = father;
+			ft_printf("1st process id: [%d]\n", father);
+	//		status->started_time = time(NULL);
+	//		status->state = running;
+		}
 	}
+	
 }

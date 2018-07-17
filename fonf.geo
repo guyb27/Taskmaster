@@ -14,7 +14,7 @@ exitcodes:
 -2 
 startretries: 3
 starttime: 5
-stopsignal: TERM
+stopsignal: 4
 stoptime: 10
 stdout: /tmp/my_ls.stdout
 stderr: /tmp/my_ls.stderr
@@ -34,7 +34,7 @@ exitcodes:
 -2 
 startretries: 3
 starttime: 5
-stopsignal: TERM
+stopsignal: 2
 stoptime: 10
 stdout: /tmp/nginx.stdout
 stderr: /tmp/nginx.stderr

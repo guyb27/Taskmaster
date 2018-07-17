@@ -71,4 +71,6 @@ void	    ft_get_job_status(t_tm *tm, int id_job)
 	else
 		ft_printf("uptime   N/A");
 	ft_printf("{eoc}\n");
+	if (tm->shared->status[id_job].next)
+		ft_get_job_status(tm, id_job);
 }
