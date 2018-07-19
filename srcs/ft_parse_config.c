@@ -48,7 +48,20 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 	else if (!ft_strcmp(token, "cmd"))
 		ft_strcpy(tm->jobs[current_job].cmd, value);
 	else if (!ft_strcmp(token, "numprocs"))
+	{
 		tm->jobs[current_job].nb_procs = ft_atoi(value);
+		// malloc chained list elements needed for multi procs
+		if (ft_atoi(value) > 0)
+		{
+			int i = 0;
+			t_status *tmp = &tm->shared->status[current_job];
+			while (++i < ft_atoi(value))
+			{
+				tmp->next = ft_megamalloc(sizeof(t_status));
+				tmp = tmp->next;
+			}
+		}
+	}
 	else if (!ft_strcmp(token, "umask"))
 		ft_strcpy(tm->jobs[current_job].umask, value);
 	else if (!ft_strcmp(token, "workingdir"))

@@ -13,6 +13,21 @@
 
 #include "taskmaster.h"
 
+void		*ft_megamalloc(int size)
+{
+	void *var;
+	
+	var = mmap(NULL, size, 
+				PROT_READ|PROT_WRITE, 
+				MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+	return (var);
+}
+
+void		ft_megafree(void *var, int size)
+{
+	munmap(var, size);
+}
+
 t_status    *ft_get_last_status(t_status *list)
 {
     t_status *tmp;

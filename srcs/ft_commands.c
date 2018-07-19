@@ -44,5 +44,6 @@ void	ft_cmd_status(t_tm *tm, char *name)
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
-			ft_get_job_status(tm, i);
+			ft_get_job_status(tm, i, &tm->shared->status[i]);
+		//	ft_get_job_status(tm, i);
 }

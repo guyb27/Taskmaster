@@ -28,6 +28,8 @@ void	ft_init_status(t_status *status)
 	status->state = stopped;
 	status->started_time = 0;
 	status->stopped_time = 0;
+	status->next = NULL;
+	status->prev = NULL;
 }
 
 static void	ft_get_htime(t_htime *htime, time_t time)
@@ -47,6 +49,57 @@ static void	ft_get_htime(t_htime *htime, time_t time)
     }
 }
 
+void	    ft_get_job_status(t_tm *tm, int id_job, t_status *status)
+{
+	t_htime htime;
+
+	ft_printf("%s", status->state ? "\e[92m" : "\e[91m");
+	ft_printf("%-20s ", tm->jobs[id_job].name);
+	ft_printf("%-10s ", status->state ? "RUNNING" : "STOPPED");
+	if (status->pid > 0 && status->state)
+		ft_printf("pid %-10d", status->pid);
+	else
+		ft_printf("pid %-10s", "N/A");
+	if (status->state == running)
+	{
+		ft_get_htime(&htime, time(NULL) - status->started_time);
+		ft_printf("uptime   %02d:%02d:%02d", htime.h, htime.m, htime.s);
+	}
+	else if (status->stopped_time)
+	{
+		ft_get_htime(&htime, time(NULL) - status->stopped_time);
+		ft_printf("downtime %02d:%02d:%02d", htime.h, htime.m, htime.s);
+	}
+	else
+		ft_printf("uptime   N/A");
+	ft_printf("{eoc}\n");
+	if (status->next)
+		ft_get_job_status(tm, id_job, status->next);
+}
+/*
+void	    ft_get_job_status(t_tm *tm, int id_job, t_status *status)
+{
+	t_status *tmp;
+	t_htime htime;
+	int i = 0;
+
+	ft_get_htime(&htime, time(NULL) - 555);
+	(void)tm;
+	(void)id_job;
+	tmp = status;
+	while (tmp)
+	{
+		printf("-----------------------------------------\n");
+		printf("Elem numero [%d], addr: [%p]\n", ++i, tmp);
+		printf("pid: [%d]\n", tmp->pid);
+		printf("next: [%p]\n", tmp->next);
+		printf("prev: [%p]\n", tmp->prev);
+		tmp = tmp->next;
+	}
+}*/
+
+
+/*
 void	    ft_get_job_status(t_tm *tm, int id_job)
 {
 	t_htime htime;
@@ -73,4 +126,4 @@ void	    ft_get_job_status(t_tm *tm, int id_job)
 	ft_printf("{eoc}\n");
 	if (tm->shared->status[id_job].next)
 		ft_get_job_status(tm, id_job);
-}
+}*/

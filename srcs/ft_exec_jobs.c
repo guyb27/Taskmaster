@@ -13,7 +13,23 @@
 
 #include "taskmaster.h"
 
-static void	ft_exec_job_inner(t_tm *tm, int id_job)
+void		ft_remove_elem(t_status *status)
+{
+	t_status *tmp;
+
+	if (!status)
+		return ;
+	tmp = status;
+	if (tmp->prev)
+	{
+		tmp = tmp->prev;
+		tmp->next = status->next;
+	//	free(status);
+		ft_megafree(status, sizeof(t_status));
+	}
+}
+
+static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 {
 	pid_t	father;
 	char	**args;
@@ -60,20 +76,45 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job)
 	}
 	else
 	{
-
+/*
 t_status *status = ft_get_last_status(&tm->shared->status[id_job]);
+// create new list element if nb_procs > 1
+if (status->pid)
+{
+//	t_status *tmp = malloc(sizeof(t_status));
+	t_status *tmp = ft_megamalloc(sizeof(t_status));
+	ft_init_status(tmp);
+	tmp->prev = status;
+	status->next = tmp;
+	status = status->next;
+}
+
+// set starting status
 status->pid = father;
 //ft_fprintf(fd, "2nd process id: [%d]\n", father);
 status->started_time = time(NULL);
 status->state = running;
 
+ft_printf("setting pid [%d] on elem [%p]\n", status->pid, status);*/
+
+status->pid = father;
+status->started_time = time(NULL);
+status->state = running;
+
 
 		wait(&father);
-
+// remove finished multi proc
+//ft_remove_elem(status);
+t_status *tmp = status->next;
+ft_init_status(status);
+status->next = tmp;
 
 		ft_free_list(args);
-		tm->shared->status[id_job].stopped_time = time(NULL);
-		tm->shared->status[id_job].state = stopped;
+	//	tm->shared->status[id_job].stopped_time = time(NULL);
+	//	tm->shared->status[id_job].state = stopped;
+		status->stopped_time = time(NULL);
+		status->state = stopped;
+
 		if (fd_stdout > 0)
 			close(fd_stdout);
 		if (fd_stderr > 0)
@@ -90,15 +131,17 @@ void	ft_exec_job(t_tm *tm, int id_job)
     t_status    *status;
 	int			i;
 
-    status = ft_get_last_status(&tm->shared->status[id_job]);
+//    status = ft_get_last_status(&tm->shared->status[id_job]);
 //	ft_init_status(&tm->shared->status[id_job]);
-    ft_init_status(status);
+//	ft_init_status(status);
+//	t_status *tmp = &tm->shared->status[id_job];
+	status = &tm->shared->status[id_job];
 	i = -1;
-	while (++i < tm->jobs[id_job].nb_procs)
+	while (++i < tm->jobs[id_job].nb_procs && status)
 	{
 		father = fork();
 		if (!father)
-			ft_exec_job_inner(tm, id_job);
+			ft_exec_job_inner(tm, id_job, status);
 		if (father > 0)
 		{
 		//	tm->shared->status[id_job].pid = father;
@@ -110,6 +153,7 @@ void	ft_exec_job(t_tm *tm, int id_job)
 	//		status->started_time = time(NULL);
 	//		status->state = running;
 		}
+		status = status->next;
 	}
 	
 }

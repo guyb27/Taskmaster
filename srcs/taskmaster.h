@@ -55,7 +55,8 @@ typedef struct		s_status
 	}				state;
 	time_t			started_time;
 	time_t			stopped_time;
-    struct s_status *next;
+	struct s_status *next;
+	struct s_status *prev;
 }					t_status;
 
 typedef struct		s_shared
@@ -105,12 +106,15 @@ void                ft_parse_config(t_tm *tm, char *config_file);
 */
 void	ft_debug_status(t_status *status);
 void                ft_init_status(t_status *status);
-void                ft_get_job_status(t_tm *tm, int id_job);
+void                ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 void                ft_parse_config(t_tm *tm, char *config_file);
 
 /*
 **  ft_utils.c
 */
+void		*ft_megamalloc(int size);
+void		ft_megafree(void *var, int size);
+
 t_status            *ft_get_last_status(t_status *list);
 void	            ft_init_job(t_job *job);
 void	            ft_debug_job(t_tm *tm, int job_id);
