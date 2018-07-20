@@ -13,7 +13,7 @@ exitcodes:
 -0
 -2 
 startretries: 3
-starttime: 5
+starttime: 3
 stopsignal: 4
 stoptime: 10
 stdout: /tmp/my_ls.stdout
@@ -33,7 +33,7 @@ exitcodes:
 -0
 -2 
 startretries: 3
-starttime: 5
+starttime: 6
 stopsignal: 2
 stoptime: 10
 stdout: /tmp/nginx.stdout

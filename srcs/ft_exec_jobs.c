@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #include "taskmaster.h"
-
+/*
 void		ft_remove_elem(t_status *status)
 {
 	t_status *tmp;
@@ -27,7 +27,7 @@ void		ft_remove_elem(t_status *status)
 	//	free(status);
 		ft_megafree(status, sizeof(t_status));
 	}
-}
+}*/
 
 static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 {
@@ -76,42 +76,29 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 	}
 	else
 	{
-/*
-t_status *status = ft_get_last_status(&tm->shared->status[id_job]);
-// create new list element if nb_procs > 1
-if (status->pid)
-{
-//	t_status *tmp = malloc(sizeof(t_status));
-	t_status *tmp = ft_megamalloc(sizeof(t_status));
-	ft_init_status(tmp);
-	tmp->prev = status;
-	status->next = tmp;
-	status = status->next;
-}
+		status->pid = father;
+		status->started_time = time(NULL);
+		status->state = starting;
+		
 
-// set starting status
-status->pid = father;
-//ft_fprintf(fd, "2nd process id: [%d]\n", father);
-status->started_time = time(NULL);
-status->state = running;
-
-ft_printf("setting pid [%d] on elem [%p]\n", status->pid, status);*/
-
-status->pid = father;
-status->started_time = time(NULL);
-status->state = running;
-
+	char *tmp8 = NULL;
+	ft_sprintf(&tmp8, "echo OK pid %d >> omg.log", status->pid);
+	system(tmp8);
 
 		wait(&father);
-// remove finished multi proc
-//ft_remove_elem(status);
-t_status *tmp = status->next;
-ft_init_status(status);
-status->next = tmp;
+
+
+	char *tmp9 = NULL;
+	ft_sprintf(&tmp9, "echo OMFG pid %d >> omg.log", status->pid);
+	system(tmp9);
+
+		// remove finished multi proc
+		t_status *tmp = status->next;
+		ft_init_status(status);
+		status->next = tmp;
 
 		ft_free_list(args);
-	//	tm->shared->status[id_job].stopped_time = time(NULL);
-	//	tm->shared->status[id_job].state = stopped;
+
 		status->stopped_time = time(NULL);
 		status->state = stopped;
 
@@ -131,28 +118,42 @@ void	ft_exec_job(t_tm *tm, int id_job)
     t_status    *status;
 	int			i;
 
-//    status = ft_get_last_status(&tm->shared->status[id_job]);
-//	ft_init_status(&tm->shared->status[id_job]);
-//	ft_init_status(status);
-//	t_status *tmp = &tm->shared->status[id_job];
 	status = &tm->shared->status[id_job];
 	i = -1;
 	while (++i < tm->jobs[id_job].nb_procs && status)
 	{
 		father = fork();
 		if (!father)
-			ft_exec_job_inner(tm, id_job, status);
-		if (father > 0)
 		{
-		//	tm->shared->status[id_job].pid = father;
-		//	ft_printf("process id: [%d]\n", father);
-		//	tm->shared->status[id_job].started_time = time(NULL);
-		//	tm->shared->status[id_job].state = running;
-	//        status->pid = father;
-			ft_printf("1st process id: [%d]\n", father);
-	//		status->started_time = time(NULL);
-	//		status->state = running;
+			father = fork();
+			
+			if (!father)
+			{
+	//			status->state = starting;
+			//	status->started_time = time(NULL);
+				ft_sleep(tm->jobs[id_job].start_time);
+
+				char *tmp = NULL;
+				ft_sprintf(&tmp, "echo pid %d >> lol.log", status->pid);
+				system(tmp);
+
+	//			if (status->pid > 0 && kill(status->pid, 0) > -1)
+	//				status->state = running;
+			//	else
+			//		restart
+				exit(0);
+			}
+			else
+				ft_exec_job_inner(tm, id_job, status);
+		//	exit(0);
 		}
+		
+			
+			
+	//	if (father > 0)
+	//	{
+	//		ft_printf("1st process id: [%d]\n", father);
+	//	}
 		status = status->next;
 	}
 	

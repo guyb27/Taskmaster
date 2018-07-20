@@ -49,13 +49,33 @@ static void	ft_get_htime(t_htime *htime, time_t time)
     }
 }
 
+void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
+{
+	if (status->state == stopped)
+		ft_printf("%s ", "\e[91m");
+	else if (status->state == starting)
+		ft_printf("%s ", "\e[93m");
+	else if (status->state == running)
+		ft_printf("%s ", "\e[92m");
+	ft_printf("%-20s ", tm->jobs[id_job].name);
+	if (status->state == stopped)
+		ft_printf("%-10s ", "STOPPED");
+	else if (status->state == starting)
+		ft_printf("%-10s ", "STARTING");
+	else if (status->state == running)
+		ft_printf("%-10s ", "RUNNING");
+
+	ft_printf("state: [%d] ", status->state);
+}
+
 void	    ft_get_job_status(t_tm *tm, int id_job, t_status *status)
 {
 	t_htime htime;
 
-	ft_printf("%s", status->state ? "\e[92m" : "\e[91m");
-	ft_printf("%-20s ", tm->jobs[id_job].name);
-	ft_printf("%-10s ", status->state ? "RUNNING" : "STOPPED");
+//	ft_printf("%s", status->state ? "\e[92m" : "\e[91m");
+//	ft_printf("%-20s ", tm->jobs[id_job].name);
+//	ft_printf("%-10s ", status->state ? "RUNNING" : "STOPPED");
+	ft_print_name_and_state(tm, id_job, status);
 	if (status->pid > 0 && status->state)
 		ft_printf("pid %-10d", status->pid);
 	else

@@ -51,7 +51,8 @@ typedef struct		s_status
 	pid_t			pid;
 	enum {
 					stopped,
-					running
+					running,
+					starting
 	}				state;
 	time_t			started_time;
 	time_t			stopped_time;
@@ -90,6 +91,7 @@ typedef struct		s_tm
 void                ft_cmd_start(t_tm *tm, char *name);
 void	            ft_cmd_restart(t_tm *tm, char *name);
 void	            ft_cmd_status(t_tm *tm, char *name);
+void				ft_cmd_stop(t_tm *tm, char *name);
 
 /*
 **  ft_exec_jobs.c
@@ -112,8 +114,9 @@ void                ft_parse_config(t_tm *tm, char *config_file);
 /*
 **  ft_utils.c
 */
-void		*ft_megamalloc(int size);
-void		ft_megafree(void *var, int size);
+unsigned int		ft_sleep(unsigned int seconds);
+void				*ft_megamalloc(int size);
+void				ft_megafree(void *var, int size);
 
 t_status            *ft_get_last_status(t_status *list);
 void	            ft_init_job(t_job *job);

@@ -45,6 +45,7 @@ void	ft_process_cmd(t_tm *tm)
 	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
 	{
 		ft_printf("stopping: [%s]\n", tm->cmd + 5);
+		ft_cmd_stop(tm, tm->cmd + 5);
 	}
 	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
 	{
@@ -75,7 +76,7 @@ int		main(int argc, char *argv[], char *env[])
 	t_tm	tm;
 
 	tm.argv = argv;
-//	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
+	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
 	tm.shared = (t_shared*)mmap(NULL, sizeof(t_shared), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 	tm.env = env;
 	tm.jobs_cnt = 0;
@@ -89,6 +90,7 @@ int		main(int argc, char *argv[], char *env[])
 		while (1)
 		{
 			ft_get_user_input(&tm);
+		ft_printf("{blue}cmd: [%s]{eoc}\n", tm.cmd);
 			ft_process_cmd(&tm);
 //			ft_start_process_watcher(&tm);
 		}

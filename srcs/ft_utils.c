@@ -13,6 +13,17 @@
 
 #include "taskmaster.h"
 
+unsigned int ft_sleep(unsigned int seconds)
+{
+	struct timespec ts;
+	
+	ts.tv_sec = seconds;
+	ts.tv_nsec = 0;
+	if(nanosleep(&ts, &ts) == 0)
+		return 0;
+	return (ts.tv_sec);
+}
+
 void		*ft_megamalloc(int size)
 {
 	void *var;

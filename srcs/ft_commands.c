@@ -13,6 +13,30 @@
 
 #include "taskmaster.h"
 
+void	ft_stop_job(t_tm *tm, int id_job, t_status *status)
+{
+	pid_t	father;
+
+	if (!status->pid)
+		return ;
+	father = fork();
+	if (!father)
+	{
+		kill(status->pid, tm->jobs[id_job].stop_signal);
+		ft_sleep(tm->jobs[id_job].stop_signal);
+		if (status->pid > 0 && kill(status->pid, 0) > -1)
+			kill(status->pid, 9);
+		if (status->pid > 0 && kill(status->pid, 0) == -1)
+		{
+			status->state = stopped;
+			status->stopped_time = time(NULL);
+		}
+		exit(0);
+	}
+	else if (status->next)
+		ft_stop_job(tm, id_job, status->next);
+}
+
 void	ft_cmd_start(t_tm *tm, char *name)
 {
 	int i;
@@ -46,4 +70,14 @@ void	ft_cmd_status(t_tm *tm, char *name)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
 			ft_get_job_status(tm, i, &tm->shared->status[i]);
 		//	ft_get_job_status(tm, i);
+}
+
+void	ft_cmd_stop(t_tm *tm, char *name)
+{
+	int i;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
+			ft_stop_job(tm, i, &tm->shared->status[i]);
 }
