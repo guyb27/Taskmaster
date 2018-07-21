@@ -69,7 +69,6 @@ void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
 		ft_printf("%-10s ", "RUNNING");
 	else if (status->state == error)
 		ft_printf("%-10s ", "ERROR");
-
 //	ft_printf("state: [%d] ", status->state);
 }
 
@@ -88,15 +87,15 @@ void	    ft_get_job_status(t_tm *tm, int id_job, t_status *status)
 	if (status->state > stopped && status->state < error)
 	{
 		ft_get_htime(&htime, time(NULL) - status->started_time);
-		ft_printf("uptime   %02d:%02d:%02d", htime.h, htime.m, htime.s);
+		ft_printf("uptime    %02d:%02d:%02d", htime.h, htime.m, htime.s);
 	}
 	else if (status->stopped_time)
 	{
 		ft_get_htime(&htime, time(NULL) - status->stopped_time);
-		ft_printf("downtime %02d:%02d:%02d", htime.h, htime.m, htime.s);
+		ft_printf("downtime  %02d:%02d:%02d", htime.h, htime.m, htime.s);
 	}
 	else
-		ft_printf("uptime   N/A");
+		ft_printf("uptime    N/A");
 	ft_printf(" {eoc}\n");
 	if (status->next)
 		ft_get_job_status(tm, id_job, status->next);
