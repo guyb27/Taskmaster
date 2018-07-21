@@ -57,6 +57,7 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 			t_status *tmp = &tm->shared->status[current_job];
 			while (++i < ft_atoi(value))
 			{
+				ft_init_status(tmp);
 				tmp->next = ft_megamalloc(sizeof(t_status));
 				tmp = tmp->next;
 			}

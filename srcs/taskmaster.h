@@ -52,10 +52,12 @@ typedef struct		s_status
 	enum {
 					stopped,
 					running,
-					starting
+					starting,
+					error
 	}				state;
 	time_t			started_time;
 	time_t			stopped_time;
+//	int				restarts;
 	struct s_status *next;
 	struct s_status *prev;
 }					t_status;

@@ -76,7 +76,7 @@ int		main(int argc, char *argv[], char *env[])
 	t_tm	tm;
 
 	tm.argv = argv;
-	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
+//	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
 	tm.shared = (t_shared*)mmap(NULL, sizeof(t_shared), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 	tm.env = env;
 	tm.jobs_cnt = 0;
