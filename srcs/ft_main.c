@@ -12,8 +12,6 @@
 /* ************************************************************************** */
 
 #include "taskmaster.h"
-#include <sys/mman.h>
-#include <signal.h>
 
 void	ft_autostart_jobs(t_tm *tm)
 {
@@ -23,45 +21,34 @@ void	ft_autostart_jobs(t_tm *tm)
 	while (++i < tm->jobs_cnt)
 	{
 		if (tm->jobs[i].autostart == 1)
-			ft_exec_job(tm, i);
+			ft_exec_job(tm, i, 0);
 	}
 }
-//------------------------------------------------------------------------------
 
 void	ft_process_cmd(t_tm *tm)
 {
-	if (!ft_strcmp(tm->cmd, "exit"))
-		exit(0);
-	else if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
-	{
-		ft_printf("starting: [%s]\n", tm->cmd + 6);
+	if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
 		ft_cmd_start(tm, tm->cmd + 6);
-	}
 	else if (!strncmp(tm->cmd, "restart", 7) && (ft_strlen(tm->cmd) > 8))
-	{
-		ft_printf("restarting: [%s]\n", tm->cmd + 8);
 		ft_cmd_restart(tm, tm->cmd + 8);
-	}
 	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
-	{
-		ft_printf("stopping: [%s]\n", tm->cmd + 5);
 		ft_cmd_stop(tm, tm->cmd + 5);
-	}
 	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
-	{
-		ft_printf("getting status of: [%s]\n", tm->cmd + 7);
 		ft_cmd_status(tm, tm->cmd + 7);
-	}
 	else if (!strcmp(tm->cmd, "reload"))
-	{
 		ft_printf("reloading config file\n");
-	}
 	else if (!strcmp(tm->cmd, "shutdown"))
 	{
 		ft_printf("Quitting taskmaster\n");
 		exit(0);
 	}
+	else if (!ft_strcmp(tm->cmd, "exit"))
+		exit(0);
 }
+
+/*
+**------------------------------------------------------------------------------
+*/
 
 void	ft_get_user_input(t_tm *tm)
 {
@@ -76,8 +63,8 @@ int		main(int argc, char *argv[], char *env[])
 	t_tm	tm;
 
 	tm.argv = argv;
-//	signal(SIGCHLD, SIG_IGN); // ignore fcking SIGCHLD so wait become useless and no more zombies
-	tm.shared = (t_shared*)mmap(NULL, sizeof(t_shared), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+	signal(SIGCHLD, SIG_IGN);
+	tm.shared = ft_megamalloc(sizeof(t_shared));
 	tm.env = env;
 	tm.jobs_cnt = 0;
 	if (argc == 2)
@@ -85,14 +72,12 @@ int		main(int argc, char *argv[], char *env[])
 		ft_parse_config(&tm, argv[1]);
 		for (int i = 0; i < tm.jobs_cnt; i++)
 			ft_debug_job(&tm, i);
-	//	ft_autostart_jobs(tm);
-//	ft_start_process_watcher(&tm);
+		ft_autostart_jobs(&tm);
 		while (1)
 		{
 			ft_get_user_input(&tm);
 		ft_printf("{blue}cmd: [%s]{eoc}\n", tm.cmd);
 			ft_process_cmd(&tm);
-//			ft_start_process_watcher(&tm);
 		}
 	}
 	else

@@ -3,11 +3,11 @@
 # stopsignal: 0-31
 
 name: ls
-cmd: /bin/ls -la
+cmd: /bin/ls -laR /
 numprocs: 1
 umask: 022
 workingdir: .
-autostart: true
+autostart: 0
 autorestart: 1
 exitcodes:
 -0
@@ -27,7 +27,7 @@ cmd: lol
 numprocs: 1
 umask: 022
 workingdir: .
-autostart: true
+autostart: 0
 autorestart: 1
 exitcodes:
 -0
@@ -43,11 +43,11 @@ _STARTED_BY: taskmaster
 _ANSWER: 42
 
 name: loop
-cmd: /tmp/a.out
+cmd: /Users/gbarnay/Documents/cursus/taskmaster/last/loop
 numprocs: 3
 umask: 022
 workingdir: .
-autostart: true
+autostart: 1
 autorestart: 1
 exitcodes:
 -0
