@@ -33,6 +33,8 @@ void	ft_process_cmd(t_tm *tm)
 		ft_cmd_restart(tm, tm->cmd + 8);
 	else if (!strncmp(tm->cmd, "stop", 4) && (ft_strlen(tm->cmd) > 5))
 		ft_cmd_stop(tm, tm->cmd + 5);
+	else if (!strncmp(tm->cmd, "pause", 5) && (ft_strlen(tm->cmd) > 6))
+		ft_cmd_pause(tm, tm->cmd + 6);
 	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
 		ft_cmd_status(tm, tm->cmd + 7);
 	else if (!strcmp(tm->cmd, "reload"))

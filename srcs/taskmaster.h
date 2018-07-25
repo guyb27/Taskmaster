@@ -55,6 +55,7 @@ typedef struct		s_status
 		stopped,
 		running,
 		starting,
+		paused,
 		error
 	}				state;
 	time_t			started_time;
@@ -91,6 +92,7 @@ typedef struct		s_tm
 **  ft_commands.c
 */
 void				ft_cmd_start(t_tm *tm, char *name);
+void				ft_cmd_pause(t_tm *tm, char *name);
 void				ft_cmd_restart(t_tm *tm, char *name);
 void				ft_cmd_status(t_tm *tm, char *name);
 void				ft_cmd_stop(t_tm *tm, char *name);

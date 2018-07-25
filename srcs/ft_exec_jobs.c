@@ -12,46 +12,42 @@
 /* ************************************************************************** */
 
 #include "taskmaster.h"
-/*
-void		ft_remove_elem(t_status *status)
-{
-	t_status *tmp;
 
-	if (!status)
-		return ;
-	tmp = status;
-	if (tmp->prev)
-	{
-		tmp = tmp->prev;
-		tmp->next = status->next;
-	//	free(status);
-		ft_megafree(status, sizeof(t_status));
-	}
-}*/
+int			ft_fork(void (*f)(t_tm*, int, t_status*), t_tm *tm, int id_job, t_status *status)
+{
+	pid_t	father;
+
+	father = fork();
+	if (!father)
+		f(tm, id_job, status);
+	else
+		return (father);
+	exit(0);
+}
+
+int			ft_change_fd(int fd, char *path)
+{
+	int tmp_fd;
+	int ret;
+
+	if (!path && path[0])
+		return (-1);
+	if ((tmp_fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0)
+		return (-1);
+	ret = dup2(tmp_fd, fd);
+	close(tmp_fd);
+	return (ret);
+}
 
 static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 {
 	pid_t	father;
 	char	**args;
-	int		fd_stdout;
-	int		fd_stderr;
 
 	args = NULL;
 	args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
-	// stdout
-	fd_stdout = 0;
-	if (tm->jobs[id_job].stdout[0])
-	{
-		fd_stdout = open(tm->jobs[id_job].stdout, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		dup2(fd_stdout, STDOUT_FILENO);
-	}
-	// stderr
-	fd_stderr = 0;
-	if (tm->jobs[id_job].stderr[0])
-	{
-		fd_stderr = open(tm->jobs[id_job].stderr, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		dup2(fd_stderr, STDERR_FILENO);
-	}
+	ft_change_fd(STDOUT_FILENO, tm->jobs[id_job].stdout);
+	ft_change_fd(STDERR_FILENO, tm->jobs[id_job].stderr);
 	// umask
 	if (tm->jobs[id_job].stderr[0])
 		umask(tm->jobs[id_job].stderr[0]);
@@ -71,17 +67,11 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 	{
 		status->pid = father;
 		status->started_time = time(NULL);
-		if (status->state != error)
-			status->state = starting;
 		wait(&father);
 		ft_free_list(args);
 		status->stopped_time = time(NULL);
 		if (status->state != error)
 			status->state = stopped;
-		if (fd_stdout > 0)
-			close(fd_stdout);
-		if (fd_stderr > 0)
-			close(fd_stderr);
 		ft_printf("program: [%s] just finished.\n", tm->jobs[id_job].name);
 		exit(0);
 	}
@@ -93,7 +83,40 @@ void		ft_exec_job(t_tm *tm, int id_job, int retry)
 	t_status	*status;
 	int			i;
 
-	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
+//	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
+	status = &tm->shared->status[id_job];
+	i = -1;
+	while (++i < tm->jobs[id_job].nb_procs && status)
+	{
+		father = fork();
+		if (!father)
+		{
+			ft_fork(&ft_exec_job_inner, tm, id_job, status);
+			ft_sleep(tm->jobs[id_job].start_time);
+			if (status->pid > 0 && kill(status->pid, 0) > -1)
+				status->state = running;
+			else if (status->state != stopped &&
+						status->retries < tm->jobs[id_job].start_retries)
+			{
+				status->retries++;
+				ft_exec_job(tm, id_job, 1);
+			}
+			exit(0);
+		}
+		status = status->next;
+	}
+	if (retry)
+		exit(0);
+}
+
+/*
+void		ft_exec_job(t_tm *tm, int id_job, int retry)
+{
+	pid_t		father;
+	t_status	*status;
+	int			i;
+
+//	ft_printf("executing: [%s]\n", tm->jobs[id_job].name);
 	status = &tm->shared->status[id_job];
 	i = -1;
 	while (++i < tm->jobs[id_job].nb_procs && status)
@@ -109,7 +132,8 @@ void		ft_exec_job(t_tm *tm, int id_job, int retry)
 				ft_sleep(tm->jobs[id_job].start_time);
 				if (status->pid > 0 && kill(status->pid, 0) > -1)
 					status->state = running;
-				else if (status->retries < tm->jobs[id_job].start_retries)
+				else if (status->state != stopped &&
+							status->retries < tm->jobs[id_job].start_retries)
 				{
 					status->retries++;
 					ft_exec_job(tm, id_job, 1);
@@ -121,4 +145,4 @@ void		ft_exec_job(t_tm *tm, int id_job, int retry)
 	}
 	if (retry)
 		exit(0);
-}
+}*/

@@ -61,6 +61,8 @@ void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
 		ft_printf("%s ", "\e[38;5;208m");
 	else if (status->state == running)
 		ft_printf("%s ", "\e[92m");
+	else if (status->state == paused)
+		ft_printf("%s ", "\e[93m");
 	else if (status->state == error)
 		ft_printf("%s ", "\e[41m");
 	ft_printf("%-20s ", tm->jobs[id_job].name);
@@ -70,6 +72,8 @@ void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
 		ft_printf("%-8s ", "STARTING");
 	else if (status->state == running)
 		ft_printf("%-8s ", "RUNNING");
+	else if (status->state == paused)
+		ft_printf("%-8s ", "PAUSED");
 	else if (status->state == error)
 		ft_printf("%-8s ", "ERROR");
 	if (status->retries)

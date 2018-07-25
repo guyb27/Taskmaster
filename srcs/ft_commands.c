@@ -55,21 +55,53 @@ void	ft_restart_job(t_tm *tm, int id_job, t_status *status)
 void	ft_cmd_start(t_tm *tm, char *name)
 {
 	int			i;
-	t_status	*tmp;
+	t_status	*status;
 
 	ft_printf("starting: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
-		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")) &&
-			tm->shared->status[i].state == stopped)
+		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
 		{
-			tmp = &tm->shared->status[i];
-			while (tmp)
+			status = &tm->shared->status[i];
+			while (status)
 			{
-				tmp->retries = 0;
-				tmp = tmp->next;
+				status->retries = 0;
+				status = status->next;
 			}
-			ft_exec_job(tm, i, 0);
+			status = &tm->shared->status[i];
+			if (status->state == paused)
+				while (status)
+				{
+					kill(status->pid, SIGCONT);
+					status->state = running;
+					status = status->next;
+				}
+			else if (status->state == stopped || status->state == error)
+				ft_exec_job(tm, i, 0);
+		}
+}
+
+void	ft_cmd_pause(t_tm *tm, char *name)
+{
+	int			i;
+	t_status	*status;
+
+	ft_printf("pausing: [%s]\n", name);
+	i = -1;
+	while (++i < tm->jobs_cnt)
+		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")) &&
+			tm->shared->status[i].pid > 0)
+		{
+			status = &tm->shared->status[i];
+			while (status)
+			{
+				if (status->state == running)
+				{
+					kill(status->pid, SIGSTOP);
+					status->state = paused;
+				}
+				status = status->next;
+			}
 		}
 }
 
