@@ -32,8 +32,9 @@ void		ft_init_status(t_status *status)
 	status->started_time = 0;
 	status->stopped_time = 0;
 	status->retries = 0;
+	status->can_restart = 1;
 	status->next = NULL;
-	status->prev = NULL;
+//	status->prev = NULL;
 }
 
 static void	ft_get_htime(t_htime *htime, time_t time)

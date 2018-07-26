@@ -31,7 +31,7 @@ autostart: 0
 autorestart: 1
 exitcodes:
 -0
--2 
+-2
 startretries: 3
 starttime: 3
 stopsignal: 4
@@ -39,7 +39,7 @@ stoptime: 10
 stdout: /tmp/my_ls.stdout
 stderr: /tmp/my_ls.stderr
 env:
-_STARTED_BY: taskmaster
+_FUCKER: jack
 _ANSWER: 42
 
 name: loop

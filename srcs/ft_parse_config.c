@@ -120,6 +120,7 @@ static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 		else
 			ft_printf("bad token: [%s]\n", token);
 	}
+	free(token);
 }
 
 void		ft_parse_config(t_tm *tm, char *config_file)

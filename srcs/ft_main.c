@@ -13,7 +13,46 @@
 
 #include "taskmaster.h"
 
-void	ft_autostart_jobs(t_tm *tm)
+static void	ft_free_env(t_keyval *env)
+{
+	t_keyval	*env_2;
+
+	while (env)
+	{
+		env_2 = env;
+		env = env->next;
+		free(env_2->key);
+		free(env_2->value);
+		free(env_2);
+	}
+}
+
+void		ft_shutdown(t_tm *tm)
+{
+	t_status	*tmp;
+	t_status	*tmp_2;
+	int			i;
+	int			j;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+	{
+		ft_free_env(tm->jobs[i].env);
+		tmp = &tm->shared->status[i];
+		j = 0;
+		while (tmp)
+		{
+			tmp_2 = tmp;
+			tmp = tmp->next;
+			if (j++ > 0)
+				ft_megafree(tmp_2, sizeof(t_status));
+		}
+	}
+	ft_megafree(tm->shared, sizeof(t_shared));
+	exit(0);
+}
+
+void		ft_autostart_jobs(t_tm *tm)
 {
 	int i;
 
@@ -25,7 +64,7 @@ void	ft_autostart_jobs(t_tm *tm)
 	}
 }
 
-void	ft_process_cmd(t_tm *tm)
+void		ft_process_cmd(t_tm *tm)
 {
 	if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
 		ft_cmd_start(tm, tm->cmd + 6);
@@ -45,14 +84,11 @@ void	ft_process_cmd(t_tm *tm)
 		exit(0);
 	}
 	else if (!ft_strcmp(tm->cmd, "exit"))
-		exit(0);
+	//	exit(0);
+		ft_shutdown(tm);
 }
 
-/*
-**------------------------------------------------------------------------------
-*/
-
-void	ft_get_user_input(t_tm *tm)
+void		ft_get_user_input(t_tm *tm)
 {
 	if (tm->cmd)
 		free(tm->cmd);
@@ -60,7 +96,7 @@ void	ft_get_user_input(t_tm *tm)
 	get_next_line(0, &tm->cmd);
 }
 
-int		main(int argc, char *argv[], char *env[])
+int			main(int argc, char *argv[], char *env[])
 {
 	t_tm	tm;
 
@@ -78,7 +114,7 @@ int		main(int argc, char *argv[], char *env[])
 		while (1)
 		{
 			ft_get_user_input(&tm);
-		ft_printf("{blue}cmd: [%s]{eoc}\n", tm.cmd);
+	//	ft_printf("{blue}cmd: [%s]{eoc}\n", tm.cmd);
 			ft_process_cmd(&tm);
 		}
 	}

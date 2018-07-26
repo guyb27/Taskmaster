@@ -22,10 +22,12 @@ void	ft_stop_job(t_tm *tm, int id_job, t_status *status)
 	father = fork();
 	if (!father)
 	{
+		status->can_restart = 0;
 		kill(status->pid, tm->jobs[id_job].stop_signal);
 		ft_sleep(tm->jobs[id_job].stop_signal);
 		if (status->pid > 0 && kill(status->pid, 0) > -1)
 			kill(status->pid, 9);
+		status->can_restart = 1;
 		if (status->pid > 0 && kill(status->pid, 0) == -1)
 		{
 			status->state = stopped;

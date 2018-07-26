@@ -61,8 +61,8 @@ typedef struct		s_status
 	time_t			started_time;
 	time_t			stopped_time;
 	int				retries;
+	int				can_restart;
 	struct s_status *next;
-	struct s_status *prev;
 }					t_status;
 
 typedef struct		s_shared
@@ -122,7 +122,7 @@ unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
 
-t_status			*ft_get_last_status(t_status *list);
+//t_status			*ft_get_last_status(t_status *list);
 void				ft_init_job(t_job *job);
 void				ft_debug_job(t_tm *tm, int job_id);
 

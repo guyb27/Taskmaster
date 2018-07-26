@@ -13,10 +13,10 @@
 
 #include "taskmaster.h"
 
-unsigned int ft_sleep(unsigned int seconds)
+unsigned int	ft_sleep(unsigned int seconds)
 {
 	struct timespec ts;
-	
+
 	ts.tv_sec = seconds;
 	ts.tv_nsec = 0;
 	if (nanosleep(&ts, &ts) == 0)
@@ -24,32 +24,32 @@ unsigned int ft_sleep(unsigned int seconds)
 	return (ts.tv_sec);
 }
 
-void		*ft_megamalloc(int size)
+void			*ft_megamalloc(int size)
 {
 	void *var;
-	
-	var = mmap(NULL, size, 
-				PROT_READ|PROT_WRITE, 
-				MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+
+	var = mmap(NULL, size,
+				PROT_READ | PROT_WRITE,
+				MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	return (var);
 }
 
-void		ft_megafree(void *var, int size)
+void			ft_megafree(void *var, int size)
 {
 	munmap(var, size);
 }
 
-t_status    *ft_get_last_status(t_status *list)
+t_status		*ft_get_last_status(t_status *list)
 {
-    t_status *tmp;
+	t_status *tmp;
 
-    tmp = list;
-    while (tmp->next)
-        tmp = tmp->next;
-    return (tmp);
+	tmp = list;
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
 }
 
-void	ft_init_job(t_job *job)
+void			ft_init_job(t_job *job)
 {
 	int i;
 
@@ -66,13 +66,12 @@ void	ft_init_job(t_job *job)
 	job->start_time = 0;
 	job->stop_time = 0;
 	job->stop_signal = 3;
-//	ft_bzero(job->stop_signal, 10);
 	ft_bzero(job->stdout, 1000);
 	ft_bzero(job->stderr, 1000);
 	job->env = NULL;
 }
 
-void	ft_debug_job(t_tm *tm, int job_id)
+void			ft_debug_job(t_tm *tm, int job_id)
 {
 	ft_printf("\n==> Debugging job id [%d]\n", job_id);
 	ft_printf("\e[38;5;208m");

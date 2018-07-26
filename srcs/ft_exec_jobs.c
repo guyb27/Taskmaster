@@ -61,7 +61,7 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 		if (args && execve(args[0], args, tm->env) < 0)
 			ft_printf("{red}Error executing '%s'{eoc}\n", tm->jobs[id_job].name);
 		status->state = error;
-		exit(0);
+		exit(127);
 	}
 	else
 	{
@@ -72,7 +72,13 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status)
 		status->stopped_time = time(NULL);
 		if (status->state != error)
 			status->state = stopped;
-		ft_printf("program: [%s] just finished.\n", tm->jobs[id_job].name);
+	//	ft_printf("program: [%s] just finished.\n", tm->jobs[id_job].name);
+	/*	if (tm->jobs[id_job].autorestart && status->can_restart &&
+							status->retries < tm->jobs[id_job].start_retries)
+		{
+			status->retries++;
+			ft_exec_job(tm, id_job, 0);
+		}*/
 		exit(0);
 	}
 }
@@ -91,15 +97,18 @@ void		ft_exec_job(t_tm *tm, int id_job, int retry)
 		father = fork();
 		if (!father)
 		{
-			ft_fork(&ft_exec_job_inner, tm, id_job, status);
-			ft_sleep(tm->jobs[id_job].start_time);
-			if (status->pid > 0 && kill(status->pid, 0) > -1)
-				status->state = running;
-			else if (status->state != stopped &&
-						status->retries < tm->jobs[id_job].start_retries)
+			if (status->state == stopped || status->state == paused)
 			{
-				status->retries++;
-				ft_exec_job(tm, id_job, 1);
+				ft_fork(&ft_exec_job_inner, tm, id_job, status);
+				ft_sleep(tm->jobs[id_job].start_time);
+				if (status->pid > 0 && kill(status->pid, 0) > -1)
+					status->state = running;
+				else if (status->state >= running && status->state <= paused &&
+							status->retries < tm->jobs[id_job].start_retries)
+				{
+					status->retries++;
+					ft_exec_job(tm, id_job, 1);
+				}
 			}
 			exit(0);
 		}
