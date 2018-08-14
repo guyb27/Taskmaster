@@ -44,7 +44,7 @@ _ANSWER: 42
 
 name: loop
 cmd: /Users/gbarnay/Documents/cursus/taskmaster/last/loop
-numprocs: 3
+numprocs: 2
 umask: 022
 workingdir: .
 autostart: 1

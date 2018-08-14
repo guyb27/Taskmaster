@@ -52,18 +52,6 @@ void		ft_shutdown(t_tm *tm)
 	exit(0);
 }
 
-void		ft_autostart_jobs(t_tm *tm)
-{
-	int i;
-
-	i = -1;
-	while (++i < tm->jobs_cnt)
-	{
-		if (tm->jobs[i].autostart == 1)
-			ft_exec_job(tm, i, 0);
-	}
-}
-
 void		ft_process_cmd(t_tm *tm)
 {
 	if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
@@ -84,7 +72,6 @@ void		ft_process_cmd(t_tm *tm)
 		exit(0);
 	}
 	else if (!ft_strcmp(tm->cmd, "exit"))
-	//	exit(0);
 		ft_shutdown(tm);
 }
 
@@ -105,19 +92,20 @@ int			main(int argc, char *argv[], char *env[])
 	tm.shared = ft_megamalloc(sizeof(t_shared));
 	tm.env = env;
 	tm.jobs_cnt = 0;
-	if (argc == 2)
+	if (argc == 2 && access(argv[1], F_OK) > -1)
 	{
 		ft_parse_config(&tm, argv[1]);
-		for (int i = 0; i < tm.jobs_cnt; i++)
-			ft_debug_job(&tm, i);
+//		for (int i = 0; i < tm.jobs_cnt; i++)
+//			ft_debug_job(&tm, i);
 		ft_autostart_jobs(&tm);
 		while (1)
 		{
 			ft_get_user_input(&tm);
-	//	ft_printf("{blue}cmd: [%s]{eoc}\n", tm.cmd);
 			ft_process_cmd(&tm);
 		}
 	}
+	else if (access(argv[1], F_OK) == -1)
+		ft_printf("error: not a valid config file\n");
 	else
 		ft_printf("usage: taskmaster config_file\n");
 	munmap(tm.shared, sizeof(t_shared));

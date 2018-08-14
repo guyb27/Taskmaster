@@ -121,9 +121,22 @@ void				ft_parse_config(t_tm *tm, char *config_file);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
-
-//t_status			*ft_get_last_status(t_status *list);
 void				ft_init_job(t_job *job);
-void				ft_debug_job(t_tm *tm, int job_id);
+/*
+**void				ft_debug_job(t_tm *tm, int job_id);
+*/
+
+/*
+**	ft_jobs_funcs.c
+*/
+void				ft_stop_job(t_tm *tm, int id_job, t_status *status);
+void				ft_restart_job(t_tm *tm, int id_job, t_status *status);
+void				ft_autostart_jobs(t_tm *tm);
+
+/*
+**	ft_parse_utils.c
+*/
+void				ft_append_int_val(int list[], int val);
+void				ft_append_env(t_job *job, char *key, char *value);
 
 #endif

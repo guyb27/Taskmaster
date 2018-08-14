@@ -13,7 +13,9 @@ SRCS_NAME =	ft_main.c			\
 			ft_commands.c		\
 			ft_status.c			\
 			ft_parse_config.c	\
-			ft_utils.c
+			ft_utils.c			\
+			ft_jobs_funcs.c		\
+			ft_parse_utils.c
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))

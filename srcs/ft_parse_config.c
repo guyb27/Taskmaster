@@ -13,34 +13,6 @@
 
 #include "taskmaster.h"
 
-static void	ft_append_int_val(int list[], int val)
-{
-	int	i;
-
-	i = 0;
-	while (list[i] > -42)
-		i++;
-	list[i] = val;
-}
-
-static void	ft_append_env(t_job *job, char *key, char *value)
-{
-	t_keyval *new;
-	t_keyval *tmp;
-
-	tmp = job->env;
-	while (tmp && tmp->next)
-		tmp = tmp->next;
-	new = (t_keyval*)malloc(sizeof(t_keyval));
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = NULL;
-	if (!tmp)
-		job->env = new;
-	else
-		tmp->next = new;
-}
-
 static void	ft_parse_token2(t_tm *tm, char *token, char *value, int current_job)
 {
 	if (!ft_strcmp(token, "umask"))
@@ -85,11 +57,12 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 		{
 			i = 0;
 			tmp = &tm->shared->status[current_job];
+			ft_init_status(tmp);
 			while (++i < ft_atoi(value))
 			{
-				ft_init_status(tmp);
 				tmp->next = ft_megamalloc(sizeof(t_status));
 				tmp = tmp->next;
+				ft_init_status(tmp);
 			}
 		}
 	}
