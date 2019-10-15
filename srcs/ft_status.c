@@ -77,9 +77,9 @@ void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
 	else if (status->state == error)
 		ft_printf("%-8s ", "ERROR");
 	if (status->retries)
-		ft_printf("(%d retries)  ", status->retries);
+		ft_printf("(%2d retries)  ", status->retries);
 	else
-		ft_printf("             ");
+		ft_printf("              ");
 }
 
 void		ft_get_job_status(t_tm *tm, int id_job, t_status *status)

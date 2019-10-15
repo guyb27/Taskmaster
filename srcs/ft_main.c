@@ -104,7 +104,7 @@ int			main(int argc, char *argv[], char *env[])
 			ft_process_cmd(&tm);
 		}
 	}
-	else if (access(argv[1], F_OK) == -1)
+	else if (argc == 2 && access(argv[1], F_OK) == -1)
 		ft_printf("error: not a valid config file\n");
 	else
 		ft_printf("usage: taskmaster config_file\n");
