@@ -16,38 +16,51 @@
 
 # include "libft.h"
 # include "ft_printf.h"
+# include "get_next_line.h"
 # include <sys/mman.h>
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-#include <sys/socket.h>
-#include <netdb.h>
+# include <unistd.h>
+# include <errno.h>
 
+/*
+********************************************************************************
+** Server
+*/
 
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <errno.h>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
 
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define closesocket(s) close(s)
+# define INVALID_SOCKET	-1
+# define SOCKET_ERROR	-1
 
-#define MAX_CLIENTS 	100
-#define BUF_SIZE		1024
-#define PORT	 		1978
+# define MAX_CLIENTS 	100
+# define BUF_SIZE		1024
+# define SERVER_PORT	1978
 
+typedef int					t_socket;
+typedef struct sockaddr_in	t_sockaddr_in;
+typedef struct sockaddr		t_sockaddr;
+typedef struct in_addr		t_in_addr;
 
-typedef int SOCKET;
-typedef struct sockaddr_in SOCKADDR_IN;
-typedef struct sockaddr SOCKADDR;
-typedef struct in_addr IN_ADDR;
-
-
-typedef struct
+typedef struct		s_server
 {
-   SOCKET sock;
-}Client;
+	t_socket		sock;
+	t_sockaddr_in	sin;
+	t_socket		csock;
+	t_sockaddr_in	csin;
+	t_socket		clients[MAX_CLIENTS];
+	int				clients_cnt;
+	fd_set			rdfs;
+}					t_server;
+
+/*
+********************************************************************************
+** Main structs
+*/
 
 typedef struct		s_keyval
 {
@@ -110,19 +123,20 @@ typedef struct		s_tm
 	t_shared		*shared;
 	int				jobs_cnt;
 	char			**env;
-	char			cmd[BUF_SIZE];//Modify by gmadec
+	char			cmd[BUF_SIZE];
 	pid_t			jobs_watcher;
 	char			**argv;
-	char			*ret;//ADD BY GMADEC
+	char			*ret; // ADDED BY GMADEC
 }					t_tm;
 
-typedef struct		s_server
-{
-		int socket;
-		SOCKET clients[MAX_CLIENTS];
-		fd_set rdfs;
-}					t_server;
+/*
+********************************************************************************
+*/
 
+/*
+** ft_main.c
+*/
+void				ft_process_cmd(t_tm *tm);
 
 /*
 **  ft_commands.c
@@ -154,6 +168,7 @@ void				ft_parse_config(t_tm *tm, char *config_file);
 /*
 **  ft_utils.c
 */
+void				ft_perror(char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
@@ -176,10 +191,10 @@ void				ft_append_int_val(int list[], int val);
 void				ft_append_env(t_job *job, char *key, char *value);
 
 /*
-**server.c
+**	ft_server.c
 */
-t_server			init_server(char *port);
-int					receive_info(SOCKET sock, char *buffer);
-void				send_info(SOCKET sender, const char *buffer);
+void				ft_server_quit(t_server *server, char *error);
+t_server			ft_init_server(int port);
+int					ft_server_loop(t_server *server, t_tm *tm);
 
 #endif

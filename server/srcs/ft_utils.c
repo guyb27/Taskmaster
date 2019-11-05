@@ -13,6 +13,16 @@
 
 #include "taskmaster.h"
 
+void			ft_perror(char *msg)
+{
+	if (msg)
+		ft_printf("%s: ", msg);
+	if (errno <= sys_nerr - 1)
+		ft_printf("%s\n", sys_errlist[errno]);
+	else
+		ft_printf("Unknown error: %d\n", errno);
+}
+
 unsigned int	ft_sleep(unsigned int seconds)
 {
 	struct timespec ts;
@@ -60,6 +70,7 @@ void			ft_init_job(t_job *job)
 	ft_bzero(job->stderr, 1000);
 	job->env = NULL;
 }
+
 /*
 **void			ft_debug_job(t_tm *tm, int job_id)
 **{
