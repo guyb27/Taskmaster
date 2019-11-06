@@ -6,7 +6,7 @@
 /*   By: dewalter <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/13 23:22:07 by dewalter     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/25 12:37:18 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 04:35:13 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -52,8 +52,8 @@ static int			geo_prompt(t_prompt prompt)
 
 	ft_bzero(buff, sizeof(buff));
 	home = prompt == 0 ? ft_getenv("HOME", g_env) : NULL;
-	if (prompt != PROMPT)
-		return (0);
+//	if (prompt != PROMPT)
+//		return (0);
 	pwd = ft_get_current_dir();
 	err = ft_getenv("?", g_set);
 	ft_geoprintf(buff, err && err[0] == '0' ? "\e[92m➜\e[0m" : "\e[91m➜\e[0m");
@@ -73,7 +73,9 @@ static int			geo_prompt(t_prompt prompt)
 
 int					display_prompt(t_prompt prompt)
 {
-	if (prompt == PROMPT)
+
+	return (ft_putstr("taskmaster > "));
+/*	if (prompt == PROMPT)
 		return (geo_prompt(prompt) + 1);
 	else if (prompt == B_QUOTE || prompt == S_QUOTE)
 		return (prompt == B_QUOTE ? ft_putstr("bquote> ") :
@@ -93,5 +95,5 @@ int					display_prompt(t_prompt prompt)
 	else if (prompt == SUBST)
 		return (ft_putstr("cmdsubst> "));
 	else
-		return (0);
+		return (0);*/
 }

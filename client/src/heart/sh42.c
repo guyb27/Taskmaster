@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 01:34:36 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 06:26:50 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,65 +32,65 @@ static void		ft_print_logo_and_init(void)
 
 static void end_connection(int sock)
 {
-   closesocket(sock);
+	closesocket(sock);
 }
 
 static int read_server(SOCKET sock, char *buffer)
 {
-   int n = 0;
+	int n = 0;
 
-   if((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0)
-   {
-      perror("recv()");
-      exit(errno);
-   }
+	if((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0)
+	{
+		perror("recv()");
+		exit(errno);
+	}
 
-   buffer[n] = 0;
+	buffer[n] = 0;
 
-   return n;
+	return n;
 }
 
 
 static void write_server(SOCKET sock, const char *buffer)
 {
-   if(send(sock, buffer, strlen(buffer), 0) < 0)
-   {
-      perror("send()");
-      exit(errno);
-   }
+	if(send(sock, buffer, strlen(buffer), 0) < 0)
+	{
+		perror("send()");
+		exit(errno);
+	}
 }
 
 
 static int init_connection(const char *address)
 {
-   SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-   SOCKADDR_IN sin = { 0 };
-   struct hostent *hostinfo;
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	SOCKADDR_IN sin = { 0 };
+	struct hostent *hostinfo;
 
-   if(sock == INVALID_SOCKET)
-   {
-      perror("socket()");
-      exit(errno);
-   }
+	if(sock == INVALID_SOCKET)
+	{
+		perror("socket()");
+		exit(errno);
+	}
 
-   hostinfo = gethostbyname(address);
-   if (hostinfo == NULL)
-   {
-      fprintf (stderr, "Unknown host %s.\n", address);
-      exit(EXIT_FAILURE);
-   }
+	hostinfo = gethostbyname(address);
+	if (hostinfo == NULL)
+	{
+		fprintf (stderr, "Unknown host %s.\n", address);
+		exit(EXIT_FAILURE);
+	}
 
-   sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
-   sin.sin_port = htons(PORT);
-   sin.sin_family = AF_INET;
+	sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
+	sin.sin_port = htons(PORT);
+	sin.sin_family = AF_INET;
 
-   if(connect(sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
-   {
-      perror("connect()");
-      exit(errno);
-   }
+	if(connect(sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
+	{
+		perror("connect()");
+		exit(errno);
+	}
 
-   return sock;
+	return sock;
 }
 
 void stackchar(char c)
@@ -100,40 +100,94 @@ void stackchar(char c)
 		exit(1);
 	}
 }
+
 static int		shell(const char *addr, const char *port)
 {
-	char buf[BUF_SIZE];
-
 	int sock = init_connection(addr);
 	char buffer[BUF_SIZE];
+	char prompt[500];
 	fd_set rdfs;
-
 	ft_print_logo_and_init();
-   while(1)
-   {
-
-		ft_memset(buf, 0, sizeof(buf));
-		ft_get_user_input(&g_prompt);
-		if (g_cmd && g_prompt == PROMPT && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
-			return (0);
-		else if (g_cmd && g_cmd[1])
+	int i = 0;
+		FD_ZERO(&rdfs);
+		/* add STDIN_FILENO */
+		FD_SET(STDIN_FILENO, &rdfs);
+		/* add the socket */
+		FD_SET(sock, &rdfs);
+		if (i == 0)
+		stackchar('\n');
+		if(select(sock, &rdfs, NULL, NULL, NULL) == -1)
 		{
-			history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-         	write_server(sock, g_cmd);
+			perror("select()");
+			exit(errno);
 		}
-		ft_strdel(&g_cmd);
-		 if (read_server(sock, buffer) == 0)
-         {
-            printf("Server disconnected !\n");
-            break;
-         }
-         printf("%s", buffer);
-   }
+	while(1)
+	{
+	ft_memset(prompt, 0, sizeof(prompt));
+		if (read_server(sock, prompt) == 0)
+		{
+			printf("Server disconnected !\n");
+			end_connection(sock);
+			return (0);
+	//		break;
+		}
 
-   end_connection(sock);
+		/* something from standard input : i.e keyboard */
+		if(FD_ISSET(STDIN_FILENO, &rdfs))
+		{
+				/*if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+			//printf("%s\n", buffer);
+			ft_memset(buffer, 0, sizeof(buffer));
+			ft_get_user_input(&g_prompt, prompt);
+			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+				return (0);
+			else if (g_cmd && g_cmd[1])
+			{
+				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
+				write_server(sock, g_cmd);
+			}
+		/*		if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+			printf("%s\n", buffer);*/
+		/*		if (read_server(sock, prompt) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+			ft_strdel(&g_cmd);
+			/*	if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+		}
+		else if(FD_ISSET(sock, &rdfs))
+		{
+			//int n = read_server(sock, buffer);
+			// server down
+			//if(n == 0)
+			//printf("READDDD\n");
+				if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+			printf("%s\n", buffer);
+		}
+		//printf("%s", buffer);
+		i = 1;
+	}
+
+	end_connection(sock);
 	return (0);
 }
-
 int				main(int ac, const char **av)
 {
 	int		ret;

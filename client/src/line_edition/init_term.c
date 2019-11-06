@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/24 03:09:23 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 04:45:32 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -31,7 +31,7 @@ int				ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
 	sh->t.nb_line = 0;
 	sh->t.nb_char = 0;
 	ft_get_cols(&sh->ws);
-	sh->prompt_len = display_prompt(*prompt);
+	//sh->prompt_len = display_prompt(*prompt);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2044/03/15 20:48:52 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 06:13:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -112,7 +112,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				ft_perror("accept()");
 				continue;
 			}
-			if (send(server->csock, PROMPT, ft_strlen(PROMPT), 0) < 0)
+			if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
 			// what is the new maximum fd ?
 			max_fd = server->csock > max_fd ? server->csock : max_fd;
@@ -136,13 +136,13 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 					else if (ft_cmd_check(tm->cmd))
 					{
 						ft_process_cmd(tm);
-						if (send(server->clients[i], tm->ret, ft_strlen(tm->ret), 0) < 0)
+						if (send(server->clients[i], tm->ret, ft_strlen(tm->ret) + 1, 0) < 0)
 						{
 							ft_strdel(&tm->ret);
 							ft_server_quit(server, "send()");
 						}
 					}
-					if (send(server->clients[i], PROMPT, ft_strlen(PROMPT), 0) < 0)
+					if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
 						ft_server_quit(server, "send() prompt 2");
 					break;
 				}

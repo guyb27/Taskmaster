@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 01:21:09 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 06:17:37 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -39,7 +39,7 @@
 
 # define MAX_CLIENTS 	100
 # define BUF_SIZE		1024
-# define SERVER_PORT	1979
+# define SERVER_PORT	1990
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 
