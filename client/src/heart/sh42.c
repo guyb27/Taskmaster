@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/24 03:11:23 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 01:34:36 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -93,6 +93,13 @@ static int init_connection(const char *address)
    return sock;
 }
 
+void stackchar(char c)
+{
+	if (ioctl(0, TIOCSTI, &c) < 0) {
+		perror("ioctl");
+		exit(1);
+	}
+}
 static int		shell(const char *addr, const char *port)
 {
 	char buf[BUF_SIZE];
@@ -105,24 +112,6 @@ static int		shell(const char *addr, const char *port)
    while(1)
    {
 
-      FD_ZERO(&rdfs);
-
-      /* add STDIN_FILENO */
-      FD_SET(STDIN_FILENO, &rdfs);
-
-      /* add the socket */
-      FD_SET(sock, &rdfs);
-
-      if(select(sock, &rdfs, NULL, NULL, NULL) == -1)
-      {
-         perror("select()");
-         exit(errno);
-      }
-
-	printf("[0]\n\r");
-      /* something from standard input : i.e keyboard */
-      if(FD_ISSET(STDIN_FILENO, &rdfs))
-      {
 		ft_memset(buf, 0, sizeof(buf));
 		ft_get_user_input(&g_prompt);
 		if (g_cmd && g_prompt == PROMPT && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
@@ -133,18 +122,12 @@ static int		shell(const char *addr, const char *port)
          	write_server(sock, g_cmd);
 		}
 		ft_strdel(&g_cmd);
-      }
-      else if(FD_ISSET(sock, &rdfs))
-      {
-         int n = read_server(sock, buffer);
-         /* server down */
-         if(n == 0)
+		 if (read_server(sock, buffer) == 0)
          {
             printf("Server disconnected !\n");
             break;
          }
-         printf("%s\n", buffer);
-      }
+         printf("%s", buffer);
    }
 
    end_connection(sock);

@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/17 11:35:39 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 01:31:05 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -115,14 +115,12 @@ char		*ft_get_user_input(t_prompt *prompt)
 	t_shell	sh;
 	char	buff[5];
 
-	printf("[1]\n\r");
 	ft_memset(&sh, 0, sizeof(sh));
 	ft_memset(buff, 0, sizeof(buff));
 	if (ft_init_shell_struct(&sh, prompt) == -1)
 		return (g_cmd = ft_strdup("exit\n"));
 	ft_init_input_keys(&sh);
 	get_term_raw_mode(1);
-
 	while (1)
 	{
 		ft_bzero(buff, 5);
@@ -131,10 +129,7 @@ char		*ft_get_user_input(t_prompt *prompt)
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		ft_get_cols(&sh.ws);
 		if (ft_get_user_input_buff_checker(&sh, buff))
-		{
-//		get_term_raw_mode(0);
 			return (g_cmd);
-		}
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 	}
 }
