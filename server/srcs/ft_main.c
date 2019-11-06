@@ -52,6 +52,35 @@ void		ft_shutdown(t_tm *tm)
 	exit(0);
 }
 
+void		ft_send_json_status(t_tm *tm)
+{
+	t_status	*st;
+	char		**json;
+	int			i;
+
+	json = &tm->ret;
+	ft_sprintf(json, "[\n");
+	i = -1;
+	while (++i < tm->jobs_cnt)
+	{
+		st = &tm->shared->status[i];
+		ft_sprintf(json, "%s{\n\"name\": \"%s\",\n", *json, tm->jobs[i].name);
+		ft_sprintf(json, "%s\"status\": \"%d\",\n", *json, st->state);
+		ft_sprintf(json, "%s\"retries\": \"%d\",\n", *json, st->retries);
+		ft_sprintf(json, "%s\"pid\": \"%d\",\n", *json, st->pid);
+		ft_sprintf(json, "%s\"timetype\": \"%s\",\n", *json,
+						st->state == running ? "starttime" : "downtime");
+		if (st->state > stopped && st->state < error)
+			ft_sprintf(json, "%s\"elapsed\": \"%zu\"\n", *json,
+												time(NULL) - st->started_time);
+		else
+			ft_sprintf(json, "%s\"elapsed\": \"%zu\"\n", *json,
+						st->stopped_time ? time(NULL) - st->stopped_time : 0);
+		ft_sprintf(json, "%s}%s\n", *json, i + 1 < tm->jobs_cnt ? "," : "");
+	}
+	ft_sprintf(json, "%s]\n", *json);
+}
+
 void		ft_process_cmd(t_tm *tm)
 {
 	printf("CMD: [%s]\n", tm->cmd);
@@ -72,6 +101,8 @@ void		ft_process_cmd(t_tm *tm)
 		ft_printf("Quitting taskmaster\n");
 		exit(0);
 	}
+	else if (!ft_strcmp(tm->cmd, "json status"))
+		ft_send_json_status(tm);
 	else if (!ft_strcmp(tm->cmd, "exit"))
 		ft_shutdown(tm);
 	else
