@@ -41,6 +41,8 @@
 # define BUF_SIZE		1024
 # define SERVER_PORT	1979
 
+# define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
+
 typedef int					t_socket;
 typedef struct sockaddr_in	t_sockaddr_in;
 typedef struct sockaddr		t_sockaddr;
@@ -50,8 +52,8 @@ typedef struct		s_server
 {
 	t_socket		sock;
 	t_sockaddr_in	sin;
-	t_socket		csock;
-	t_sockaddr_in	csin;
+	t_socket		csock; // pas utile ds la struct ?
+	t_sockaddr_in	csin;  // meme chose ?
 	t_socket		clients[MAX_CLIENTS];
 	int				clients_cnt;
 	fd_set			rdfs;

@@ -112,6 +112,8 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				ft_perror("accept()");
 				continue;
 			}
+			if (send(server->csock, PROMPT, ft_strlen(PROMPT), 0) < 0)
+				ft_server_quit(server, "send() prompt");
 			// what is the new maximum fd ?
 			max_fd = server->csock > max_fd ? server->csock : max_fd;
 			FD_SET(server->csock, &server->rdfs);
@@ -126,6 +128,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				// a client is talking
 				if (FD_ISSET(server->clients[i], &server->rdfs))
 				{
+					
 					if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) < 0)
 						ft_server_quit(server, "recv()");
 					if (!ft_strlen(tm->cmd))
@@ -139,6 +142,8 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 							ft_server_quit(server, "send()");
 						}
 					}
+					if (send(server->clients[i], PROMPT, ft_strlen(PROMPT), 0) < 0)
+						ft_server_quit(server, "send() prompt 2");
 					break;
 				}
 			}
