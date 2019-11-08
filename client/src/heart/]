@@ -101,40 +101,6 @@ void stackchar(char c)
 	}
 }
 
-int get_fd( void *ptr, size_t size )
-{
-    unsigned char *p = ptr ;
-	int				mult = 1;
-	int ret = 0;
-
-    for( size_t i = 0; i < size; i++ )
-    {
-        for( short j = 0; j <= 7; j++ )
-        {
-			ret += ((p[i] >> j) & 1) * mult;
-			mult *= 2;
-        }
-    }
-	return (ret);
-}
-
-static void *fn_store (void *p_data)
-{
-	char prompt[50];
-	int sock;
-
-	sock = get_fd(p_data, sizeof(int));
-	//printf("SOCK: [%d], [%s]\n", sock, (char*)p_data);
-	if (read_server(sock, prompt) == 0)
-	{
-		printf("Server disconnected !\n");
-		end_connection(sock);
-		return (0);
-	}
-
-	return NULL;
-}
-
 static int		shell(const char *addr, const char *port)
 {
 	int sock = init_connection(addr);
@@ -143,37 +109,102 @@ static int		shell(const char *addr, const char *port)
 	fd_set rdfs;
 	ft_print_logo_and_init();
 	int i = 0;
-	int ret = 0;
-	pthread_t thread_store;
-
-	ft_memset(prompt, 0, sizeof(prompt));
-	if (read_server(sock, prompt) == 0)
-	{
-		printf("Server disconnected !\n");
-		end_connection(sock);
-		return (0);
-	}
-	ret = pthread_create (&thread_store, NULL, fn_store, (void*)&sock);
-//	pthread_exit(&ret);
-	printf("RIGHT: [%d]\n", sock);
-	while(1)
-	{
-		ft_memset(buffer, 0, sizeof(buffer));
-		ft_get_user_input(&g_prompt, prompt);
-		if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
-			return (0);
-		else if (g_cmd && g_cmd[1])
+		FD_ZERO(&rdfs);
+		/* add STDIN_FILENO */
+		FD_SET(STDIN_FILENO, &rdfs);
+		/* add the socket */
+		FD_SET(sock, &rdfs);
+		if (i == 0)
+		stackchar('\n');
+		if(select(sock, &rdfs, NULL, NULL, NULL) == -1)
 		{
-			history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-			write_server(sock, g_cmd);
+			perror("select()");
+			exit(errno);
 		}
-		if (read_server(sock, buffer) == 0)
+	//ft_memset(prompt, 0, sizeof(prompt));
+		if (read_server(sock, prompt) == 0)
 		{
 			printf("Server disconnected !\n");
-			break;
+			end_connection(sock);
+			return (0);
+	//		break;
 		}
-		printf("%s\n", buffer);
-		ft_strdel(&g_cmd);
+	while(1)
+	{
+
+		/* something from standard input : i.e keyboard */
+		if(FD_ISSET(STDIN_FILENO, &rdfs))
+		{
+				/*if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+			//printf("%s\n", buffer);
+			ft_memset(buffer, 0, sizeof(buffer));
+			ft_get_user_input(&g_prompt, prompt);
+			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+				return (0);
+			else if (g_cmd && g_cmd[1])
+			{
+				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
+				write_server(sock, g_cmd);
+			}
+				if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+		//stackchar('\n');
+			printf("%s\n", buffer);
+		/*		if (read_server(sock, prompt) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+			ft_strdel(&g_cmd);
+			/*	if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}*/
+		}/*
+		if (FD_ISSET(sock, &rdfs))
+		{
+			//int n = read_server(sock, buffer);
+			// server down
+			//if(n == 0)
+			dprintf(2, "READDDD\n\r");
+				if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+			//printf("%s\n\r", buffer);
+			ft_putendl(buffer);
+				if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+			ft_putendl(buffer);*/
+			//printf("%s\n\r", buffer);
+		/*stackchar('\n');
+		stackchar('\r');
+		stackchar('\n');
+		stackchar('\r');
+		stackchar('\n');
+		stackchar('\r');*/
+
+			/*
+				if (read_server(sock, buffer) == 0)
+				{
+					printf("Server disconnected !\n");
+					break;
+				}
+			printf("%s\n", buffer);*/
+	//	}
+		//printf("%s", buffer);
 		i = 1;
 	}
 

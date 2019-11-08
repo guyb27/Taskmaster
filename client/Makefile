@@ -17,7 +17,7 @@ NAME = 42sh
 
 MAKE = make
 CC = gcc
-CFLAGS = #-Wall -Werror -Wextra -Wunused -Wunreachable-code
+CFLAGS = -lpthread -D_REENTRANT#-Wall -Werror -Wextra -Wunused -Wunreachable-code
 CPPFLAGS = -I ./include/
 LDLIBS = -lft -ltermcap
 LDFLAGS = -Llibft/

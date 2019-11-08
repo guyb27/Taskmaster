@@ -53,6 +53,7 @@ t_server	ft_init_server(int port)
 
 static void	ft_remove_client(t_server *server, int client_id)
 {
+	printf("A client left\n");
 	close(server->clients[client_id]);
 	ft_memmove(&server->clients[client_id], &server->clients[client_id + 1],
 			(server->clients_cnt - client_id - 1) * sizeof(t_socket));
@@ -112,7 +113,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				ft_perror("accept()");
 				continue;
 			}
-			if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
+			if (send(server->csock, PROMPT, ft_strlen(PROMPT), 0) < 0)
 				ft_server_quit(server, "send() prompt");
 			// what is the new maximum fd ?
 			max_fd = server->csock > max_fd ? server->csock : max_fd;
@@ -129,21 +130,23 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				if (FD_ISSET(server->clients[i], &server->rdfs))
 				{
 					
-					if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) < 0)
-						ft_server_quit(server, "recv()");
-					if (!ft_strlen(tm->cmd))
+					//if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) < 0)
+					//	ft_server_quit(server, "recv()");
+					if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) <= 0)
 						ft_remove_client(server, i);
+					//if (!ft_strlen(tm->cmd))
+					//	ft_remove_client(server, i);
 					else if (ft_cmd_check(tm->cmd))
 					{
 						ft_process_cmd(tm);
-						if (send(server->clients[i], tm->ret, ft_strlen(tm->ret) + 1, 0) < 0)
+						if (send(server->clients[i], tm->ret, ft_strlen(tm->ret), 0) < 0)
 						{
 							ft_strdel(&tm->ret);
 							ft_server_quit(server, "send()");
 						}
 					}
-					if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
-						ft_server_quit(server, "send() prompt 2");
+					//if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
+					//	ft_server_quit(server, "send() prompt 2");
 					break;
 				}
 			}

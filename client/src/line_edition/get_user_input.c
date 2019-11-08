@@ -115,6 +115,7 @@ char		*ft_get_user_input(t_prompt *prompt, char *cl_prompt)
 	t_shell	sh;
 	char	buff[5];
 
+	//fflush(NULL);
 	ft_memset(&sh, 0, sizeof(sh));
 	ft_memset(buff, 0, sizeof(buff));
 	if (ft_init_shell_struct(&sh, prompt) == -1)
