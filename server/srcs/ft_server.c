@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 06:13:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 03:52:16 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,7 +54,7 @@ t_server	ft_init_server(int port)
 static void	ft_remove_client(t_server *server, int client_id)
 {
 	printf("A client left\n");
-	close(server->clients[client_id]);
+//	close(server->clients[client_id]);
 	ft_memmove(&server->clients[client_id], &server->clients[client_id + 1],
 			(server->clients_cnt - client_id - 1) * sizeof(t_socket));
 	server->clients_cnt--;
@@ -130,12 +130,8 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				if (FD_ISSET(server->clients[i], &server->rdfs))
 				{
 					
-					//if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) < 0)
-					//	ft_server_quit(server, "recv()");
 					if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) <= 0)
 						ft_remove_client(server, i);
-					//if (!ft_strlen(tm->cmd))
-					//	ft_remove_client(server, i);
 					else if (ft_cmd_check(tm->cmd))
 					{
 						ft_process_cmd(tm);
@@ -145,8 +141,9 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 							ft_server_quit(server, "send()");
 						}
 					}
-					//if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
-					//	ft_server_quit(server, "send() prompt 2");
+					if (send(server->clients[i], PROMPT, ft_strlen(PROMPT), 0) <= 0)
+						ft_remove_client(server, i);
+						//ft_server_quit(server, "send() prompt 2");
 					break;
 				}
 			}

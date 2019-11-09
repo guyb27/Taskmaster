@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/02 01:40:43 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 06:17:56 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 05:06:58 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -60,17 +60,20 @@ typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
 #define CRLF	 "\r\n"
-#define PORT	 1990
+#define PORT	 1995
 
 #define BUF_SIZE 1024
+
+int				g_stop_srv;
+
 
 char			**g_set;
 int				g_interupt;
 char			**g_env;
 char			*g_cmd;
 int				g_cursor_pos;
-t_prompt		g_prompt;
-char			g_cl_prompt;
+//t_prompt		g_prompt;
+char			*g_cl_prompt;
 
 int				heart_of_101sh(char *line, int fd_base);
 void			signal_shell(void);

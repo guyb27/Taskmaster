@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 04:39:45 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 02:43:03 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -115,7 +115,7 @@ int				ft_recup_cursor_pos(t_shell *sh, int *left_xpos,
 		int *right_xpos);
 int				ft_count_line_cmd(t_shell *sh);
 int				ft_reprint_cmd(t_shell *sh);
-char			*ft_get_user_input(t_prompt *prompt, char *cl_prompt);
+char			*ft_get_user_input(void);
 int				ft_input_check(char key[], char buff[]);
 void			ft_init_input_keys(t_shell *sh);
 void			ft_left_move(int len, int col);

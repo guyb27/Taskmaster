@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 04:45:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 05:08:09 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -90,14 +90,20 @@ int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 	int	i;
 
 	i = -1;
-	if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
+	if (g_stop_srv == -1)
+	{
+		printf("G_STOP_SRV TERMCAPS\n");
+		free(g_cmd);
+		g_cmd = ft_strdup((char[4]){4, 0, 0, 0});
+		return (1);
+	}
+	else if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
 	{
 		init_tab_and_hist(sh, buff);
 		ft_insert_to_line(sh, buff);
 	}
 	else
 	{
-//	printf("ENTER\n");
 		init_tab_and_hist(sh, buff);
 		while (sh->keys[++i].f)
 			if (ft_input_check(sh->keys[i].key, buff) &&
@@ -110,28 +116,33 @@ int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 	return (0);
 }
 
-char		*ft_get_user_input(t_prompt *prompt, char *cl_prompt)
+char		*ft_get_user_input(void)
 {
 	t_shell	sh;
 	char	buff[5];
 
-	//fflush(NULL);
+	if (g_stop_srv)
+		return (NULL);
 	ft_memset(&sh, 0, sizeof(sh));
 	ft_memset(buff, 0, sizeof(buff));
-	if (ft_init_shell_struct(&sh, prompt) == -1)
+	if (ft_init_shell_struct(&sh, NULL) == -1)
 		return (g_cmd = ft_strdup("exit\n"));
-	sh.prompt_len = ft_putstr(cl_prompt);
+	sh.prompt_len = ft_strlen(g_cl_prompt);
 	ft_init_input_keys(&sh);
 	get_term_raw_mode(1);
 	while (1)
 	{
 		ft_bzero(buff, 5);
-		if (!(read(0, buff, 4)))
+		if (g_stop_srv || !(read(0, buff, 4)))
 			return (NULL);
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		ft_get_cols(&sh.ws);
 		if (ft_get_user_input_buff_checker(&sh, buff))
+		{
+			if (!g_cmd || !ft_strcmp("\n", g_cmd))
+				ft_putstr(g_cl_prompt);
 			return (g_cmd);
+		}
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 	}
 }
