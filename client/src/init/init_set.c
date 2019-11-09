@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #include "heart.h"
-
+/*
 static int			add_info_params(const char **av)
 {
 	char	*tmp;
@@ -82,15 +82,15 @@ static int			get_sysname(void)
 	ft_strdel(&tmp);
 	return (0);
 }
-
+*/
 int					init_set(int ac, const char **av)
 {
-	(void)ac;
-	if (g_env)
-		g_set = ft_tabdup(g_env);
-	add_info_params(av);
-	add_info_id();
-	add_to_set("IFS", " \t\n");
-	get_sysname();
+//	(void)ac;
+//	if (g_env)
+//		g_set = ft_tabdup(g_env);
+//	add_info_params(av);
+//	add_info_id();
+//	add_to_set("IFS", " \t\n");
+//	get_sysname();
 	return (EXIT_SUCCESS);
 }

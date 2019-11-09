@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #include "heart.h"
-
+/*
 static int	add_multiline(char **ret, char *news, char ***get_hist)
 {
 	char	*tmp;
@@ -59,7 +59,7 @@ static int	add_hist_to_memory(char **tmp, char *path)
 	ft_tabdel(&get_hist);
 	return (0);
 }
-
+*/
 static int	init_builtins_history_read(int fd, int *i, char *path)
 {
 	char	*str;
@@ -74,7 +74,8 @@ static int	init_builtins_history_read(int fd, int *i, char *path)
 		(*i)++;
 		ft_strdel(&str);
 	}
-	add_hist_to_memory(tmp, path);
+	//add_hist_to_memory(tmp, path);
+	history_save(&tmp, NULL, -1, path);
 	ft_tabdel(&tmp);
 	return (EXIT_SUCCESS);
 }
@@ -105,20 +106,6 @@ static int	init_builtins_history(const char *path)
 
 int			init_builtins(const char *path)
 {
-/*
-	t_hashtable		*hashtable;
-	int				i;
-
-	hashtable = NULL;
-	i = -1;
-	if (!(hashtable = (t_hashtable *)malloc(sizeof(t_hashtable) * MAX_HASH)))
-		return (EXIT_FAILURE);
-	while (++i < MAX_HASH)
-	{
-		hashtable[i].key = 0;
-		hashtable[i].hashcase = NULL;
-	}
-	ft_save_hash(&hashtable);*/
 	init_builtins_history(path);
 	return (EXIT_SUCCESS);
 }

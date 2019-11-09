@@ -21,8 +21,5 @@ int			init_files(const char *path)
 	if ((access((buf = ft_strjoin(path, "/.101sh_history")), F_OK)) == -1)
 		creat(buf, 0644);
 	ft_strdel(&buf);
-	if ((access((buf = ft_strjoin(path, "/.101sh_aliases")), F_OK)) == -1)
-		creat(buf, 0644);
-	ft_strdel(&buf);
 	return (EXIT_SUCCESS);
 }
