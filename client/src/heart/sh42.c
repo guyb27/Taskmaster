@@ -72,7 +72,6 @@ void			*ft_print_memory(void *addr, unsigned int size)
 static void		ft_print_logo_and_init(void)
 {
 	g_cmd = NULL;
-	//g_prompt = PROMPT;
 	ft_putstr(CYANB);
 	printf(" _            _                        _ \n");
 	printf("| |          | |                      | |           \n");
@@ -99,9 +98,7 @@ static int read_server(SOCKET sock, char *buffer)
 		perror("recv()");
 		exit(errno);
 	}
-
 	buffer[n] = 0;
-
 	return n;
 }
 
@@ -183,22 +180,21 @@ static void *disconnect_srv (void *p_data)
 	sock = get_fd(p_data, sizeof(int));
 	while (1)
 	{
-	ft_memset(ret, 0, sizeof(ret));
+		ft_memset(ret, 0, sizeof(ret));
 		if ((ret_srv = read_server(sock, ret)) == 0)
 		{
 			printf("Server disconnected !\n");
 			g_stop_srv = -1;
-			end_connection(sock);
 			stackchar('\n');
+			end_connection(sock);
 			get_term_raw_mode(0);
 			return (NULL);
 		}
 		else if (ret_srv > 0)
 		{
-	ft_memset(prompt, 0, sizeof(prompt));
+			ft_memset(prompt, 0, sizeof(prompt));
 			g_stop_srv = 1;
 			get_term_raw_mode(0);
-			//ret[ret_srv] = '\0';
 			ft_putstr(ret);
 			get_term_raw_mode(1);
 			g_stop_srv = 0;
@@ -209,6 +205,7 @@ static void *disconnect_srv (void *p_data)
 			printf("ERR[1][%d]\n", ret_srv);
 		}
 	}
+			printf("DISCONNECT SRV\n");
 	return NULL;
 }
 
@@ -232,18 +229,31 @@ static int		shell(const char *addr, const char *port)
 	}
 	ft_putstr(prompt);
 	g_cl_prompt = ft_strdup(prompt);
-	ret = pthread_create (&thread_store, NULL, disconnect_srv, (void*)&sock);
+	ret = pthread_create(&thread_store, NULL, disconnect_srv, (void*)&sock);
 	while(1)
 	{
 		ft_memset(buffer, 0, sizeof(buffer));
 		ft_get_user_input();
+		get_term_raw_mode(0);
 		if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+		{
+			ft_strdel(&g_cmd);
+			pthread_exit(&ret);
+			end_connection(sock);
 			return (0);
-		else if (g_cmd && g_cmd[1])
+		}
+		else if (g_cmd && g_cmd[0])
 		{
 			history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-			write_server(sock, g_cmd);
 			g_stop_srv = 1;
+			write_server(sock, g_cmd);
+			if (!ft_strcmp("exit\n", g_cmd))
+			{
+				pthread_exit(&ret);
+				end_connection(sock);
+				ft_strdel(&g_cmd);
+				return (0);
+			}
 		}
 		ft_strdel(&g_cmd);
 		i = 1;
