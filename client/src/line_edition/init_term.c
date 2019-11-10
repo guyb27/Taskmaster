@@ -47,11 +47,13 @@ int				get_term_raw_mode(int mode)
 		term.c_oflag &= ~(OPOST);
 		term.c_cc[VMIN] = 1;
 		term.c_cc[VTIME] = 0;
+		//printf("ACTIVE_TERM\n");
 	}
 	else
 	{
 		term.c_lflag |= (ECHO | ICANON | ISIG);
 		term.c_oflag |= (OPOST);
+		//printf("CLOSE_TERM\n");
 	}
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 	mode ? TERMCAP("ns") : 0;

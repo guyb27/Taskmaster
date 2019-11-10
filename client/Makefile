@@ -60,18 +60,14 @@ SRCS_NAME =	\
 			ft_select/ft_manage_tab.c \
 			ft_select/ft_tabsplit.c \
 			ft_select/utils.c \
-			line_edition/prompt.c \
-			line_edition/prompt_git.c \
 			line_edition/init_term.c \
 			line_edition/get_user_input.c \
-			line_edition/ft_putfreshstr.c \
 			line_edition/utils_tab_and_hist.c \
 			line_edition/ft_inputs.c \
 			line_edition/ft_inputs_arrows.c \
 			line_edition/ft_inputs_ctrl.c \
 			line_edition/ft_inputs_del.c \
 			line_edition/utils.c \
-			line_edition/ft_cmd_split.c \
 			line_edition/cursor.c
 
 OBJS_FOLDERS = 	\

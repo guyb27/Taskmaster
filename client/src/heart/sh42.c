@@ -223,6 +223,7 @@ static int		shell(const char *addr, const char *port)
 	ft_memset(prompt, 0, sizeof(prompt));
 	if ((i = read_server(sock, prompt)) == 0)
 	{
+		get_term_raw_mode(0);
 		printf("Server disconnected !\n");
 		end_connection(sock);
 		return (0);

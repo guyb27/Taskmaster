@@ -97,19 +97,12 @@ typedef struct	s_shell
 	int			tabu;
 }				t_shell;
 
-int				ft_get_git_branch(char buff[]);
-int				display_prompt(t_prompt prompt);
-void			ft_miniconcat(char **s1, char *s2);
-void			ft_print_git_branch(void);
-void			ft_putfreshstr(char *str);
 void			gm_goto(int nb, void (*f) (int, int), int len, int col);
-char			**ft_cmd_split(t_shell *ed);
 void			ft_pushed_left(t_shell *sh);
 void			ft_pushed_right(t_shell *sh);
 void			init_tab_and_hist(t_shell *sh, char key[5]);
 void			init_hist(t_shell *sh, char key[5]);
 void			init_tab(t_shell *sh, char key[5]);
-void			ft_insert_to_line(t_shell *sh, char *buff);
 void			ft_putcmd(t_shell *sh, int new_pos);
 int				ft_recup_cursor_pos(t_shell *sh, int *left_xpos,
 		int *right_xpos);

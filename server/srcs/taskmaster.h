@@ -39,7 +39,7 @@
 
 # define MAX_CLIENTS 	100
 # define BUF_SIZE		1024
-# define SERVER_PORT	1995
+# define SERVER_PORT	1990
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 

@@ -65,7 +65,7 @@ int			ft_reprint_cmd(t_shell *sh)
 	return (i);
 }
 
-void		ft_insert_to_line(t_shell *sh, char *buff)
+static void		ft_insert_to_line(t_shell *sh, char *buff)
 {
 	int		i;
 	int		cursor_max;
@@ -85,7 +85,7 @@ void		ft_insert_to_line(t_shell *sh, char *buff)
 	}
 }
 
-int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
+static int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 {
 	int	i;
 

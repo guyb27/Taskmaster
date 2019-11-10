@@ -40,7 +40,8 @@ void	place_cursor_after(t_shell *sh)
 		TERMCAP("al");
 		i--;
 	}
-	display_prompt(0);
+	//display_prompt(0);
+	ft_putstr(g_cl_prompt);
 	i = g_cursor_pos;
 	g_cursor_pos = 0;
 	ft_reprint_cmd(sh);

@@ -60,7 +60,7 @@ typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
 #define CRLF	 "\r\n"
-#define PORT	 1995
+#define PORT	 1992
 
 #define BUF_SIZE 1024
 
