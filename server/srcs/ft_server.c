@@ -19,6 +19,7 @@ void		ft_server_quit(t_server *server, char *error)
 	int	i;
 
 	err = errno;
+	printf("\nSERVER QUIT !!!\n");
 	if (errno && error)
 		ft_perror(error);
 	i = -1;
@@ -134,7 +135,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 						ft_remove_client(server, i);
 					else if (ft_cmd_check(tm->cmd))
 					{
-						ft_process_cmd(tm);
+						ft_process_cmd(tm, server);
 						if (send(server->clients[i], tm->ret, ft_strlen(tm->ret), 0) < 0)
 						{
 							ft_strdel(&tm->ret);

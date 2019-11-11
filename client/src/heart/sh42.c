@@ -11,7 +11,8 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "heart.h"
+#include "../../include/heart.h"
+//#include "heart.h"
 
 static void		ft_putnbr_hex(int octet, int rem)
 {
@@ -155,18 +156,18 @@ void stackchar(char c)
 
 int get_fd( void *ptr, size_t size )
 {
-    unsigned char *p = ptr ;
+	unsigned char *p = ptr ;
 	int				mult = 1;
 	int ret = 0;
 
-    for( size_t i = 0; i < size; i++ )
-    {
-        for( short j = 0; j <= 7; j++ )
-        {
+	for( size_t i = 0; i < size; i++ )
+	{
+		for( short j = 0; j <= 7; j++ )
+		{
 			ret += ((p[i] >> j) & 1) * mult;
 			mult *= 2;
-        }
-    }
+		}
+	}
 	return (ret);
 }
 
@@ -205,7 +206,7 @@ static void *disconnect_srv (void *p_data)
 			printf("ERR[1][%d]\n", ret_srv);
 		}
 	}
-			printf("DISCONNECT SRV\n");
+	printf("DISCONNECT SRV\n");
 	return NULL;
 }
 
@@ -213,56 +214,63 @@ static int		shell(const char *addr, const char *port)
 {
 	int sock = init_connection(addr);
 	char buffer[BUF_SIZE];
-	char prompt[500];
 	fd_set rdfs;
 	ft_print_logo_and_init();
-	int i = 0;
-	int ret = 0;
-	pthread_t thread_store;
 
-	ft_memset(prompt, 0, sizeof(prompt));
-	if ((i = read_server(sock, prompt)) == 0)
-	{
-		get_term_raw_mode(0);
-		printf("Server disconnected !\n");
-		end_connection(sock);
-		return (0);
-	}
-	ft_putstr(prompt);
-	g_cl_prompt = ft_strdup(prompt);
-	ret = pthread_create(&thread_store, NULL, disconnect_srv, (void*)&sock);
+	get_term_raw_mode(1);
 	while(1)
 	{
-		ft_memset(buffer, 0, sizeof(buffer));
-		ft_get_user_input();
-		get_term_raw_mode(0);
-		if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+		FD_ZERO(&rdfs);
+		FD_SET(STDIN_FILENO, &rdfs);
+		FD_SET(sock, &rdfs);
+		if(select(sock + 1, &rdfs, NULL, NULL, NULL) == -1)
 		{
-			ft_strdel(&g_cmd);
-			pthread_exit(&ret);
-			end_connection(sock);
-			return (0);
+			perror("select()");
+			exit(errno);
 		}
-		else if (g_cmd && g_cmd[0])
+		if(FD_ISSET(STDIN_FILENO, &rdfs))
 		{
-			history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-			g_stop_srv = 1;
-			write_server(sock, g_cmd);
-			if (!ft_strcmp("exit\n", g_cmd))
+			ft_memset(buffer, 0, sizeof(buffer));
+			ft_get_user_input();
+			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
 			{
-				pthread_exit(&ret);
-				end_connection(sock);
 				ft_strdel(&g_cmd);
+				end_connection(sock);
+				get_term_raw_mode(0);
 				return (0);
 			}
+			else if (g_cmd && g_cmd[0])
+			{
+				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
+				write_server(sock, g_cmd);
+				if (!ft_strcmp("exit\n", g_cmd))
+				{
+					end_connection(sock);
+					get_term_raw_mode(0);
+					ft_strdel(&g_cmd);
+					return (0);
+				}
+			}
+			ft_strdel(&g_cmd);
 		}
-		ft_strdel(&g_cmd);
-		i = 1;
+		else if(FD_ISSET(sock, &rdfs))
+		{
+			int n = read_server(sock, buffer);
+			if(n == 0)
+			{
+				printf("Server disconnected !\n");
+				get_term_raw_mode(0);
+				break;
+			}
+			get_term_raw_mode(0);
+			ft_putstr(buffer);
+			get_term_raw_mode(1);
+		}
 	}
-	pthread_exit(&ret);
+
 	end_connection(sock);
 	return (0);
-}
+	}
 int				main(int ac, const char **av)
 {
 	int		ret;
@@ -280,3 +288,4 @@ int				main(int ac, const char **av)
 	exit_shell();
 	return (ret);
 }
+

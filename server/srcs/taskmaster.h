@@ -39,7 +39,7 @@
 
 # define MAX_CLIENTS 	100
 # define BUF_SIZE		1024
-# define SERVER_PORT	1990
+# define SERVER_PORT	2025
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 
@@ -138,7 +138,7 @@ typedef struct		s_tm
 /*
 ** ft_main.c
 */
-void				ft_process_cmd(t_tm *tm);
+void				ft_process_cmd(t_tm *tm, t_server *server);
 
 /*
 **  ft_commands.c

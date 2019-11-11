@@ -95,7 +95,7 @@ static int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 		printf("G_STOP_SRV TERMCAPS\n");
 		free(g_cmd);
 		g_cmd = ft_strdup((char[4]){4, 0, 0, 0});
-		get_term_raw_mode(0);
+		//get_term_raw_mode(0);
 		return (1);
 	}
 	else if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
@@ -125,12 +125,10 @@ char		*ft_get_user_input(void)
 	if (g_stop_srv)
 		return (NULL);
 	ft_memset(&sh, 0, sizeof(sh));
-	ft_memset(buff, 0, sizeof(buff));
 	if (ft_init_shell_struct(&sh, NULL) == -1)
 		return (g_cmd = ft_strdup("exit\n"));
 	sh.prompt_len = ft_strlen(g_cl_prompt);
 	ft_init_input_keys(&sh);
-	get_term_raw_mode(1);
 	while (1)
 	{
 		ft_bzero(buff, 5);

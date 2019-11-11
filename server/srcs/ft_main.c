@@ -27,13 +27,14 @@ static void	ft_free_env(t_keyval *env)
 	}
 }
 
-void		ft_shutdown(t_tm *tm)
+void		ft_shutdown(t_tm *tm, t_server *server)
 {
 	t_status	*tmp;
 	t_status	*tmp_2;
 	int			i;
 	int			j;
 
+	ft_server_quit(server, "Bye");
 	i = -1;
 	while (++i < tm->jobs_cnt)
 	{
@@ -81,7 +82,7 @@ void		ft_send_json_status(t_tm *tm)
 	ft_sprintf(json, "%s]\n", *json);
 }
 
-void		ft_process_cmd(t_tm *tm)
+void		ft_process_cmd(t_tm *tm, t_server *server)
 {
 	printf("CMD: [%s]\n", tm->cmd);
 	if (!strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
@@ -104,7 +105,10 @@ void		ft_process_cmd(t_tm *tm)
 	else if (!ft_strcmp(tm->cmd, "json status"))
 		ft_send_json_status(tm);
 	else if (!ft_strcmp(tm->cmd, "exit"))
-		ft_shutdown(tm);
+	{
+		//Ne pas oublier de close la socket
+		ft_shutdown(tm, server);
+	}
 	else
 		ft_sprintf(&tm->ret, "[%s]: Command not found\n", tm->cmd);
 }
