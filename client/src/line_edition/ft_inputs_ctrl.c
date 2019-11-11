@@ -29,7 +29,6 @@ int		ft_pushed_key_ctrl_d(t_shell *sh, char key[])
 	(void)key;
 	if (!g_cmd)
 	{
-		free(g_cmd);
 		get_term_raw_mode(0);
 		g_cmd = ft_strdup(FT_KEY_CTRL_D);
 		ft_putstr("\n");

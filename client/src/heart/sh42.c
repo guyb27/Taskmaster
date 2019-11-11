@@ -14,62 +14,6 @@
 #include "../../include/heart.h"
 //#include "heart.h"
 
-static void		ft_putnbr_hex(int octet, int rem)
-{
-	char base[17];
-
-	ft_strcpy(base, "0123456789abcdef");
-	if (rem > 1)
-		ft_putnbr_hex(octet >> 4, rem - 1);
-	write(1, base + (octet % 16), 1);
-}
-
-static void		ft_print_mem_hex(void *addr, unsigned int size, unsigned int a)
-{
-	unsigned int b;
-
-	b = -1;
-	while (++b < 16)
-	{
-		if ((a + b) < size)
-			ft_putnbr_hex(*((unsigned char*)addr + a + b), 2);
-		else
-			ft_putstr("  ");
-		if (b % 2)
-			ft_putchar(' ');
-	}
-}
-
-static void		ft_print_mem_str(void *addr, unsigned int size, unsigned int a)
-{
-	unsigned int b;
-
-	b = -1;
-	while (++b < 16 && (a + b) < size)
-		if (ft_isprint(*((char*)addr + a + b)))
-			ft_putchar(*((char*)addr + a + b));
-		else
-			ft_putchar('.');
-}
-
-void			*ft_print_memory(void *addr, unsigned int size)
-{
-	unsigned int a;
-
-	a = 0;
-	while (a < size)
-	{
-		ft_putnbr_hex(*(int*)addr + a, 8);
-		ft_putstr(": ");
-		ft_print_mem_hex(addr, size, a);
-		ft_putchar(' ');
-		ft_print_mem_str(addr, size, a);
-		ft_putchar('\n');
-		a += 16;
-	}
-	return (addr);
-}
-
 static void		ft_print_logo_and_init(void)
 {
 	g_cmd = NULL;
@@ -146,70 +90,6 @@ static int init_connection(const char *address)
 	return sock;
 }
 
-void stackchar(char c)
-{
-	if (ioctl(0, TIOCSTI, &c) < 0) {
-		perror("ioctl");
-		exit(1);
-	}
-}
-
-int get_fd( void *ptr, size_t size )
-{
-	unsigned char *p = ptr ;
-	int				mult = 1;
-	int ret = 0;
-
-	for( size_t i = 0; i < size; i++ )
-	{
-		for( short j = 0; j <= 7; j++ )
-		{
-			ret += ((p[i] >> j) & 1) * mult;
-			mult *= 2;
-		}
-	}
-	return (ret);
-}
-
-static void *disconnect_srv (void *p_data)
-{
-	char ret[50000];
-	char prompt[5000];
-	int sock;
-	int ret_srv = 0;
-
-	sock = get_fd(p_data, sizeof(int));
-	while (1)
-	{
-		ft_memset(ret, 0, sizeof(ret));
-		if ((ret_srv = read_server(sock, ret)) == 0)
-		{
-			printf("Server disconnected !\n");
-			g_stop_srv = -1;
-			stackchar('\n');
-			end_connection(sock);
-			get_term_raw_mode(0);
-			return (NULL);
-		}
-		else if (ret_srv > 0)
-		{
-			ft_memset(prompt, 0, sizeof(prompt));
-			g_stop_srv = 1;
-			get_term_raw_mode(0);
-			ft_putstr(ret);
-			get_term_raw_mode(1);
-			g_stop_srv = 0;
-		}
-		else
-		{
-			printf("ERR[0][%d]\n", ret_srv);
-			printf("ERR[1][%d]\n", ret_srv);
-		}
-	}
-	printf("DISCONNECT SRV\n");
-	return NULL;
-}
-
 static int		shell(const char *addr, const char *port)
 {
 	int sock = init_connection(addr);
@@ -262,7 +142,7 @@ static int		shell(const char *addr, const char *port)
 				get_term_raw_mode(0);
 				break;
 			}
-			get_term_raw_mode(0);
+	//		get_term_raw_mode(0);
 			ft_putstr(buffer);
 			get_term_raw_mode(1);
 		}
