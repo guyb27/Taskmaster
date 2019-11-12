@@ -63,7 +63,6 @@ typedef struct in_addr IN_ADDR;
 #define BUF_SIZE 1024
 
 int				g_interupt;
-char			**g_env;
 char			*g_cmd;
 int				g_cursor_pos;
 char			*g_cl_prompt;

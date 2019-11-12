@@ -21,7 +21,6 @@ int			init_files(const char *path);
 int			init_env(const char *path);
 int			init_builtins(const char *bin);
 
-int			add_to_env(char *name, char *value);
 char		*concat_name_value(char *name, char *value);
 char		*search_path_of_101sh(const char *bin);
 

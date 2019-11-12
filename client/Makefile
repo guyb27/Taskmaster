@@ -36,7 +36,6 @@ SRCS_NAME =	\
 			init/init_files.c \
 			init/init_env.c \
 			init/init_builtins.c \
-			init/envset_add.c \
 			init/utils.c \
 			init/envset_manage.c \
 			ft_select/ft_arrows.c \

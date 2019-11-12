@@ -15,8 +15,6 @@
 
 void		exit_shell(void)
 {
-//	if (g_env)
-//		ft_tabdel(&g_env);
 	ft_strdel(&g_cmd);
 	history_save((char ***)NULL, (char *)NULL, 2, (char *)NULL);
 	get_next_line(-101, NULL);
