@@ -40,8 +40,8 @@ void		exit_shell(void)
 {
 	if (g_env)
 		ft_tabdel(&g_env);
-	if (g_set)
-		ft_tabdel(&g_set);
+//	if (g_set)
+//		ft_tabdel(&g_set);
 	//hash_delete();
 	ft_strdel(&g_cmd);
 	history_save((char ***)NULL, (char *)NULL, 2, (char *)NULL);

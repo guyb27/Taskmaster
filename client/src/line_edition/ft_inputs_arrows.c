@@ -56,27 +56,26 @@ static void	add_memory(char *news, char ***histsave)
 {
 	char	*s;
 	char	tmp[ft_strlen(news) + 2];
-	int		histsize;
 	int		histfilesize;
 
-	s = ft_getenv("HISTSIZE", g_set);
-	histsize = s && ft_strisdigit(s) ? ft_atoi(s) : 500;
-	ft_strdel(&s);
+	//s = ft_getenv("HISTSIZE", g_set);
+//	histsize = s && ft_strisdigit(s) ? ft_atoi(s) : 500;
+	//ft_strdel(&s);
 	s = *histsave ? made_history((*histsave)[ft_tablen(*histsave) - 1]) : NULL;
 	ft_strcpy(tmp, "[");
 	ft_strncat(tmp, news, ft_strlen(news) - 1);
-	if ((!*histsave || ft_strcmp(s, tmp + 1)) && histsize > 0)
+	if ((!*histsave || ft_strcmp(s, tmp + 1)) && HISTSIZE > 0)
 	{
 		ft_strdel(&s);
 		histfilesize = *histsave ? ft_tablen(*histsave) + 1 : 1;
-		while (--histfilesize >= histsize && histfilesize >= 0)
+		while (--histfilesize >= HISTSIZE && histfilesize >= 0)
 			ft_strdel_in_tab(histsave, 0);
-		s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
-		add_to_set("HISTFILESIZE", s);
-		ft_strdel(&s);
+		//s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
+		//add_to_set("HISTFILESIZE", s);
+		//ft_strdel(&s);
 		ft_malloc_cmd(histsave, strcat(tmp, "]"));
-		s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
-		add_to_set("HISTFILESIZE", s);
+		//s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
+		//add_to_set("HISTFILESIZE", s);
 	}
 	ft_strdel(&s);
 }

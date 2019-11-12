@@ -27,9 +27,7 @@ static void		binorfile(t_shell **ed, int *end_word)
 		t.c = (*ed)->t.cmd[0][i];
 		t.i = i;
 		t.count = 0;
-		if (ft_is_echap_sep((*ed)->t.cmd[0], i))
-			(*ed)->t.nb_word = 0;
-		else if (ft_isprint((*ed)->t.cmd[0][i]))
+		if (ft_isprint((*ed)->t.cmd[0][i]))
 			(*ed)->t.nb_word++;
 		i++;
 	}
@@ -51,21 +49,8 @@ int				lexer_tab(t_shell **sh)
 		}
 		else if ((*sh)->t.cmd[1][0])
 			(*sh)->t.word = ft_strdup((*sh)->t.cmd[1]);
-		if ((*sh)->t.word && (*sh)->t.word[0] == '$')
-			(*sh)->t.nb_word = -1;
 	}
 	return (1);
-}
-
-int				echap_char(char **element)
-{
-	int			i;
-
-	i = -1;
-	while ((*element)[++i])
-		if (ft_isechap((*element)[i]))
-			ft_add_to_str(&*element, '\\', i++);
-	return (0);
 }
 
 void			end_tab_sequence(t_shell *sh)

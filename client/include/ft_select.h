@@ -71,17 +71,13 @@ int						ft_select(t_shell **ed, int version, char key[]);
 void					ft_print_params(t_select *sel);
 int						ft_manage_touch(t_shell **ed, int version, char key[]);
 int						ft_arrows(char arrows, t_select **t, int *place);
-int						add_bin_tab(t_shell **sh, DIR *dir, char *path);
 void					ft_init_select(t_shell **ed);
 int						ft_count_line(t_select *t);
 int						lexer_tab(t_shell **sh);
-int						echap_char(char **element);
 void					end_tab_sequence(t_shell *sh);
 int						ft_search_big_param(t_line *line);
 int						search_bin_tab(t_shell **ed);
 int						search_in_rep_tab(t_shell **ed);
-char					**search_var_tab(char *word);
-char					ft_stat(char *file, char *path);
 void					ft_first_sort(t_line **line, char *av);
 int						ft_count_params(t_line *line);
 int						ft_char_by_line(t_select **sel);
@@ -93,21 +89,9 @@ void					place_cursor_before(t_shell *sh);
 void					place_cursor_after(t_shell *sh);
 int						ft_free_t_select(t_select **t);
 int						tabulator(t_shell **ed, int version, char key[]);
-int						ft_isdir(char *test);
-char					*ft_search_pwd(char *ext);
-int						ft_isechap(char c);
-int						ft_isseparator(char c);
 char					**ft_tabsplit(void);
 int						replace_line_after_tab(t_shell **ed);
-char					*ft_search_absolute_path(char *line);
-char					*ft_search_relative_path(char *line);
-char					*ft_search_path(char *line);
-int						ft_cut_word_and_before(char **str, char *word,
-		char **before);
 void					ft_free_t_tab(t_tab *t);
-int						ft_is_echap_sep(const char *s, int i);
 int						lex_tab(const char *s, int i, int *find, int *cursor);
-int						lex_sep(const char *s, t_tab_lex t, int *find,
-		int *cursor);
 
 #endif

@@ -45,6 +45,8 @@
 # define TERMCAPGO(x, y) tputs(tgoto(tgetstr(x, NULL), 0, y), 1, ft_putchar)
 # define WHITE "\033[7;49;37"
 # define END "\033[0m"
+# define HISTSIZE 500
+# define HISTFILESIZE 500
 
 typedef struct termios		t_termios;
 typedef struct s_select		t_select;

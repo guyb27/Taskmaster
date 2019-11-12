@@ -13,56 +13,6 @@
 
 #include "heart.h"
 
-static char	*tab_replace_tild(char *line)
-{
-	char	*ret;
-	char	*tmp;
-
-	ret = NULL;
-	if (line && line[0] == '~' && (line[1] == '/' || !line[1]))
-	{
-		if ((tmp = ft_getenv("HOME", g_set)))
-		{
-			ret = line[1] && tmp ? ft_strjoin(tmp, line + 1) : ft_strdup(tmp);
-			ft_strdel(&tmp);
-		}
-		else
-			ret = ft_strdup(line);
-	}
-	else
-		ret = ft_strdup(line);
-	return (ret);
-}
-
-int			add_bin_tab(t_shell **sh, DIR *dir, char *path)
-{
-	struct dirent	*t_dir;
-	char			*tmp;
-	char			*line;
-	int				len_file;
-	char			*tmp2;
-
-	line = (*sh)->t.word;
-	while ((t_dir = readdir(dir)))
-	{
-		tmp2 = ft_strdup(t_dir->d_name);
-		echap_char(&tmp2);
-		len_file = (*sh)->t.is_file ? ft_strlen((*sh)->t.is_file) : 0;
-		tmp = ft_stat(tmp2, path) == '2' ?
-			ft_strjoin(tmp2, "/") : ft_strdup(tmp2);
-		if ((line && 0 == ft_strncmp(line, tmp, ft_strlen(line))) ||
-				(!line && tmp[0] != '.'))
-		{
-			ft_add_to_str(&(*sh)->t.is_file, ft_stat(tmp2, path), len_file);
-			ft_malloc_cmd(&(*sh)->t.elem, tmp);
-		}
-		ft_strdel(&tmp);
-		ft_strdel(&tmp2);
-	}
-	ft_strdel(&line);
-	return (0);
-}
-
 void		manage_first_tab(t_shell **sh, char key[])
 {
 	if ((*sh)->t.elem && (*sh)->t.elem[1])
@@ -93,30 +43,14 @@ void		first_tab(t_shell **sh, char key[])
 {
 	if (lexer_tab(sh) != -1)
 	{
-		printf("0LOL\n");
 		if ((*sh)->t.nb_word == 1 || (*sh)->t.nb_word == 0)
-		{
-		printf("1LOL\n");
 			search_bin_tab(sh);
-		}
-		else if ((*sh)->t.nb_word == -1)
-		{
-		printf("2LOL\n");
-			//(*sh)->t.elem = search_var_tab((*sh)->t.word); OBSOLETE LOCAL VAR
-		}
 		else
-		{
-		printf("3LOL\n");
 			search_in_rep_tab(sh);
-		}
 		manage_first_tab(sh, key);
 	}
 	else
-	{
-
-		printf("4LOL\n");
 		ft_free_t_tab(&(*sh)->t);
-	}
 }
 
 int			tabulator(t_shell **ed, int version, char key[])

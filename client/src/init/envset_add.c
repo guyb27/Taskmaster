@@ -43,7 +43,7 @@ void		sort_set(void)
 }
 
 int			add_to_set(char *name, char *value)
-{
+{/*
 	char	*s;
 	int		i;
 
@@ -66,7 +66,7 @@ int			add_to_set(char *name, char *value)
 		ft_strdel(&g_set[i]);
 		g_set[i] = ft_envset_join(name, value);
 	}
-	ft_strdel(&s);
+	ft_strdel(&s);*/
 	return (EXIT_SUCCESS);
 }
 
@@ -91,7 +91,7 @@ int			add_to_env(char *name, char *value)
 		ft_strdel(&g_env[i]);
 		g_env[i] = ft_envset_join(name, value);
 	}
-	add_to_set(name, value);
+	//add_to_set(name, value);
 	ft_strdel(&s);
 	return (EXIT_SUCCESS);
 }

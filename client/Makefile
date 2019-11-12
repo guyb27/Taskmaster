@@ -35,7 +35,6 @@ SRCS_NAME =	\
 			init/init_shell.c \
 			init/init_files.c \
 			init/init_env.c \
-			init/init_set.c \
 			init/init_builtins.c \
 			init/envset_add.c \
 			init/utils.c \
@@ -46,11 +45,9 @@ SRCS_NAME =	\
 			ft_select/ft_first_sort.c \
 			ft_select/ft_free_t_select.c \
 			ft_select/ft_init_select.c \
-			ft_select/ft_is_file.c \
 			ft_select/ft_manage_touch.c \
 			ft_select/ft_params_by_line.c \
 			ft_select/ft_prepare_print.c \
-			ft_select/ft_tab_manage_path.c \
 			ft_select/ft_print_params.c \
 			ft_select/ft_search_big_param.c \
 			ft_select/ft_search_tab.c \
