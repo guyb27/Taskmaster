@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 02:53:00 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 03:51:12 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -70,7 +70,13 @@ int		ft_pushed_key_enter(t_shell *sh, char key[])
 	if (sh->tabu != -1)
 		return (ft_pushed_key_tab(sh, key));
 	ft_pushed_key_home_end(sh, FT_KEY_END);
-	g_cmd = ft_strjoin_free(g_cmd, "\n");
+	if (g_cmd && ft_str_isblank(g_cmd))
+	{
+		free(g_cmd);
+		g_cmd = ft_strdup("\n");
+	}
+	else
+		g_cmd = ft_strjoin_free(g_cmd, "\n");
 	get_term_raw_mode(0);
 	write(1, "\n", 1);
 	return (1);

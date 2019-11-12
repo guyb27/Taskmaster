@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 05:08:09 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 04:00:05 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -90,14 +90,14 @@ static int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 	int	i;
 
 	i = -1;
-	if (g_stop_srv == -1)
+	/*if (g_stop_srv == -1)
 	{
 		printf("G_STOP_SRV TERMCAPS\n");
 		free(g_cmd);
 		g_cmd = ft_strdup((char[4]){4, 0, 0, 0});
 		return (1);
-	}
-	else if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
+	}*/
+	if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
 	{
 		init_tab_and_hist(sh, buff);
 		ft_insert_to_line(sh, buff);
@@ -121,12 +121,10 @@ char		*ft_get_user_input(void)
 	t_shell	sh;
 	char	buff[5];
 
-	if (g_stop_srv)
-		return (NULL);
 	ft_memset(&sh, 0, sizeof(sh));
 	if (ft_init_shell_struct(&sh, NULL) == -1)
 		return (g_cmd = ft_strdup("exit\n"));
-	sh.prompt_len = ft_strlen(g_cl_prompt);
+	sh.prompt_len = 13;
 	ft_init_input_keys(&sh);
 	while (1)
 	{

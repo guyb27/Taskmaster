@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/10 20:37:15 by dzonda            #+#    #+#              #
-#    Updated: 2018/11/23 06:36:00 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/12 03:18:21 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,6 +100,7 @@ SRCS_NAME =	\
 			ft_getenv.c \
 			ft_strdel_in_tab.c \
 			ft_str_isalnum.c \
+			ft_str_isspace.c \
 			ft_malloc_cmd.c \
 			ft_putstr_color.c \
 			ft_add_str_at.c \

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/06 04:45:32 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 03:43:18 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -69,17 +69,4 @@ int				get_term_raw_mode(int mode)
 	mode ? TERMCAP("ns") : 0;
 	i = 1;
 	return (1);
-}
-
-void			ft_read_raw_mode(void)
-{
-	t_termios	term;
-
-	ft_bzero(&term, sizeof(term));
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~(ECHO | ICANON | ISIG);
-	term.c_oflag &= ~(OPOST);
-	term.c_cc[VMIN] = 0;
-	term.c_cc[VTIME] = 1;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 }

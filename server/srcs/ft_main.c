@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 02:09:27 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 04:14:53 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -124,17 +124,20 @@ int			main(int argc, char *argv[], char *env[])
 	tm.shared = ft_megamalloc(sizeof(t_shared));
 	tm.env = env;
 	tm.jobs_cnt = 0;
-	if (argc == 3 && access(argv[1], F_OK) > -1 && ft_atoi(argv[2]))
+	if ((argc == 2 || (argc == 3 && ft_atoi(argv[2]) > 0)) &&
+			access(argv[1], F_OK) > -1)
 	{
 		ft_parse_config(&tm, argv[1]);
 		ft_autostart_jobs(&tm);
-		server = ft_init_server(ft_atoi(argv[2]));
+		server = ft_init_server(argc == 3 ? ft_atoi(argv[2]) : SERVER_PORT);
 		ft_server_loop(&server, &tm);
 	}
 	else if (access(argv[1], F_OK) == -1)
 		ft_printf("error: not a valid config file\n");
+	else if (argc == 3 && !(ft_atoi(argv[2]) > 0))
+		ft_printf("error: not a valid listen port\n");
 	else
-		ft_printf("usage: taskmaster config_file\n");
+		ft_printf("usage: taskmaster config_file [port]\n");
 	munmap(tm.shared, sizeof(t_shared));
 	return (0);
 }

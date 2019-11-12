@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 02:43:03 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 03:43:27 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -127,7 +127,6 @@ int				ft_pushed_key_ctrl_d(t_shell *sh, char key[]);
 int				ft_pushed_key_ctrl_l(t_shell *sh, char key[]);
 int				ft_init_shell_struct(t_shell *sh, t_prompt *prompt);
 int				get_term_raw_mode(int mode);
-void			ft_read_raw_mode();
 void			ft_get_cols(t_ws *ws);
 void			history_save(char ***history, char *news, int version, char *s);
 

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 02:04:20 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 03:51:49 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -58,7 +58,7 @@ static void write_server(SOCKET sock, const char *buffer)
 }
 
 
-static int init_connection(const char *address)
+static int init_connection(const char *address, int port)
 {
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
 	SOCKADDR_IN sin = { 0 };
@@ -78,7 +78,7 @@ static int init_connection(const char *address)
 	}
 
 	sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
-	sin.sin_port = htons(PORT);
+	sin.sin_port = htons(port);
 	sin.sin_family = AF_INET;
 
 	if(connect(sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
@@ -90,9 +90,9 @@ static int init_connection(const char *address)
 	return sock;
 }
 
-static int		shell(const char *addr, const char *port)
+static int		shell(const char *addr, int port)
 {
-	int sock = init_connection(addr);
+	int sock = init_connection(addr, port);
 	char buffer[BUF_SIZE];
 	fd_set rdfs;
 	ft_print_logo_and_init();
@@ -106,11 +106,10 @@ static int		shell(const char *addr, const char *port)
 		return (0);
 	}
 	g_cl_prompt = ft_strdup(buffer);
-	ft_putstr(buffer);
+		ft_putstr(g_cl_prompt);
 	get_term_raw_mode(1);
 	while(1)
 	{
-	//get_term_raw_mode(1);
 		FD_ZERO(&rdfs);
 		FD_SET(STDIN_FILENO, &rdfs);
 		FD_SET(sock, &rdfs);
@@ -125,13 +124,15 @@ static int		shell(const char *addr, const char *port)
 			ft_get_user_input();
 			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
 			{
+			//	printf("00\n");
 				ft_strdel(&g_cmd);
 				end_connection(sock);
 				get_term_raw_mode(0);
 				return (0);
 			}
-			else if (g_cmd && g_cmd[0])
+			else if (g_cmd && !ft_str_isblank(g_cmd))
 			{
+			//	printf("11\n");
 				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
 				write_server(sock, g_cmd);
 				if (!ft_strcmp("exit\n", g_cmd))
@@ -142,11 +143,18 @@ static int		shell(const char *addr, const char *port)
 					return (0);
 				}
 			}
+			else
+			{
+				//printf("22G_CMD: [%s]\n", g_cmd);
+				if (g_cmd && g_cmd[0] && g_cmd[1])
+					ft_putstr(g_cl_prompt);
+				get_term_raw_mode(1);
+			}
 			ft_strdel(&g_cmd);
 		}
 		else if(FD_ISSET(sock, &rdfs))
 		{
-	ft_memset(buffer, 0, sizeof(buffer));
+			ft_memset(buffer, 0, sizeof(buffer));
 			int n = read_server(sock, buffer);
 			if(n == 0)
 			{
@@ -155,7 +163,10 @@ static int		shell(const char *addr, const char *port)
 				break;
 			}
 			if (ft_strcmp(buffer, g_cl_prompt))
+			{
 				ft_putstr(buffer);
+				ft_putstr(g_cl_prompt);
+			}
 			//for (int i = 0;i<n;i++)
 			//	ft_putchar(buffer[i]);
 			//ft_putstr("\n");
@@ -171,7 +182,7 @@ int				main(int ac, const char **av)
 {
 	int		ret;
 
-	if (ac < 2) {
+	if (ac < 2 || !ft_atoi(av[2])) {
 		fprintf(stderr, "Usage: %s <host> <port>\n", av[0]);
 		exit(EXIT_FAILURE);
 	}
@@ -180,7 +191,7 @@ int				main(int ac, const char **av)
 		ft_putstr("Taskmaster can't run in non-interactive mode.");
 		return (EXIT_FAILURE);
 	}
-	ret = shell(av[1], av[2]);
+	ret = shell(av[1], ft_atoi(av[2]));
 	exit_shell();
 	return (ret);
 }
