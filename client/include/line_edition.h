@@ -46,6 +46,7 @@
 # define WHITE "\033[7;49;37"
 # define END "\033[0m"
 # define HISTSIZE 500
+# define HISTFILE "/.101sh_history"
 # define HISTFILESIZE 500
 
 typedef struct termios		t_termios;

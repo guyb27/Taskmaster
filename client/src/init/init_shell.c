@@ -25,7 +25,6 @@ int			ft_init_vars(int ac, const char **av)
 		ft_strdel(&path);
 		return (EXIT_FAILURE);
 	}
-//	if (init_set(ac, av) || init_env(path))
 	if (init_env(path))
 	{
 		ft_strdel(&path);

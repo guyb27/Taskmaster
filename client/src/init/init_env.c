@@ -65,9 +65,9 @@ static void		ft_get_file_info(const char *path)
 {
 	char	*tmp;
 
-	if ((tmp = ft_strjoin(path, "/.TMPDIR")))
-		add_to_env("TMPDIR", tmp);
-	ft_strdel(&tmp);
+//	if ((tmp = ft_strjoin(path, "/.TMPDIR")))
+//		add_to_env("TMPDIR", tmp);
+//	ft_strdel(&tmp);
 	if ((tmp = ft_strjoin(path, "/101sh")))
 		add_to_env("_", tmp);
 	ft_strdel(&tmp);

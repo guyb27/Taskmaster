@@ -58,9 +58,6 @@ static void	add_memory(char *news, char ***histsave)
 	char	tmp[ft_strlen(news) + 2];
 	int		histfilesize;
 
-	//s = ft_getenv("HISTSIZE", g_set);
-//	histsize = s && ft_strisdigit(s) ? ft_atoi(s) : 500;
-	//ft_strdel(&s);
 	s = *histsave ? made_history((*histsave)[ft_tablen(*histsave) - 1]) : NULL;
 	ft_strcpy(tmp, "[");
 	ft_strncat(tmp, news, ft_strlen(news) - 1);
@@ -70,12 +67,7 @@ static void	add_memory(char *news, char ***histsave)
 		histfilesize = *histsave ? ft_tablen(*histsave) + 1 : 1;
 		while (--histfilesize >= HISTSIZE && histfilesize >= 0)
 			ft_strdel_in_tab(histsave, 0);
-		//s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
-		//add_to_set("HISTFILESIZE", s);
-		//ft_strdel(&s);
 		ft_malloc_cmd(histsave, strcat(tmp, "]"));
-		//s = ft_itoa(histfilesize == 500 ? histfilesize : histfilesize + 1);
-		//add_to_set("HISTFILESIZE", s);
 	}
 	ft_strdel(&s);
 }
@@ -94,12 +86,10 @@ void		history_save(char ***history, char *news, int version, char *s)
 	else if (version == 0 && histsave)
 		*history = ft_tabdup(histsave);
 	else if (version == 1 && news[1])
-	{
 		add_memory(news, &histsave);
-	}
 	else if (version == 2)
 	{
-		tmp = ft_strjoin(path, "/.101sh_history");
+		tmp = ft_strjoin(path, HISTFILE);
 		save_to_file(histsave, tmp);
 		ft_tabdel(&histsave);
 		ft_strdel(&path);

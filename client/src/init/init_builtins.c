@@ -89,18 +89,11 @@ static int	init_builtins_history(const char *path)
 	str = NULL;
 	fd = -1;
 	i = 0;
-	if (!(str = ft_strjoin(path, "/.101sh_history")))
+	if (!(str = ft_strjoin(path, HISTFILE)))
 		return (EXIT_FAILURE);
 	if ((fd = open(str, O_RDONLY)) == -1)
 		return (EXIT_FAILURE);
 	init_builtins_history_read(fd, &i, (char *)path);
-	add_to_set("HISTSIZE", "500");
-	add_to_set("HISTFILE", str);
-	ft_strdel(&str);
-	if (!(str = ft_itoa(i)))
-		return (EXIT_FAILURE);
-	add_to_set("HISTFILESIZE", str);
-	ft_strdel(&str);
 	return (close(fd) == -1 ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
