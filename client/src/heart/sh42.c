@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 04:55:13 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 02:04:20 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -97,9 +97,20 @@ static int		shell(const char *addr, const char *port)
 	fd_set rdfs;
 	ft_print_logo_and_init();
 
+	ft_memset(buffer, 0, sizeof(buffer));
+	int n = read_server(sock, buffer);
+	if(n == 0)
+	{
+		printf("Server disconnected !\n");
+		get_term_raw_mode(0);
+		return (0);
+	}
+	g_cl_prompt = ft_strdup(buffer);
+	ft_putstr(buffer);
 	get_term_raw_mode(1);
 	while(1)
 	{
+	//get_term_raw_mode(1);
 		FD_ZERO(&rdfs);
 		FD_SET(STDIN_FILENO, &rdfs);
 		FD_SET(sock, &rdfs);
@@ -135,6 +146,7 @@ static int		shell(const char *addr, const char *port)
 		}
 		else if(FD_ISSET(sock, &rdfs))
 		{
+	ft_memset(buffer, 0, sizeof(buffer));
 			int n = read_server(sock, buffer);
 			if(n == 0)
 			{
@@ -142,8 +154,12 @@ static int		shell(const char *addr, const char *port)
 				get_term_raw_mode(0);
 				break;
 			}
-	//		get_term_raw_mode(0);
-			ft_putstr(buffer);
+			if (ft_strcmp(buffer, g_cl_prompt))
+				ft_putstr(buffer);
+			//for (int i = 0;i<n;i++)
+			//	ft_putchar(buffer[i]);
+			//ft_putstr("\n");
+			//ft_putstr(buffer + ft_strlen(buffer) + 1);
 			get_term_raw_mode(1);
 		}
 	}
