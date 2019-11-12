@@ -129,7 +129,7 @@ char		*ft_get_user_input(void)
 	while (1)
 	{
 		ft_bzero(buff, 5);
-		if (g_stop_srv || !(read(0, buff, 4)))
+		if (!(read(0, buff, 4)))
 			return (NULL);
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		ft_get_cols(&sh.ws);

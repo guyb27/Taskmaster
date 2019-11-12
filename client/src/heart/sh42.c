@@ -11,30 +11,9 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "../../include/heart.h"
-//#include "heart.h"
+#include "heart.h"
 
-static void		ft_print_logo_and_init(void)
-{
-	g_cmd = NULL;
-	ft_putstr(CYANB);
-	printf(" _            _                        _ \n");
-	printf("| |          | |                      | |           \n");
-	printf("| |_ __ _ ___| | ___ __ ___   __ _ ___| |_ ___ _ __ \n");
-	printf("| __/ _` / __| |/ / '_ ` _ \\ / _` / __| __/ _ \\ '__|\n");
-	printf("| || (_| \\__ \\   <| | | | | | (_| \\__ \\ ||  __/ |   \n");
-	printf(" \\__\\__,_|___/_|\\_\\_| |_| |_|\\__,_|___/\\__\\___|_|\n");
-	printf("                                                 \n\n");
-	ft_putstr(STOP);
-}
-
-
-static void end_connection(int sock)
-{
-	closesocket(sock);
-}
-
-static int read_server(SOCKET sock, char *buffer)
+static int read_server(int sock, char *buffer)
 {
 	int n = 0;
 
@@ -48,7 +27,7 @@ static int read_server(SOCKET sock, char *buffer)
 }
 
 
-static void write_server(SOCKET sock, const char *buffer)
+static void write_server(int sock, const char *buffer)
 {
 	if(send(sock, buffer, strlen(buffer), 0) < 0)
 	{
@@ -60,101 +39,78 @@ static void write_server(SOCKET sock, const char *buffer)
 
 static int init_connection(const char *address, int port)
 {
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	SOCKADDR_IN sin = { 0 };
+	int sock;
+	SOCKADDR_IN sin;
 	struct hostent *hostinfo;
 
-	if(sock == INVALID_SOCKET)
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
 	{
 		perror("socket()");
-		exit(errno);
+		return (-1);
 	}
-
+	ft_bzero(&sin, sizeof(SOCKADDR_IN));
 	hostinfo = gethostbyname(address);
 	if (hostinfo == NULL)
 	{
 		fprintf (stderr, "Unknown host %s.\n", address);
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
-
 	sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
 	sin.sin_port = htons(port);
 	sin.sin_family = AF_INET;
-
 	if(connect(sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
 	{
 		perror("connect()");
-		exit(errno);
+		return (-1);
 	}
-
 	return sock;
+}
+
+static int		get_start_requests(int sock)
+{
+	int		i;
+	char buffer[BUF_SIZE];
+	int n;
+	int j;
+	int debut;
+
+	i = 0;
+	while (i < 3 && ft_memset(buffer, 0, sizeof(buffer)))
+	{
+		if ((n = read_server(sock, buffer)) == 0)
+		{
+			printf("Server disconnected !\n");
+			return (1);
+		}
+		j = 0;
+		debut = 0;
+		while (j < n)
+		{
+			if (buffer[j] == '\0')
+			{
+				ft_putstr(buffer + debut);
+				if (i == 1)
+					;//FAIRE LE PARSING POUR RECUPERER LES ELEMENTS DE LA TABULATION
+				else if (i == 2)
+					g_cl_prompt = ft_strdup(buffer + debut);
+				debut = j + 1;
+				i++;
+			}
+			j++;
+		}
+	}
+	return (0);
 }
 
 static int		shell(const char *addr, int port)
 {
-	int sock = init_connection(addr, port);
+	int sock;
 	char buffer[BUF_SIZE];
 	fd_set rdfs;
-	int		i = 0;
-	int		j = 0;
-	//ft_print_logo_and_init();
+	int		n;
 
-	while (i < 3)
-	{
-		FD_ZERO(&rdfs);
-		FD_SET(STDIN_FILENO, &rdfs);
-		FD_SET(sock, &rdfs);
-		if(select(sock + 1, &rdfs, NULL, NULL, NULL) == -1)
-		{
-			perror("select()");
-			exit(errno);
-		}
-		else if(FD_ISSET(sock, &rdfs))
-		{
-			ft_memset(buffer, 0, sizeof(buffer));
-			int n = read_server(sock, buffer);
-			if(n == 0)
-			{
-				printf("Server disconnected !\n");
-				return (0);
-			}
-			j = 0;
-				printf("0I: [%d]\n", i);
-			while (j < n)
-			{
-				printf("%c", buffer[j]);
-				if (buffer[j] == '\0')
-					i++;
-				j++;
-			}
-				printf("1I: [%d]\n", i);
-		}
-	}
-	ft_memset(buffer, 0, sizeof(buffer));
-	if (read_server(sock, buffer) == 0)
-	{
-		printf("Server disconnected !\n");
-		get_term_raw_mode(0);
-		return (0);
-	}
-	printf("%s", buffer);
-	ft_memset(buffer, 0, sizeof(buffer));
-	if (read_server(sock, buffer) == 0)
-	{
-		printf("Server disconnected !\n");
-		get_term_raw_mode(0);
-		return (0);
-	}
-	printf("%s", buffer);
-	ft_memset(buffer, 0, sizeof(buffer));
-	if (read_server(sock, buffer) == 0)
-	{
-		printf("Server disconnected !\n");
-		get_term_raw_mode(0);
-		return (0);
-	}
-	g_cl_prompt = ft_strdup(buffer);
-		ft_putstr(g_cl_prompt);
+	if ((sock = init_connection(addr, port)) == -1 || get_start_requests(sock))
+		return (1);
 	get_term_raw_mode(1);
 	while(1)
 	{
@@ -172,20 +128,18 @@ static int		shell(const char *addr, int port)
 			ft_get_user_input();
 			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
 			{
-			//	printf("00\n");
 				ft_strdel(&g_cmd);
-				end_connection(sock);
+				closesocket(sock);
 				get_term_raw_mode(0);
 				return (0);
 			}
 			else if (g_cmd && !ft_str_isblank(g_cmd))
 			{
-			//	printf("11\n");
 				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
 				write_server(sock, g_cmd);
 				if (!ft_strcmp("exit\n", g_cmd))
 				{
-					end_connection(sock);
+					closesocket(sock);
 					get_term_raw_mode(0);
 					ft_strdel(&g_cmd);
 					return (0);
@@ -193,7 +147,6 @@ static int		shell(const char *addr, int port)
 			}
 			else
 			{
-				//printf("22G_CMD: [%s]\n", g_cmd);
 				if (g_cmd && g_cmd[0] && g_cmd[1])
 					ft_putstr(g_cl_prompt);
 				get_term_raw_mode(1);
@@ -203,8 +156,7 @@ static int		shell(const char *addr, int port)
 		else if(FD_ISSET(sock, &rdfs))
 		{
 			ft_memset(buffer, 0, sizeof(buffer));
-			int n = read_server(sock, buffer);
-			if(n == 0)
+			if (read_server(sock, buffer) == 0)
 			{
 				get_term_raw_mode(0);
 				printf("Server disconnected !\n");
@@ -218,10 +170,10 @@ static int		shell(const char *addr, int port)
 			get_term_raw_mode(1);
 		}
 	}
-
-	end_connection(sock);
+	closesocket(sock);
 	return (0);
-	}
+}
+
 int				main(int ac, const char **av)
 {
 	int		ret;
@@ -239,4 +191,3 @@ int				main(int ac, const char **av)
 	exit_shell();
 	return (ret);
 }
-

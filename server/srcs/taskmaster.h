@@ -43,7 +43,7 @@
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 
-# define LOGO "\033[1;36m" \
+# define LOGO "\033[94m" \
 	" _            _                        _ \n" \
 	"| |          | |                      | |           \n" \
 	"| |_ __ _ ___| | ___ __ ___   __ _ ___| |_ ___ _ __ \n" \
