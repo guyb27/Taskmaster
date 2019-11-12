@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 04:14:53 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 04:59:01 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -108,6 +108,18 @@ void		ft_process_cmd(t_tm *tm, t_server *server)
 	{
 		//Ne pas oublier de close la socket
 		ft_shutdown(tm, server);
+	}
+	else if (!ft_strcmp(tm->cmd, "help"))
+	{
+		ft_sprintf(&tm->ret, "Synopsis : <Command> [process]\n");
+		ft_sprintf(&tm->ret, "%sexamples :\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<start> <ls | fucked | all>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<restart> <ls | fucked | all>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<stop> <ls | fucked | all>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<pause> <ls | fucked | all>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<status> <ls | fucked | all>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<reload>\n", tm->ret);
+		ft_sprintf(&tm->ret, "%s\t<shutdown>\n", tm->ret);
 	}
 	else
 		ft_sprintf(&tm->ret, "[%s]: Command not found\n", tm->cmd);

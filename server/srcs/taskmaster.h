@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 05:05:59 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 05:52:52 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,9 +25,9 @@
 # include <errno.h>
 
 /*
-********************************************************************************
-** Server
-*/
+ ********************************************************************************
+ ** Server
+ */
 
 # include <sys/socket.h>
 # include <netdb.h>
@@ -43,6 +43,15 @@
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 
+# define LOGO "\033[1;36m" \
+	" _            _                        _ \n" \
+	"| |          | |                      | |           \n" \
+	"| |_ __ _ ___| | ___ __ ___   __ _ ___| |_ ___ _ __ \n" \
+	"| __/ _` / __| |/ / '_ ` _ \\ / _` / __| __/ _ \\ '__|\n" \
+	"| || (_| \\__ \\   <| | | | | | (_| \\__ \\ ||  __/ |   \n" \
+	" \\__\\__,_|___/_|\\_\\_| |_| |_|\\__,_|___/\\__\\___|_|\n" \
+	"                                                 \n\n" \
+	"\033[0;m\0"
 typedef int					t_socket;
 typedef struct sockaddr_in	t_sockaddr_in;
 typedef struct sockaddr		t_sockaddr;
@@ -60,9 +69,9 @@ typedef struct		s_server
 }					t_server;
 
 /*
-********************************************************************************
-** Main structs
-*/
+ ********************************************************************************
+ ** Main structs
+ */
 
 typedef struct		s_keyval
 {
@@ -132,17 +141,17 @@ typedef struct		s_tm
 }					t_tm;
 
 /*
-********************************************************************************
-*/
+ ********************************************************************************
+ */
 
 /*
-** ft_main.c
-*/
+ ** ft_main.c
+ */
 void				ft_process_cmd(t_tm *tm, t_server *server);
 
 /*
-**  ft_commands.c
-*/
+ **  ft_commands.c
+ */
 void				ft_cmd_start(t_tm *tm, char *name);
 void				ft_cmd_pause(t_tm *tm, char *name);
 void				ft_cmd_restart(t_tm *tm, char *name);
@@ -150,51 +159,51 @@ void				ft_cmd_status(t_tm *tm, char *name);
 void				ft_cmd_stop(t_tm *tm, char *name);
 
 /*
-**  ft_exec_jobs.c
-*/
+ **  ft_exec_jobs.c
+ */
 void				ft_exec_job(t_tm *tm, int id_job, int retry);
 
 /*
-**  ft_parse_config.c
-*/
+ **  ft_parse_config.c
+ */
 void				ft_parse_config(t_tm *tm, char *config_file);
 
 /*
-**  ft_status.c
-*/
+ **  ft_status.c
+ */
 void				ft_debug_status(t_status *status);
 void				ft_init_status(t_status *status);
 void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 void				ft_parse_config(t_tm *tm, char *config_file);
 
 /*
-**  ft_utils.c
-*/
+ **  ft_utils.c
+ */
 void				ft_perror(char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
 void				ft_init_job(t_job *job);
 /*
-**void				ft_debug_job(t_tm *tm, int job_id);
-*/
+ **void				ft_debug_job(t_tm *tm, int job_id);
+ */
 
 /*
-**	ft_jobs_funcs.c
-*/
+ **	ft_jobs_funcs.c
+ */
 void				ft_stop_job(t_tm *tm, int id_job, t_status *status);
 void				ft_restart_job(t_tm *tm, int id_job, t_status *status);
 void				ft_autostart_jobs(t_tm *tm);
 
 /*
-**	ft_parse_utils.c
-*/
+ **	ft_parse_utils.c
+ */
 void				ft_append_int_val(int list[], int val);
 void				ft_append_env(t_job *job, char *key, char *value);
 
 /*
-**	ft_server.c
-*/
+ **	ft_server.c
+ */
 void				ft_server_quit(t_server *server, char *error);
 t_server			ft_init_server(int port);
 int					ft_server_loop(t_server *server, t_tm *tm);

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 03:51:49 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 06:39:06 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -95,11 +95,59 @@ static int		shell(const char *addr, int port)
 	int sock = init_connection(addr, port);
 	char buffer[BUF_SIZE];
 	fd_set rdfs;
-	ft_print_logo_and_init();
+	int		i = 0;
+	int		j = 0;
+	//ft_print_logo_and_init();
 
+	while (i < 3)
+	{
+		FD_ZERO(&rdfs);
+		FD_SET(STDIN_FILENO, &rdfs);
+		FD_SET(sock, &rdfs);
+		if(select(sock + 1, &rdfs, NULL, NULL, NULL) == -1)
+		{
+			perror("select()");
+			exit(errno);
+		}
+		else if(FD_ISSET(sock, &rdfs))
+		{
+			ft_memset(buffer, 0, sizeof(buffer));
+			int n = read_server(sock, buffer);
+			if(n == 0)
+			{
+				printf("Server disconnected !\n");
+				return (0);
+			}
+			j = 0;
+				printf("0I: [%d]\n", i);
+			while (j < n)
+			{
+				printf("%c", buffer[j]);
+				if (buffer[j] == '\0')
+					i++;
+				j++;
+			}
+				printf("1I: [%d]\n", i);
+		}
+	}
 	ft_memset(buffer, 0, sizeof(buffer));
-	int n = read_server(sock, buffer);
-	if(n == 0)
+	if (read_server(sock, buffer) == 0)
+	{
+		printf("Server disconnected !\n");
+		get_term_raw_mode(0);
+		return (0);
+	}
+	printf("%s", buffer);
+	ft_memset(buffer, 0, sizeof(buffer));
+	if (read_server(sock, buffer) == 0)
+	{
+		printf("Server disconnected !\n");
+		get_term_raw_mode(0);
+		return (0);
+	}
+	printf("%s", buffer);
+	ft_memset(buffer, 0, sizeof(buffer));
+	if (read_server(sock, buffer) == 0)
 	{
 		printf("Server disconnected !\n");
 		get_term_raw_mode(0);
@@ -158,8 +206,8 @@ static int		shell(const char *addr, int port)
 			int n = read_server(sock, buffer);
 			if(n == 0)
 			{
-				printf("Server disconnected !\n");
 				get_term_raw_mode(0);
+				printf("Server disconnected !\n");
 				break;
 			}
 			if (ft_strcmp(buffer, g_cl_prompt))
@@ -167,10 +215,6 @@ static int		shell(const char *addr, int port)
 				ft_putstr(buffer);
 				ft_putstr(g_cl_prompt);
 			}
-			//for (int i = 0;i<n;i++)
-			//	ft_putchar(buffer[i]);
-			//ft_putstr("\n");
-			//ft_putstr(buffer + ft_strlen(buffer) + 1);
 			get_term_raw_mode(1);
 		}
 	}
