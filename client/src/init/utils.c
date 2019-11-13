@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/08/23 06:42:06 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/09/28 03:40:27 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 04:06:04 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -89,23 +89,4 @@ char				*search_path_of_101sh(const char *bin)
 		}
 	}
 	return (tmp);
-}
-
-char				*concat_name_value(char *name, char *value)
-{
-	char		*str;
-	char		*str2;
-
-	str = NULL;
-	str2 = NULL;
-	if (!name)
-		return (NULL);
-	str2 = ft_strjoin(name, "=");
-	if (value)
-	{
-		str = ft_strjoin(str2, value);
-		ft_strdel(&str2);
-	}
-	str ? ft_strdel(&str2) : 0;
-	return (str ? str : str2);
 }

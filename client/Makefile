@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/13 03:00:18 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/13 03:58:02 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -33,8 +33,6 @@ SRCS_NAME =	\
 			heart/signal.c \
 			heart/sh42_exit.c \
 			init/init_shell.c \
-			init/init_files.c \
-			init/init_builtins.c \
 			init/utils.c \
 			ft_select/ft_arrows.c \
 			ft_select/ft_lex_tab.c \

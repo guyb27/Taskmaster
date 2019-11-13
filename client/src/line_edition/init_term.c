@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 03:43:18 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 04:14:06 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,32 +40,23 @@ int				get_term_raw_mode(int mode)
 	static int i = 0;
 	static t_termios	test;
 
-	ft_memset(&term, 0, sizeof(term));
-	tcgetattr(STDIN_FILENO, &term);
 	if (i == 0)
-	tcgetattr(STDIN_FILENO, &test);
+	{
+		ft_memset(&test, 0, sizeof(t_termios));
+		tcgetattr(STDIN_FILENO, &test);
+	}
 	if (mode)
-	{//
-	//
+	{
+		ft_memset(&term, 0, sizeof(t_termios));
+		tcgetattr(STDIN_FILENO, &term);
 		term.c_lflag &= ~(ECHO | ICANON | ISIG);
 		term.c_oflag &= ~(OPOST);
 		term.c_cc[VMIN] = 1;
 		term.c_cc[VTIME] = 0;
-//		printf("ACTIVE_TERM\n");
-		//
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
-	//
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 	}
 	else
-	{
-	//	term.c_lflag |= (ECHO | ICANON | ISIG);
-	//	term.c_oflag |= (OPOST);
-	//	//
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &test);
-	//
-//		printf("CLOSE_TERM\n");
-	}
-	//tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &test);
 	mode ? TERMCAP("ns") : 0;
 	i = 1;
 	return (1);
