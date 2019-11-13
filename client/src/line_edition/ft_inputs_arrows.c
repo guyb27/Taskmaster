@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 15:56:11 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/18 05:49:01 by jecombe     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 04:33:34 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -55,19 +55,19 @@ static char	*made_history(char *str)
 static void	add_memory(char *news, char ***histsave)
 {
 	char	*s;
-	char	tmp[ft_strlen(news) + 2];
+	char	tmp[ft_strlen(news) + 1];
 	int		histfilesize;
 
 	s = *histsave ? made_history((*histsave)[ft_tablen(*histsave) - 1]) : NULL;
-	ft_strcpy(tmp, "[");
-	ft_strncat(tmp, news, ft_strlen(news) - 1);
+	ft_bzero(tmp, sizeof(tmp));
+	ft_strncpy(tmp, news, ft_strlen(news) - 1);
 	if ((!*histsave || ft_strcmp(s, tmp + 1)) && HISTSIZE > 0)
 	{
 		ft_strdel(&s);
 		histfilesize = *histsave ? ft_tablen(*histsave) + 1 : 1;
 		while (--histfilesize >= HISTSIZE && histfilesize >= 0)
 			ft_strdel_in_tab(histsave, 0);
-		ft_malloc_cmd(histsave, strcat(tmp, "]"));
+		ft_malloc_cmd(histsave, tmp);
 	}
 	ft_strdel(&s);
 }
@@ -115,32 +115,6 @@ static int		advanced_history(char ***history, char *base)
 	return (0);
 }
 
-static void		cut_crochet_historic(char ***history)
-{
-	char	**tmp;
-	char	*tmp_2;
-	int		i;
-
-	i = -1;
-	tmp = NULL;
-	if (*history)
-	{
-		while (*history && (*history)[++i])
-			if ((*history)[i][0] == '[' &&
-				(*history)[i][ft_strlen((*history)[i]) - 1] == ']')
-			{
-				tmp_2 = ft_strsub((*history)[i], 1,
-						ft_strlen((*history)[i]) - 2);
-				ft_malloc_cmd(&tmp, tmp_2);
-				free(tmp_2);
-			}
-		ft_tabdel(history);
-		if (tmp)
-			*history = ft_tabdup(tmp);
-		ft_tabdel(&tmp);
-	}
-}
-
 static void		the_last_of_dowm(t_shell *sh)
 {
 	sh->hist = -2;
@@ -181,7 +155,6 @@ void			history_get(t_shell *sh, char key[])
 	history = NULL;
 	history_save(&history, NULL, 0, (char *)NULL);
 	ft_reverse_tab(&history);
-	cut_crochet_historic(&history);
 	if (history && key[2] == 65 && sh->hist == -2 && g_cmd)
 		sh->tmp_line = ft_strdup(g_cmd);
 	if (history && sh->tmp_line)
@@ -198,7 +171,7 @@ void			history_get(t_shell *sh, char key[])
 	else
 		ft_strdel(&sh->tmp_line);
 }
-//
+
 static int	ft_pushed_key_altup_altdown_check(t_shell *sh, char *key, int lr[2],
 		int target)
 {
