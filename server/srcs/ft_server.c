@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 06:19:45 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 05:35:35 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -142,7 +142,6 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				ft_server_quit(server, "send() prompt");
 			if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
-			// what is the new maximum fd ?
 			max_fd = server->csock > max_fd ? server->csock : max_fd;
 			FD_SET(server->csock, &server->rdfs);
 			server->clients[server->clients_cnt] = server->csock;

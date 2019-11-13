@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/04/27 13:45:58 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/08 16:24:23 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 05:14:11 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -74,14 +74,12 @@ int						ft_arrows(char arrows, t_select **t, int *place);
 void					ft_init_select(t_shell **ed);
 int						ft_count_line(t_select *t);
 int						lexer_tab(t_shell **sh);
-void					end_tab_sequence(t_shell *sh);
 int						ft_search_big_param(t_line *line);
 int						search_bin_tab(t_shell **ed);
 int						search_in_rep_tab(t_shell **ed);
 void					ft_first_sort(t_line **line, char *av);
 int						ft_count_params(t_line *line);
 int						ft_char_by_line(t_select **sel);
-t_line					*ft_prepare_print(int i[2], t_line *line, int nb_line);
 int						ft_params_by_line(t_select *t);
 void					ft_print_select(t_line *str, int j, int bp, int v);
 void					ft_place_cursor(int nb_ret, int len_line, int v);

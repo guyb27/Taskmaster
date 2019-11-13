@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/18 04:29:30 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/25 15:01:15 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 04:57:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -72,7 +72,12 @@ int			tabulator(t_shell **ed, int version, char key[])
 	}
 	else if (version == 0 ||
 			(version == 1 && key[0] == 10 && key[1] == 0 && (*ed)->tabu >= 0))
-		end_tab_sequence(*ed);
+	{
+		TERMCAP("cd");
+		ft_free_t_tab(&(*ed)->t);
+		ft_free_t_select(&(*ed)->sel);
+		(*ed)->tabu = -1;
+	}
 	version != 0 ? place_cursor_after(*ed) : 0;
 	return (0);
 }

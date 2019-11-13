@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/13 03:58:02 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/13 05:25:35 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -38,17 +38,12 @@ SRCS_NAME =	\
 			ft_select/ft_lex_tab.c \
 			ft_select/ft_manage_count.c \
 			ft_select/ft_first_sort.c \
-			ft_select/ft_free_t_select.c \
 			ft_select/ft_init_select.c \
 			ft_select/ft_manage_touch.c \
-			ft_select/ft_params_by_line.c \
-			ft_select/ft_prepare_print.c \
 			ft_select/ft_print_params.c \
-			ft_select/ft_search_big_param.c \
-			ft_select/ft_search_tab.c \
+			ft_select/ft_search.c \
 			ft_select/ft_select.c \
 			ft_select/tabulator.c \
-			ft_select/ft_manage_cursor_tab.c \
 			ft_select/ft_manage_tab.c \
 			ft_select/ft_tabsplit.c \
 			ft_select/utils.c \

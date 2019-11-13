@@ -6,60 +6,13 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:08:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 04:36:50 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
-/*
-static int	add_multiline(char **ret, char *news, char ***get_hist)
-{
-	char	*tmp;
-	char	*tmp2;
 
-	tmp = ft_strjoin("\n", news);
-	tmp2 = ft_strjoin(*ret, tmp);
-	ft_strdel(ret);
-	*ret = ft_strdup(tmp2);
-	if (news && ft_strlen(news) > 0 && news[ft_strlen(news) - 1] == ']')
-	{
-		ft_malloc_cmd(get_hist, *ret);
-		ft_strdel(ret);
-	}
-	ft_strdel(&tmp);
-	ft_strdel(&tmp2);
-	return (0);
-}
-
-static int	add_hist_to_memory(char **tmp, char *path)
-{
-	char			**get_hist;
-	int				i;
-	char			*str;
-
-	i = -1;
-	str = NULL;
-	get_hist = NULL;
-	if (tmp)
-		while (tmp[++i])
-		{
-			if (!str && tmp[i][0] == '[')
-			{
-				if (tmp[i][ft_strlen(tmp[i]) - 1] == ']')
-					ft_malloc_cmd(&get_hist, tmp[i]);
-				else
-					str = ft_strdup(tmp[i]);
-			}
-			else if (str)
-				add_multiline(&str, tmp[i], &get_hist);
-		}
-	ft_strdel(&str);
-	history_save(&get_hist, NULL, -1, path);
-	ft_tabdel(&get_hist);
-	return (0);
-}
-*/
 static int	init_builtins_history_read(int fd, int *i, char *path)
 {
 	char	*str;
