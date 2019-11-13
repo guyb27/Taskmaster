@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 06:39:06 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 08:35:45 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -66,6 +66,37 @@ static int init_connection(const char *address, int port)
 	return sock;
 }
 
+void			ft_get_tab_elem(char *str)
+{
+	char		**tablo;
+	char		**tab_tmp;
+	char		*str_tmp;
+	int i = 0;
+	int			state;
+
+	state = 0;
+	tablo = ft_strsplit(str, '\n');
+	printf("------------------\n");
+	while (tablo[i])
+	{
+		tab_tmp = ft_strsplit(tablo[i], ' ');
+		if (tab_tmp && tab_tmp[0] && tab_tmp[0][0] == '\t')
+		{
+			printf("[%s]C[%d][%s]\n", state == 2 ? "C" : "P", i, tab_tmp[0] + 1);
+			if (tab_tmp[1])
+			{
+				printf("A1[%d][%s]\n", i, tab_tmp[1] + 1);
+				if (tab_tmp[2] && tab_tmp[3])
+					printf("A2[%d][%s]\n", i, ft_strsub(tab_tmp[3], 0, ft_strlen(tab_tmp[3]) - 1));
+			}
+		}
+		else
+			state++;
+		i++;
+	}
+	printf("------------------\n");
+}
+
 static int		get_start_requests(int sock)
 {
 	int		i;
@@ -90,7 +121,7 @@ static int		get_start_requests(int sock)
 			{
 				ft_putstr(buffer + debut);
 				if (i == 1)
-					;//FAIRE LE PARSING POUR RECUPERER LES ELEMENTS DE LA TABULATION
+					ft_get_tab_elem(buffer + debut);
 				else if (i == 2)
 					g_cl_prompt = ft_strdup(buffer + debut);
 				debut = j + 1;
