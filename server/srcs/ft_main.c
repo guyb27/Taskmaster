@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 04:59:01 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 07:02:43 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,6 +82,24 @@ void		ft_send_json_status(t_tm *tm)
 	ft_sprintf(json, "%s]\n", *json);
 }
 
+char		*ft_send_help(t_tm *tm)
+{
+	int i;
+
+	i = 0;
+	ft_sprintf(&tm->ret, "Synopsis: command [process | all]\n");
+	ft_sprintf(&tm->ret, "%scommand list:\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\tstart [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\trestart [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\tstop [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\tpause [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\tstatus [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\treload [process | all]\n", tm->ret);
+	ft_sprintf(&tm->ret, "%s\tshutdown\n", tm->ret);
+	ft_sprintf(&tm->ret, "%sprocess list:\n", tm->ret);
+	while (i < tm->jobs_cnt)
+		ft_sprintf(&tm->ret, "%s\t%s\n", tm->ret, tm->jobs[i++].name);
+}
 void		ft_process_cmd(t_tm *tm, t_server *server)
 {
 	printf("CMD: [%s]\n", tm->cmd);
@@ -110,17 +128,7 @@ void		ft_process_cmd(t_tm *tm, t_server *server)
 		ft_shutdown(tm, server);
 	}
 	else if (!ft_strcmp(tm->cmd, "help"))
-	{
-		ft_sprintf(&tm->ret, "Synopsis : <Command> [process]\n");
-		ft_sprintf(&tm->ret, "%sexamples :\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<start> <ls | fucked | all>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<restart> <ls | fucked | all>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<stop> <ls | fucked | all>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<pause> <ls | fucked | all>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<status> <ls | fucked | all>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<reload>\n", tm->ret);
-		ft_sprintf(&tm->ret, "%s\t<shutdown>\n", tm->ret);
-	}
+		ft_send_help(tm);
 	else
 		ft_sprintf(&tm->ret, "[%s]: Command not found\n", tm->cmd);
 }
