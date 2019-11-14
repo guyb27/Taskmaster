@@ -96,7 +96,7 @@ static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 	free(token);
 }
 
-void		ft_parse_config(t_tm *tm, char *config_file)
+void		ft_parse_config(t_tm *tm)
 {
 	int		fd;
 	char	*line;
@@ -105,8 +105,8 @@ void		ft_parse_config(t_tm *tm, char *config_file)
 
 	empty_line = 0;
 	current_job = 0;
-	ft_init_job(&tm->jobs[current_job]);
-	fd = open(config_file, O_RDONLY);
+	ft_init_job(tm, &tm->jobs[current_job]);
+	fd = open(tm->config, O_RDONLY);
 	while (get_next_line(fd, &line))
 	{
 		if (line && !line[0])
@@ -114,7 +114,7 @@ void		ft_parse_config(t_tm *tm, char *config_file)
 		else if (line[0] != '#')
 		{
 			if (empty_line && tm->jobs[current_job].name[0])
-				ft_init_job(&tm->jobs[++current_job]);
+				ft_init_job(tm, &tm->jobs[++current_job]);
 			ft_parse_next_token(tm, line, current_job);
 			empty_line = 0;
 		}

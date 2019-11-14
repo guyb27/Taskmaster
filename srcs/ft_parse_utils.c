@@ -25,18 +25,19 @@ void	ft_append_int_val(int list[], int val)
 
 void	ft_append_env(t_job *job, char *key, char *value)
 {
-	t_keyval *new;
-	t_keyval *tmp;
+	char *entry;
 
-	tmp = job->env;
-	while (tmp && tmp->next)
-		tmp = tmp->next;
-	new = (t_keyval*)malloc(sizeof(t_keyval));
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = NULL;
-	if (!tmp)
-		job->env = new;
+	entry = NULL;
+	ft_sprintf(&entry, "%s=%s", key, value);
+	if (job->env)
+	{
+		job->env = realloc(job->env, (ft_tablen(job->env) + 2) * sizeof(char*));
+		job->env[ft_tablen(job->env) + 1] = NULL;
+	}
 	else
-		tmp->next = new;
+	{
+		job->env = ft_memalloc(2 * sizeof(char*));
+	}
+	(job->env)[ft_tablen(job->env)] = strdup(entry);
+	free(entry);
 }

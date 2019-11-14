@@ -22,12 +22,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-typedef struct		s_keyval
+/* typedef struct		s_keyval
 {
 	char			*key;
 	char			*value;
 	struct s_keyval	*next;
-}					t_keyval;
+}					t_keyval; */
 
 typedef struct		s_job
 {
@@ -45,7 +45,8 @@ typedef struct		s_job
 	int				stop_signal;
 	char			stdout[1000];
 	char			stderr[1000];
-	t_keyval		*env;
+//	t_keyval		*env; // not used anymore
+	char			**env;
 }					t_job;
 
 typedef struct		s_status
@@ -79,6 +80,7 @@ typedef struct		s_htime
 
 typedef struct		s_tm
 {
+	char			config[1000];
 	t_job			jobs[1000];
 	t_shared		*shared;
 	int				jobs_cnt;
@@ -105,7 +107,7 @@ void				ft_exec_job(t_tm *tm, int id_job, int retry);
 /*
 **  ft_parse_config.c
 */
-void				ft_parse_config(t_tm *tm, char *config_file);
+void				ft_parse_config(t_tm *tm);
 
 /*
 **  ft_status.c
@@ -113,7 +115,6 @@ void				ft_parse_config(t_tm *tm, char *config_file);
 void				ft_debug_status(t_status *status);
 void				ft_init_status(t_status *status);
 void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
-void				ft_parse_config(t_tm *tm, char *config_file);
 
 /*
 **  ft_utils.c
@@ -121,7 +122,11 @@ void				ft_parse_config(t_tm *tm, char *config_file);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
-void				ft_init_job(t_job *job);
+void				ft_init_job(t_tm *tm, t_job *job);
+
+size_t				ft_tablen(char **tab);
+int					ft_tabdel(char ***tab);
+char				**ft_tabdup(char **tab);
 /*
 **void				ft_debug_job(t_tm *tm, int job_id);
 */

@@ -39,7 +39,49 @@ void			ft_megafree(void *var, int size)
 	munmap(var, size);
 }
 
-void			ft_init_job(t_job *job)
+size_t			ft_tablen(char **tab)
+{
+	size_t	i;
+
+	i = -1;
+	while (tab[++i])
+		;
+	return (i);
+}
+
+int				ft_tabdel(char ***tab)
+{
+	int		i;
+
+	i = -1;
+	if (*tab)
+	{
+		while ((*tab)[++i])
+			ft_strdel(&(*tab)[i]);
+		free(*tab);
+		*tab = NULL;
+	}
+	return (0);
+}
+
+char			**ft_tabdup(char **tab)
+{
+	int		i;
+	char	**ret;
+
+	i = -1;
+	ret = NULL;
+	if (!tab)
+		return (NULL);
+	if (!(ret = (char **)malloc(sizeof(char *) * (ft_tablen(tab) + 1))))
+		return (NULL);
+	while (tab[++i])
+		ret[i] = ft_strdup(tab[i]);
+	ret[i] = NULL;
+	return (ret);
+}
+
+void			ft_init_job(t_tm *tm, t_job *job)
 {
 	int i;
 
@@ -58,7 +100,9 @@ void			ft_init_job(t_job *job)
 	job->stop_signal = 3;
 	ft_bzero(job->stdout, 1000);
 	ft_bzero(job->stderr, 1000);
-	job->env = NULL;
+//	job->env = NULL; // here we must copy tm->env, this will
+					 // be concat with process env var from config file
+	job->env = ft_tabdup(tm->env);
 }
 /*
 **void			ft_debug_job(t_tm *tm, int job_id)
@@ -88,3 +132,11 @@ void			ft_init_job(t_job *job)
 **	ft_printf("{eoc}");
 **}
 */
+
+// pour debug
+void	logprint(char *str)
+{
+	char tmp[2048];
+	sprintf(tmp, "echo \"%s\" >> /tmp/gmadec.log", str);
+	system(tmp);
+}

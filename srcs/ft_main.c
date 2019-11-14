@@ -13,21 +13,7 @@
 
 #include "taskmaster.h"
 
-static void	ft_free_env(t_keyval *env)
-{
-	t_keyval	*env_2;
-
-	while (env)
-	{
-		env_2 = env;
-		env = env->next;
-		free(env_2->key);
-		free(env_2->value);
-		free(env_2);
-	}
-}
-
-void		ft_shutdown(t_tm *tm)
+void		ft_free_jobs(t_tm *tm)
 {
 	t_status	*tmp;
 	t_status	*tmp_2;
@@ -37,7 +23,7 @@ void		ft_shutdown(t_tm *tm)
 	i = -1;
 	while (++i < tm->jobs_cnt)
 	{
-		ft_free_env(tm->jobs[i].env);
+		ft_tabdel(&tm->jobs[i].env);
 		tmp = &tm->shared->status[i];
 		j = 0;
 		while (tmp)
@@ -48,6 +34,12 @@ void		ft_shutdown(t_tm *tm)
 				ft_megafree(tmp_2, sizeof(t_status));
 		}
 	}
+}
+
+void		ft_quit(t_tm *tm)
+{
+	ft_printf("Quitting taskmaster\n");
+	ft_free_jobs(tm);
 	ft_megafree(tm->shared, sizeof(t_shared));
 	exit(0);
 }
@@ -65,14 +57,19 @@ void		ft_process_cmd(t_tm *tm)
 	else if (!strncmp(tm->cmd, "status", 6) && (ft_strlen(tm->cmd) > 7))
 		ft_cmd_status(tm, tm->cmd + 7);
 	else if (!strcmp(tm->cmd, "reload"))
-		ft_printf("reloading config file\n");
+	{
+		ft_free_jobs(tm);
+		ft_parse_config(tm);
+	//	ft_autostart_jobs(tm); maybe a bad idea
+		ft_printf("Config file reloaded\n");
+	}
 	else if (!strcmp(tm->cmd, "shutdown"))
 	{
-		ft_printf("Quitting taskmaster\n");
-		exit(0);
+		ft_cmd_stop(tm, "all");
+		ft_quit(tm);
 	}
 	else if (!ft_strcmp(tm->cmd, "exit"))
-		ft_shutdown(tm);
+		ft_quit(tm);
 }
 
 void		ft_get_user_input(t_tm *tm)
@@ -94,7 +91,8 @@ int			main(int argc, char *argv[], char *env[])
 	tm.jobs_cnt = 0;
 	if (argc == 2 && access(argv[1], F_OK) > -1)
 	{
-		ft_parse_config(&tm, argv[1]);
+		ft_strcpy(tm.config, argv[1]);
+		ft_parse_config(&tm);
 //		for (int i = 0; i < tm.jobs_cnt; i++)
 //			ft_debug_job(&tm, i);
 		ft_autostart_jobs(&tm);
