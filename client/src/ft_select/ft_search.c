@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 10:56:07 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 08:57:00 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 09:59:20 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -37,8 +37,11 @@ int		search_in_rep_tab(t_shell **ed)
 	found = 0;
 	cmd = ft_strsplit((*ed)->t.cmd[0], ' ');
 	while (!found && g_tab.cmd[i].cmd[0])
-		if ((i++) && !ft_strcmp(g_tab.cmd[i].cmd, cmd[0]) && g_tab.cmd[i].arg)
+	{
+		if (!ft_strcmp(g_tab.cmd[i].cmd, cmd[0]) && g_tab.cmd[i].arg)
 			found = g_tab.cmd[i].arg;
+		i++;
+	}
 	i = 0;
 	while (found && g_tab.process[i][0])
 	{

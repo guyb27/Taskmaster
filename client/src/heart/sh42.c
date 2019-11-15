@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 09:26:05 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 09:59:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -77,16 +77,15 @@ void			ft_get_tab_elem(char *str)
 
 	state = 0;
 	tablo = ft_strsplit(str, '\n');
-	/*while (j < 100)
+	while (j < 100)
 	{
 		ft_bzero(g_tab.cmd[j].cmd, sizeof(g_tab.cmd[j].cmd));
 		ft_bzero(g_tab.process[j], sizeof(g_tab.process[j]));
 		j++;
 	}
 	j = 0;
-	*/
-	ft_bzero(g_command, sizeof(g_command));
-	ft_bzero(g_process, sizeof(g_process));
+	ft_bzero(g_tab.cmd, sizeof(g_tab.cmd));
+	ft_bzero(g_tab.process, sizeof(g_tab.process));
 	//ft_bzero(g_tab, sizeof(g_tab));
 	while (tablo[i])
 	{
@@ -109,19 +108,6 @@ void			ft_get_tab_elem(char *str)
 		}
 		else//TITLE
 			state++;
-		i++;
-	}
-	printf("--------PARSE----------\n");
-	i = 0;
-	while (g_tab.cmd[i].cmd[0])
-	{
-		printf("CMD [%d]: [%s], [%s]\n", i, g_tab.cmd[i].cmd, !g_tab.cmd[i].arg ? "Pas d'argument" : g_tab.cmd[i].arg == 1 ? "Arg" : "Arg + All");
-		i++;
-	}
-	i = 0;
-	while (g_tab.process[i] && g_tab.process[i][0])
-	{
-		printf("PROCESS [%d]: [%s]\n", i, g_tab.process[i]);
 		i++;
 	}
 }
