@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/04/27 13:45:58 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 05:14:11 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 06:59:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -91,5 +91,6 @@ char					**ft_tabsplit(void);
 int						replace_line_after_tab(t_shell **ed);
 void					ft_free_t_tab(t_tab *t);
 int						lex_tab(const char *s, int i, int *find, int *cursor);
+void					binorfile(t_shell **ed, int *end_word);
 
 #endif

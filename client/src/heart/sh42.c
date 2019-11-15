@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 08:35:45 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 09:26:05 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -70,31 +70,60 @@ void			ft_get_tab_elem(char *str)
 {
 	char		**tablo;
 	char		**tab_tmp;
-	char		*str_tmp;
 	int i = 0;
+	int j = 0;
+	int k = 0;
 	int			state;
 
 	state = 0;
 	tablo = ft_strsplit(str, '\n');
-	printf("------------------\n");
+	/*while (j < 100)
+	{
+		ft_bzero(g_tab.cmd[j].cmd, sizeof(g_tab.cmd[j].cmd));
+		ft_bzero(g_tab.process[j], sizeof(g_tab.process[j]));
+		j++;
+	}
+	j = 0;
+	*/
+	ft_bzero(g_command, sizeof(g_command));
+	ft_bzero(g_process, sizeof(g_process));
+	//ft_bzero(g_tab, sizeof(g_tab));
 	while (tablo[i])
 	{
 		tab_tmp = ft_strsplit(tablo[i], ' ');
-		if (tab_tmp && tab_tmp[0] && tab_tmp[0][0] == '\t')
+		if (tab_tmp && tab_tmp[0] && tab_tmp[0][0] == '\t')//CMD || PROCESS
 		{
-			printf("[%s]C[%d][%s]\n", state == 2 ? "C" : "P", i, tab_tmp[0] + 1);
-			if (tab_tmp[1])
+			if (state == 2)//COMMANDE
 			{
-				printf("A1[%d][%s]\n", i, tab_tmp[1] + 1);
-				if (tab_tmp[2] && tab_tmp[3])
-					printf("A2[%d][%s]\n", i, ft_strsub(tab_tmp[3], 0, ft_strlen(tab_tmp[3]) - 1));
+				ft_strcpy(g_tab.cmd[j].cmd, tab_tmp[0] + 1);//COMMANDE
+				if (tab_tmp[1])//PROCESS
+				{
+					g_tab.cmd[j].arg = 1;
+					if (tab_tmp[2] && tab_tmp[3])//ALL
+						g_tab.cmd[j].arg = 2;
+				}
+				j++;
 			}
+			else//PROCESS
+				ft_strcpy(g_tab.process[k++], tab_tmp[0] + 1);
 		}
-		else
+		else//TITLE
 			state++;
 		i++;
 	}
-	printf("------------------\n");
+	printf("--------PARSE----------\n");
+	i = 0;
+	while (g_tab.cmd[i].cmd[0])
+	{
+		printf("CMD [%d]: [%s], [%s]\n", i, g_tab.cmd[i].cmd, !g_tab.cmd[i].arg ? "Pas d'argument" : g_tab.cmd[i].arg == 1 ? "Arg" : "Arg + All");
+		i++;
+	}
+	i = 0;
+	while (g_tab.process[i] && g_tab.process[i][0])
+	{
+		printf("PROCESS [%d]: [%s]\n", i, g_tab.process[i]);
+		i++;
+	}
 }
 
 static int		get_start_requests(int sock)
@@ -108,7 +137,7 @@ static int		get_start_requests(int sock)
 	i = 0;
 	while (i < 3 && ft_memset(buffer, 0, sizeof(buffer)))
 	{
-		if ((n = read_server(sock, buffer)) == 0)
+		if (!(n = read_server(sock, buffer)))
 		{
 			printf("Server disconnected !\n");
 			return (1);
@@ -168,13 +197,6 @@ static int		shell(const char *addr, int port)
 			{
 				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
 				write_server(sock, g_cmd);
-				if (!ft_strcmp("exit\n", g_cmd))
-				{
-					closesocket(sock);
-					get_term_raw_mode(0);
-					ft_strdel(&g_cmd);
-					return (0);
-				}
 			}
 			else
 			{

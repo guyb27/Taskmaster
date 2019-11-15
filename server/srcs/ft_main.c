@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 07:02:43 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 05:45:46 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,23 +82,27 @@ void		ft_send_json_status(t_tm *tm)
 	ft_sprintf(json, "%s]\n", *json);
 }
 
-char		*ft_send_help(t_tm *tm)
+char		*ft_cmd_help(t_tm *tm)
 {
 	int i;
+	char	*ret;
 
+	ret = NULL;
 	i = 0;
-	ft_sprintf(&tm->ret, "Synopsis: command [process | all]\n");
-	ft_sprintf(&tm->ret, "%scommand list:\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\tstart [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\trestart [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\tstop [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\tpause [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\tstatus [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\treload [process | all]\n", tm->ret);
-	ft_sprintf(&tm->ret, "%s\tshutdown\n", tm->ret);
-	ft_sprintf(&tm->ret, "%sprocess list:\n", tm->ret);
+	ft_sprintf(&ret, "Synopsis: command [process | all]\n");
+	ft_sprintf(&ret, "%scommand list:\n", ret);
+	ft_sprintf(&ret, "%s\tstart [process | all]\n", ret);
+	ft_sprintf(&ret, "%s\trestart [process | all]\n", ret);
+	ft_sprintf(&ret, "%s\tstop [process | all]\n", ret);
+	ft_sprintf(&ret, "%s\tpause [process | all]\n", ret);
+	ft_sprintf(&ret, "%s\tstatus [process | all]\n", ret);
+	ft_sprintf(&ret, "%s\treload\n", ret);
+	ft_sprintf(&ret, "%s\tshutdown\n", ret);
+	ft_sprintf(&ret, "%s\texit\n", ret);
+	ft_sprintf(&ret, "%sprocess list:\n", ret);
 	while (i < tm->jobs_cnt)
-		ft_sprintf(&tm->ret, "%s\t%s\n", tm->ret, tm->jobs[i++].name);
+		ft_sprintf(&ret, "%s\t%s\n", ret, tm->jobs[i++].name);
+	return (ret);
 }
 void		ft_process_cmd(t_tm *tm, t_server *server)
 {
@@ -128,7 +132,7 @@ void		ft_process_cmd(t_tm *tm, t_server *server)
 		ft_shutdown(tm, server);
 	}
 	else if (!ft_strcmp(tm->cmd, "help"))
-		ft_send_help(tm);
+		tm->ret = ft_cmd_help(tm);
 	else
 		ft_sprintf(&tm->ret, "[%s]: Command not found\n", tm->cmd);
 }

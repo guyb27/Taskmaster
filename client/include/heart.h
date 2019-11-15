@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/02 01:40:43 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 05:06:58 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 06:46:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -66,6 +66,23 @@ int				g_interupt;
 char			*g_cmd;
 int				g_cursor_pos;
 char			*g_cl_prompt;
+
+typedef struct	s_srv_cmd
+{
+	char		cmd[100];
+	int			arg;
+}				t_srv_cmd;
+
+typedef struct	s_srv_tab
+{
+	t_srv_cmd	cmd[100];
+	char		process[100][100];
+}				t_srv_tab;
+
+t_srv_cmd		g_command[100];
+char			g_process[100][100];
+
+t_srv_tab		g_tab;
 
 int				heart_of_101sh(char *line, int fd_base);
 void			signal_shell(void);

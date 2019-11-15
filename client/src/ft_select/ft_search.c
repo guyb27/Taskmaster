@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 10:56:07 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 05:23:43 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 08:57:00 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,31 +15,42 @@
 
 int		search_bin_tab(t_shell **ed)
 {
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "status", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "status");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "start", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "start");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "restart", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "restart");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "pause", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "pause");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "stop", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "stop");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "reload", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "reload");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "help", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "help");
+	int		i = 0;
+
+	while (g_tab.cmd[i].cmd[0])
+	{
+		if (!(*ed)->t.word ||
+		!ft_strncmp((*ed)->t.word, g_tab.cmd[i].cmd, ft_strlen((*ed)->t.word)))
+			ft_malloc_cmd(&(*ed)->t.elem, g_tab.cmd[i].cmd);
+		i++;
+	}
 	return (0);
 }
 
 int		search_in_rep_tab(t_shell **ed)
 {
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "Bonjour", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "Bonjour");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "Bonjour les amis", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "Bonjour les amis");
-	if (!(*ed)->t.word || 0 == ft_strncmp((*ed)->t.word, "Au revoir", ft_strlen((*ed)->t.word)))
-		ft_malloc_cmd(&(*ed)->t.elem, "Au revoir");
+	int		i;
+	int		found;
+	char **cmd;
+
+	i = 0;
+	found = 0;
+	cmd = ft_strsplit((*ed)->t.cmd[0], ' ');
+	while (!found && g_tab.cmd[i].cmd[0])
+		if ((i++) && !ft_strcmp(g_tab.cmd[i].cmd, cmd[0]) && g_tab.cmd[i].arg)
+			found = g_tab.cmd[i].arg;
+	i = 0;
+	while (found && g_tab.process[i][0])
+	{
+		if (!(*ed)->t.word ||
+		!ft_strncmp((*ed)->t.word, g_tab.process[i], ft_strlen((*ed)->t.word)))
+			ft_malloc_cmd(&(*ed)->t.elem, g_tab.process[i]);
+		i++;
+	}
+	if (found == 2 && (!(*ed)->t.word ||
+		!ft_strncmp((*ed)->t.word, "all", ft_strlen((*ed)->t.word))))
+		ft_malloc_cmd(&(*ed)->t.elem, "all");
+	ft_tabdel(&cmd);
 	return (0);
 }
 

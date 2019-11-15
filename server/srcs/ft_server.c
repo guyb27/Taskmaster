@@ -6,13 +6,13 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 05:35:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 05:41:40 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "taskmaster.h"
-
+/*
 char		*ft_get_help(void)
 {
 	char *ret;
@@ -28,7 +28,7 @@ char		*ft_get_help(void)
 	ft_sprintf(&ret, "%sshutdown\n", ret);
 	return (ret);
 }
-
+*/
 void		ft_server_quit(t_server *server, char *error)
 {
 	int err;
@@ -133,13 +133,15 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 				continue;
 			}
 
-			/*ft_sprintf(&start, "%s\0%s\0%s", LOGO, ft_get_help(), PROMPT);
+			/*ft_sprintf(&start, "%s\0%s\0%s", LOGO, ft_cmd_help(tm), PROMPT);
 			if (send(server->csock, start, ft_strlen(start) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
-			*/if (send(server->csock, LOGO, ft_strlen(LOGO) + 1, 0) < 0)
+			*/
+			if (send(server->csock, LOGO, ft_strlen(LOGO) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
-			if (send(server->csock, ft_get_help(), ft_strlen(ft_get_help()) + 1, 0) < 0)
+			if (send(server->csock, ft_cmd_help(tm), ft_strlen(ft_cmd_help(tm)) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
+			//Ne pas oublier le free
 			if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
 			max_fd = server->csock > max_fd ? server->csock : max_fd;

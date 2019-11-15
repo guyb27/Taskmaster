@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/04 01:57:51 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/08 10:32:00 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 06:54:12 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -71,4 +71,22 @@ int					lex_tab(const char *s, int i, int *find, int *cursor)
 	else if (ft_isprint(s[i]) && !ft_isblank(s[i]))
 		return (lex_word(s, i, find, cursor));
 	return (0);
+}
+
+int				lexer_tab(t_shell **sh)
+{
+	int		end_word;
+
+	if (((*sh)->t.cmd = ft_tabsplit()))
+	{
+		binorfile(sh, &end_word);
+		if (g_cursor_pos < end_word)
+		{
+			g_cursor_pos = end_word;
+			return (-1);
+		}
+		else if ((*sh)->t.cmd[1][0])
+			(*sh)->t.word = ft_strdup((*sh)->t.cmd[1]);
+	}
+	return (1);
 }

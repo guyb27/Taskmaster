@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 15:56:11 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:40:11 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 09:19:49 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -29,41 +29,17 @@ static int	save_to_file(char **histsave, char *path)
 	return (close(fd) == -1 ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
-static char	*made_history(char *str)
-{
-	char		*ret;
-	int			i;
-	int			j;
-
-	j = 0;
-	i = 0;
-	ret = NULL;
-	if (str && str[1] && str[2])
-	{
-		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1))))
-			return (NULL);
-		while (str[++i] && str[i + 1])
-		{
-			if (i != 0 && str[i + 1])
-				ret[j++] = str[i];
-		}
-		ret[j] = '\0';
-	}
-	return (ret);
-}
-
 static void	add_memory(char *news, char ***histsave)
 {
 	char	*s;
 	char	tmp[ft_strlen(news) + 1];
 	int		histfilesize;
 
-	s = *histsave ? made_history((*histsave)[ft_tablen(*histsave) - 1]) : NULL;
+	s = *histsave ? ft_strdup((*histsave)[ft_tablen(*histsave) - 1]) : NULL;
 	ft_bzero(tmp, sizeof(tmp));
 	ft_strncpy(tmp, news, ft_strlen(news) - 1);
-	if ((!*histsave || ft_strcmp(s, tmp + 1)) && HISTSIZE > 0)
+	if ((!*histsave || ft_strcmp(s, tmp)) && HISTSIZE > 0)
 	{
-		ft_strdel(&s);
 		histfilesize = *histsave ? ft_tablen(*histsave) + 1 : 1;
 		while (--histfilesize >= HISTSIZE && histfilesize >= 0)
 			ft_strdel_in_tab(histsave, 0);
@@ -85,7 +61,7 @@ void		history_save(char ***history, char *news, int version, char *s)
 	}
 	else if (version == 0 && histsave)
 		*history = ft_tabdup(histsave);
-	else if (version == 1 && news[1])
+	else if (version == 1 && news)
 		add_memory(news, &histsave);
 	else if (version == 2)
 	{

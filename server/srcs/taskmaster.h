@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 05:52:52 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 05:50:06 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -157,6 +157,7 @@ void				ft_cmd_pause(t_tm *tm, char *name);
 void				ft_cmd_restart(t_tm *tm, char *name);
 void				ft_cmd_status(t_tm *tm, char *name);
 void				ft_cmd_stop(t_tm *tm, char *name);
+char				*ft_cmd_help(t_tm *tm);
 
 /*
  **  ft_exec_jobs.c

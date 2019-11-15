@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/18 04:29:30 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:57:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 08:44:19 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -43,7 +43,7 @@ void		first_tab(t_shell **sh, char key[])
 {
 	if (lexer_tab(sh) != -1)
 	{
-		if ((*sh)->t.nb_word == 1 || (*sh)->t.nb_word == 0)
+		if ((*sh)->t.nb_word == 0)
 			search_bin_tab(sh);
 		else
 			search_in_rep_tab(sh);
