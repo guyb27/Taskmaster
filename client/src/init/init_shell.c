@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:36:50 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:20:59 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,7 +27,6 @@ static int	init_builtins_history_read(int fd, int *i, char *path)
 		(*i)++;
 		ft_strdel(&str);
 	}
-	/*add_hist_to_memory(tmp, path);*/
 	history_save(&tmp, NULL, -1, path);
 	ft_tabdel(&tmp);
 	return (EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/13 05:25:35 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/15 10:18:41 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -55,6 +55,8 @@ SRCS_NAME =	\
 			line_edition/ft_inputs_ctrl.c \
 			line_edition/ft_inputs_del.c \
 			line_edition/utils.c \
+			line_edition/ft_manage_history.c \
+			line_edition/ft_save_history.c \
 			line_edition/cursor.c
 
 OBJS_FOLDERS = 	\

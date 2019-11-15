@@ -6,14 +6,14 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 11:04:32 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 09:58:45 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:25:39 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-void		binorfile(t_shell **ed, int *end_word)
+void			binorfile(t_shell **ed, int *end_word)
 {
 	int			i;
 	t_tab_lex	t;
@@ -39,9 +39,9 @@ void		binorfile(t_shell **ed, int *end_word)
 	*end_word = ft_strlen((*ed)->t.cmd[0]) + ft_strlen((*ed)->t.cmd[1]);
 }
 
-void	place_cursor_before(t_shell *sh)
+void			place_cursor_before(t_shell *sh)
 {
-	int		i;
+	int			i;
 
 	i = g_cursor_pos;
 	while (g_cursor_pos)
@@ -56,9 +56,9 @@ void	place_cursor_before(t_shell *sh)
 	}
 }
 
-void	place_cursor_after(t_shell *sh)
+void			place_cursor_after(t_shell *sh)
 {
-	int		i;
+	int			i;
 
 	i = ft_count_line_cmd(sh);
 	while (i + 1)

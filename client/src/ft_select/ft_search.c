@@ -6,17 +6,18 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 10:56:07 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 09:59:20 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:24:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-int		search_bin_tab(t_shell **ed)
+int			search_bin_tab(t_shell **ed)
 {
-	int		i = 0;
+	int		i;
 
+	i = 0;
 	while (g_tab.cmd[i].cmd[0])
 	{
 		if (!(*ed)->t.word ||
@@ -27,11 +28,11 @@ int		search_bin_tab(t_shell **ed)
 	return (0);
 }
 
-int		search_in_rep_tab(t_shell **ed)
+int			search_in_rep_tab(t_shell **ed)
 {
 	int		i;
 	int		found;
-	char **cmd;
+	char	**cmd;
 
 	i = 0;
 	found = 0;
@@ -53,14 +54,12 @@ int		search_in_rep_tab(t_shell **ed)
 	if (found == 2 && (!(*ed)->t.word ||
 		!ft_strncmp((*ed)->t.word, "all", ft_strlen((*ed)->t.word))))
 		ft_malloc_cmd(&(*ed)->t.elem, "all");
-	ft_tabdel(&cmd);
-	return (0);
+	return (ft_tabdel(&cmd));
 }
 
-char	**search_var_tab(char *word)
+char		**search_var_tab(char *word)
 {
 	char	**ret;
-
 
 	ret = NULL;
 	ft_malloc_cmd(&ret, "HELLO WORLD");
@@ -68,10 +67,10 @@ char	**search_var_tab(char *word)
 	return (ret);
 }
 
-int		ft_search_big_param(t_line *line)
+int			ft_search_big_param(t_line *line)
 {
-	t_line		*tmp;
-	size_t		len_max;
+	t_line	*tmp;
+	size_t	len_max;
 
 	len_max = 0;
 	tmp = line;

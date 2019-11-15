@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 04:00:05 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:05:03 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -65,7 +65,7 @@ int			ft_reprint_cmd(t_shell *sh)
 	return (i);
 }
 
-static void		ft_insert_to_line(t_shell *sh, char *buff)
+static void	ft_insert_to_line(t_shell *sh, char *buff)
 {
 	int		i;
 	int		cursor_max;
@@ -85,18 +85,11 @@ static void		ft_insert_to_line(t_shell *sh, char *buff)
 	}
 }
 
-static int			ft_get_user_input_buff_checker(t_shell *sh, char *buff)
+static int	ft_get_user_input_buff_checker(t_shell *sh, char *buff)
 {
-	int	i;
+	int		i;
 
 	i = -1;
-	/*if (g_stop_srv == -1)
-	{
-		printf("G_STOP_SRV TERMCAPS\n");
-		free(g_cmd);
-		g_cmd = ft_strdup((char[4]){4, 0, 0, 0});
-		return (1);
-	}*/
 	if (ft_isprint(buff[0]) || (buff[0] < 0 && (int)buff < 0x10FFFF))
 	{
 		init_tab_and_hist(sh, buff);

@@ -6,16 +6,16 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/04 01:57:51 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 09:58:52 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:22:27 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-static	int			lex_word(const char *s, int i, int *find, int *cursor)
+static int		lex_word(const char *s, int i, int *find, int *cursor)
 {
-	int		count;
+	int			count;
 
 	count = 0;
 	while (ft_isprint(s[i]) && !ft_isblank(s[i]) && s[i])
@@ -31,9 +31,9 @@ static	int			lex_word(const char *s, int i, int *find, int *cursor)
 	return (count);
 }
 
-static	int			lex_blank(const char *s, int i, int *find, int *cursor)
+static int		lex_blank(const char *s, int i, int *find, int *cursor)
 {
-	int		count;
+	int			count;
 
 	count = 0;
 	if (ft_isblank(s[i]) && i != *cursor)
@@ -59,7 +59,7 @@ static	int			lex_blank(const char *s, int i, int *find, int *cursor)
 	return (count);
 }
 
-int					lex_tab(const char *s, int i, int *find, int *cursor)
+int				lex_tab(const char *s, int i, int *find, int *cursor)
 {
 	t_tab_lex	t;
 
@@ -75,7 +75,7 @@ int					lex_tab(const char *s, int i, int *find, int *cursor)
 
 int				lexer_tab(t_shell **sh)
 {
-	int		end_word;
+	int			end_word;
 
 	if (((*sh)->t.cmd = ft_tabsplit()))
 	{

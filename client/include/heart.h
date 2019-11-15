@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/02 01:40:43 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 06:46:48 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:38:07 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,13 +17,10 @@
 # define BUFF_SIZE 4096
 # define BI_MAX 4084
 # define MAX_HASH 100
-
 # include <unistd.h>
 # include <signal.h>
-
 # include <term.h>
 # include <termios.h>
-
 # include <sys/ioctl.h>
 # include <sys/socket.h>
 # include <sys/types.h>
@@ -33,34 +30,20 @@
 # include <netdb.h>
 # include <string.h>
 # include <time.h>
-
-
-# include <stdio.h>
 # include <curses.h>
 # include <fcntl.h>
 # include <dirent.h>
 # include <pwd.h>
 # include <limits.h>
-
 # include "../libft/include/libft.h"
 # include "init.h"
 # include "ft_select.h"
 # include "line_edition.h"
+# include <errno.h>
+# include <netdb.h>
+# include <pthread.h>
 
-
-#include <errno.h>
-#include <netdb.h> /* gethostbyname */
-#include <pthread.h>
-
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define closesocket(s) close(s)
-
-typedef struct sockaddr_in SOCKADDR_IN;
-typedef struct sockaddr SOCKADDR;
-typedef struct in_addr IN_ADDR;
-
-#define BUF_SIZE 1024
+# define BUF_SIZE 1024
 
 int				g_interupt;
 char			*g_cmd;
@@ -78,9 +61,6 @@ typedef struct	s_srv_tab
 	t_srv_cmd	cmd[100];
 	char		process[100][100];
 }				t_srv_tab;
-
-t_srv_cmd		g_command[100];
-char			g_process[100][100];
 
 t_srv_tab		g_tab;
 

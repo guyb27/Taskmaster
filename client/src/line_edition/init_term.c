@@ -6,14 +6,14 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:14:06 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 10:02:31 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-int				ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
+int						ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
 {
 	g_cmd = NULL;
 	g_interupt = 0;
@@ -34,10 +34,10 @@ int				ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
 	return (0);
 }
 
-int				get_term_raw_mode(int mode)
+int						get_term_raw_mode(int mode)
 {
-	t_termios	term;
-	static int i = 0;
+	t_termios			term;
+	static int			i = 0;
 	static t_termios	test;
 
 	if (i == 0)

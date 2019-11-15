@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 09:59:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 11:10:47 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,25 +40,25 @@ static void write_server(int sock, const char *buffer)
 static int init_connection(const char *address, int port)
 {
 	int sock;
-	SOCKADDR_IN sin;
+	struct sockaddr_in sin;
 	struct hostent *hostinfo;
 
-	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
 		perror("socket()");
 		return (-1);
 	}
-	ft_bzero(&sin, sizeof(SOCKADDR_IN));
+	ft_bzero(&sin, sizeof(struct sockaddr_in));
 	hostinfo = gethostbyname(address);
 	if (hostinfo == NULL)
 	{
 		fprintf (stderr, "Unknown host %s.\n", address);
 		return (-1);
 	}
-	sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
+	sin.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 	sin.sin_port = htons(port);
 	sin.sin_family = AF_INET;
-	if(connect(sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
+	if(connect(sock,(struct sockaddr *) &sin, sizeof(struct sockaddr)) == -1)
 	{
 		perror("connect()");
 		return (-1);
@@ -148,69 +148,81 @@ static int		get_start_requests(int sock)
 	return (0);
 }
 
+int				ft_thread_read_input(int sock)
+{
+		ft_get_user_input();
+		if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+		{
+			ft_strdel(&g_cmd);
+			close(sock);
+			get_term_raw_mode(0);
+			return (-1);
+		}
+		else if (g_cmd && !ft_str_isblank(g_cmd))
+		{
+			history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
+			write_server(sock, g_cmd);
+		}
+		else
+		{
+			if (g_cmd && g_cmd[0] && g_cmd[1])
+				ft_putstr(g_cl_prompt);
+			get_term_raw_mode(1);
+		}
+		ft_strdel(&g_cmd);
+	return (0);
+}
+
+int				ft_thread_read_server(int sock, fd_set *rdfs)
+{
+	char buffer[BUF_SIZE];
+
+	if(FD_ISSET(STDIN_FILENO, rdfs))
+	{
+	}
+	else if(FD_ISSET(sock, rdfs))
+	{
+		ft_memset(buffer, 0, sizeof(buffer));
+		if (read_server(sock, buffer) == 0)
+		{
+			get_term_raw_mode(0);
+			printf("Server disconnected !\n");
+			return (1);
+		}
+		if (ft_strcmp(buffer, g_cl_prompt))
+		{
+			ft_putstr(buffer);
+			ft_putstr(g_cl_prompt);
+		}
+		get_term_raw_mode(1);
+	}
+	return (0);
+}
+
 static int		shell(const char *addr, int port)
 {
 	int sock;
-	char buffer[BUF_SIZE];
 	fd_set rdfs;
-	int		n;
+	int		loop;
 
+	loop = 0;
 	if ((sock = init_connection(addr, port)) == -1 || get_start_requests(sock))
 		return (1);
 	get_term_raw_mode(1);
-	while(1)
+	while(!loop)
 	{
 		FD_ZERO(&rdfs);
 		FD_SET(STDIN_FILENO, &rdfs);
 		FD_SET(sock, &rdfs);
 		if(select(sock + 1, &rdfs, NULL, NULL, NULL) == -1)
-		{
-			perror("select()");
-			exit(errno);
-		}
+			return (close + ft_putstr("Select error\n"));
 		if(FD_ISSET(STDIN_FILENO, &rdfs))
-		{
-			ft_memset(buffer, 0, sizeof(buffer));
-			ft_get_user_input();
-			if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
-			{
-				ft_strdel(&g_cmd);
-				closesocket(sock);
-				get_term_raw_mode(0);
-				return (0);
-			}
-			else if (g_cmd && !ft_str_isblank(g_cmd))
-			{
-				history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-				write_server(sock, g_cmd);
-			}
-			else
-			{
-				if (g_cmd && g_cmd[0] && g_cmd[1])
-					ft_putstr(g_cl_prompt);
-				get_term_raw_mode(1);
-			}
-			ft_strdel(&g_cmd);
-		}
+			loop = ft_thread_read_input(sock);
 		else if(FD_ISSET(sock, &rdfs))
-		{
-			ft_memset(buffer, 0, sizeof(buffer));
-			if (read_server(sock, buffer) == 0)
-			{
-				get_term_raw_mode(0);
-				printf("Server disconnected !\n");
-				break;
-			}
-			if (ft_strcmp(buffer, g_cl_prompt))
-			{
-				ft_putstr(buffer);
-				ft_putstr(g_cl_prompt);
-			}
-			get_term_raw_mode(1);
-		}
+			loop = ft_thread_read_server(sock, &rdfs);
 	}
-	closesocket(sock);
-	return (0);
+	close(sock);
+	return (loop == 1 || loop == 0 ? 0 : 1);
 }
 
 int				main(int ac, const char **av)
