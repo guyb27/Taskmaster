@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 07:49:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:52:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,15 +22,15 @@ int			ft_recup_cursor_pos(t_shell *sh, int *left_xpos, int *right_xpos)
 	ret = 0;
 	*left_xpos = 0;
 	*right_xpos = -1;
-	while (i < g_cursor_pos + sh->prompt_len)
+	while (i < g_cl.cursor_pos + sh->prompt_len)
 	{
 		ret = ret + 1 == sh->ws.ws_col || (i > sh->prompt_len &&
 				g_cmd[i - sh->prompt_len] == '\n') ? ret = 0 : ret + 1;
-		if (i == g_cursor_pos + sh->prompt_len - 2)
+		if (i == g_cl.cursor_pos + sh->prompt_len - 2)
 			*left_xpos = ret;
 		i++;
 	}
-	if (g_cmd && g_cursor_pos < (int)ft_strlen(g_cmd))
+	if (g_cmd && g_cl.cursor_pos < (int)ft_strlen(g_cmd))
 		*right_xpos = ret + 1 == sh->ws.ws_col || (i > sh->prompt_len &&
 			g_cmd[i - sh->prompt_len] == '\n') ? 0 : ret + 1;
 	return (ret);
@@ -42,7 +42,7 @@ int			ft_reprint_cmd(t_shell *sh)
 	int		cursor_in_line;
 
 	ft_get_cols(&sh->ws);
-	i = g_cursor_pos;
+	i = g_cl.cursor_pos;
 	cursor_in_line = ft_recup_cursor_pos(sh, &cursor_in_line, &cursor_in_line);
 	while (g_cmd && g_cmd[i])
 	{
@@ -75,13 +75,13 @@ static void	ft_insert_to_line(t_shell *sh, char *buff)
 	while (buff[++i])
 	{
 		tputs(tgetstr("cd", NULL), 1, ft_putchar);
-		ft_add_to_str(&g_cmd, buff[i], g_cursor_pos);
+		ft_add_to_str(&g_cmd, buff[i], g_cl.cursor_pos);
 		cursor_max = ft_reprint_cmd(sh);
-		cursor_tmp = g_cursor_pos;
-		g_cursor_pos = cursor_max;
+		cursor_tmp = g_cl.cursor_pos;
+		g_cl.cursor_pos = cursor_max;
 		while (--cursor_max > cursor_tmp)
 			ft_pushed_left(sh);
-		g_cursor_pos = cursor_tmp + 1;
+		g_cl.cursor_pos = cursor_tmp + 1;
 	}
 }
 
@@ -129,7 +129,7 @@ char		*ft_get_user_input(void)
 		if (ft_get_user_input_buff_checker(&sh, buff))
 		{
 			if (!g_cmd || !ft_strcmp("\n", g_cmd))
-				ft_putstr(g_cl_prompt);
+				ft_putstr(g_cl.prompt);
 			return (g_cmd);
 		}
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);

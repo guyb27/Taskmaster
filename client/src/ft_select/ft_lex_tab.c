@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/04 01:57:51 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:22:27 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:30:45 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -80,9 +80,9 @@ int				lexer_tab(t_shell **sh)
 	if (((*sh)->t.cmd = ft_tabsplit()))
 	{
 		binorfile(sh, &end_word);
-		if (g_cursor_pos < end_word)
+		if (g_cl.cursor_pos < end_word)
 		{
-			g_cursor_pos = end_word;
+			g_cl.cursor_pos = end_word;
 			return (-1);
 		}
 		else if ((*sh)->t.cmd[1][0])

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/01 07:40:58 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/06 17:20:48 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:38:34 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,12 +20,12 @@ void		ft_putcmd(t_shell *sh, int new_pos)
 
 	if (g_cmd)
 	{
-		cursor_tmp = g_cursor_pos;
-		while (g_cursor_pos)
+		cursor_tmp = g_cl.cursor_pos;
+		while (g_cl.cursor_pos)
 			ft_pushed_left(sh);
 		cursor_max = ft_reprint_cmd(sh);
-		g_cursor_pos = new_pos;
-		while (--cursor_max > g_cursor_pos)
+		g_cl.cursor_pos = new_pos;
+		while (--cursor_max > g_cl.cursor_pos)
 			ft_pushed_left(sh);
 	}
 }

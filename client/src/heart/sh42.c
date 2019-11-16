@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 07:58:18 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:50:33 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -61,7 +61,7 @@ static int				ft_thread_read_input(int sock, int *reload_bool)
 	else
 	{
 		if (g_cmd && g_cmd[0] && g_cmd[1])
-			ft_putstr(g_cl_prompt);
+			ft_putstr(g_cl.prompt);
 		get_term_raw_mode(1);
 	}
 	return (ft_strdel(&g_cmd));
@@ -80,7 +80,7 @@ static int				ft_thread_read_server(int sock, fd_set *rdfs,\
 		ft_putstr(!n ? "\nServer disconnected !\n" : "");
 		return (1);
 	}
-	if (ft_strcmp(buffer, g_cl_prompt))
+	if (ft_strcmp(buffer, g_cl.prompt))
 	{
 		ft_putstr(buffer);
 		if (*reload_bool)
@@ -89,7 +89,7 @@ static int				ft_thread_read_server(int sock, fd_set *rdfs,\
 			*reload_bool = 0;
 			ft_get_tab_elems(buffer);
 		}
-		ft_putstr(g_cl_prompt);
+		ft_putstr(g_cl.prompt);
 	}
 	get_term_raw_mode(1);
 	return (0);

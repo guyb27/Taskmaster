@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 15:56:11 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:18:22 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:36:56 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -42,7 +42,7 @@ static void		the_last_of_dowm(t_shell *sh)
 		ft_strdel(&sh->tmp_line);
 		ft_putstr(g_cmd);
 	}
-	g_cursor_pos = g_cmd ? ft_strlen(g_cmd) : 0;
+	g_cl.cursor_pos = g_cmd ? ft_strlen(g_cmd) : 0;
 }
 
 static void		heart_of_hist_search(t_shell *sh, char **history, char key[])

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/16 05:05:35 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 06:37:05 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:49:03 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -86,7 +86,7 @@ int		ft_init_parse(int sock)
 				if (i == 1)
 					ft_get_tab_elems(buffer + debut);
 				else if (i == 2)
-					g_cl_prompt = ft_strdup(buffer + debut);
+					g_cl.prompt = ft_strdup(buffer + debut);
 				debut = j + 1;
 				i++;
 			}

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/27 09:50:31 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/23 11:28:32 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:35:07 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,7 @@ void	ft_pushed_right(t_shell *sh)
 	int		right_xpos;
 	int		zell;
 
-	if (g_cmd && g_cursor_pos < (int)ft_strlen(g_cmd))
+	if (g_cmd && g_cl.cursor_pos < (int)ft_strlen(g_cmd))
 	{
 		pos = ft_recup_cursor_pos(sh, &zell, &right_xpos);
 		if (right_xpos > 0)
@@ -29,7 +29,7 @@ void	ft_pushed_right(t_shell *sh)
 			TERMCAP("sf");
 			TERMCAP("cr");
 		}
-		g_cursor_pos++;
+		g_cl.cursor_pos++;
 	}
 }
 
@@ -40,7 +40,7 @@ void	ft_pushed_left(t_shell *sh)
 	int		zell;
 
 	zell = 0;
-	if (g_cursor_pos > 0)
+	if (g_cl.cursor_pos > 0)
 	{
 		pos = ft_recup_cursor_pos(sh, &left_xpos, &zell);
 		if (pos == 0)
@@ -54,6 +54,6 @@ void	ft_pushed_left(t_shell *sh)
 		}
 		else
 			TERMCAP("le");
-		g_cursor_pos--;
+		g_cl.cursor_pos--;
 	}
 }

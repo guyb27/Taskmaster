@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/02 01:40:43 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:26:30 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:53:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -45,10 +45,7 @@
 
 # define BUF_SIZE 1024
 
-int				g_interupt;
 char			*g_cmd;
-int				g_cursor_pos;
-char			*g_cl_prompt;
 
 typedef struct	s_srv_cmd
 {
@@ -66,6 +63,8 @@ t_srv_tab		g_tab;
 
 typedef struct	s_cl
 {
+	int			cursor_pos;
+	char		*prompt;
 }				t_cl;
 
 t_cl			g_cl;

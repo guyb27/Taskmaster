@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/25 03:31:24 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 08:38:21 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:33:10 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -108,7 +108,7 @@ char		**ft_tabsplit(void)
 	ret = NULL;
 	i_tmp = 0;
 	if (g_cmd)
-		ret = manage_tabsplit(g_cmd, i_tmp, find_cursor, g_cursor_pos);
+		ret = manage_tabsplit(g_cmd, i_tmp, find_cursor, g_cl.cursor_pos);
 	else
 	{
 		ft_malloc_cmd(&ret, "");

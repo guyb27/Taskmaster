@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 03:51:12 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:35:35 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -57,10 +57,10 @@ void	ft_init_input_keys(t_shell *sh)
 int		ft_pushed_key_home_end(t_shell *sh, char key[])
 {
 	if (!ft_strcmp(FT_KEY_HOME, key))
-		while (g_cursor_pos > 0)
+		while (g_cl.cursor_pos > 0)
 			ft_pushed_left_right(sh, FT_KEY_LEFT);
 	if (!ft_strcmp(FT_KEY_END, key))
-		while (g_cursor_pos < (int)ft_strlen(g_cmd))
+		while (g_cl.cursor_pos < (int)ft_strlen(g_cmd))
 			ft_pushed_left_right(sh, FT_KEY_RIGHT);
 	return (0);
 }

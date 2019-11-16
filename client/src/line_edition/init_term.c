@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:17:06 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:38:16 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,7 +16,7 @@
 int						ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
 {
 	g_cmd = NULL;
-	g_cursor_pos = 0;
+	g_cl.cursor_pos = 0;
 	sh->tmp_line = NULL;
 	sh->tabu = -1;
 	sh->hist = -2;
