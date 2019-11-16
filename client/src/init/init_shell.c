@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:20:59 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:19:50 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -106,7 +106,7 @@ int			init_shell(int ac, const char **av)
 	{
 		while (tcgetpgrp(STDIN_FILENO) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);
-		signal(SIGINT, ft_handle_sigint);
+//		signal(SIGINT, ft_handle_sigint);
 		signal(SIGWINCH, ft_handle_resize);
 		shell_pid = getpid();
 		tcsetpgrp(STDIN_FILENO, shell_pid);

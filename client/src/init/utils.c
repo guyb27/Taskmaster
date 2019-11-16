@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/08/23 06:42:06 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 04:06:04 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 08:24:08 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -89,4 +89,22 @@ char				*search_path_of_101sh(const char *bin)
 		}
 	}
 	return (tmp);
+}
+
+void		ft_handle_resize(int sig)
+{
+	int		tmp_cursor;
+	t_shell	sh;
+
+	(void)sig;
+	ft_get_cols(&sh.ws);
+	sh.prompt_len = g_cmd ? ft_strlen(g_cmd) : 0;
+	tmp_cursor = g_cursor_pos;
+	TERMCAP("cl");
+	ft_putstr(g_cl_prompt);
+	g_cursor_pos = 0;
+	g_cmd ? ft_reprint_cmd(&sh) : 0;
+	g_cursor_pos = g_cmd ? ft_strlen(g_cmd) : 0;
+	while (tmp_cursor < g_cursor_pos)
+		ft_pushed_left(&sh);
 }

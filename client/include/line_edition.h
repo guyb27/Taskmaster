@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:16:16 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 07:50:35 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -93,6 +93,7 @@ typedef struct	s_shell
 	t_ws		ws;
 	int			prompt_len;
 	t_key		keys[100];
+	char		*cmd;
 	char		*tmp_line;
 	t_tab		t;
 	t_select	*sel;

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 06:54:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 07:58:18 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -47,17 +47,16 @@ static int				ft_thread_read_input(int sock, int *reload_bool)
 	ft_get_user_input();
 	if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
 	{
-		ft_strdel(&g_cmd);
 		close(sock);
 		get_term_raw_mode(0);
-		return (-1);
+		return (-1 + ft_strdel(&g_cmd));
 	}
 	else if (g_cmd && !ft_str_isblank(g_cmd))
 	{
 		history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
 		*reload_bool = !ft_strcmp("reload\n", g_cmd) ? 1 : *reload_bool;
 		if (write_server(sock, g_cmd) == -1)
-			return (1);
+			return (1 + ft_strdel(&g_cmd));
 	}
 	else
 	{
@@ -65,8 +64,7 @@ static int				ft_thread_read_input(int sock, int *reload_bool)
 			ft_putstr(g_cl_prompt);
 		get_term_raw_mode(1);
 	}
-	ft_strdel(&g_cmd);
-	return (0);
+	return (ft_strdel(&g_cmd));
 }
 
 static int				ft_thread_read_server(int sock, fd_set *rdfs,\
@@ -82,12 +80,12 @@ static int				ft_thread_read_server(int sock, fd_set *rdfs,\
 		ft_putstr(!n ? "\nServer disconnected !\n" : "");
 		return (1);
 	}
-	printf("RELOAD: [%d]\n", *reload_bool);
 	if (ft_strcmp(buffer, g_cl_prompt))
 	{
 		ft_putstr(buffer);
 		if (*reload_bool)
 		{
+			printf("RELOADING\n\r");
 			*reload_bool = 0;
 			ft_get_tab_elems(buffer);
 		}
@@ -97,16 +95,15 @@ static int				ft_thread_read_server(int sock, fd_set *rdfs,\
 	return (0);
 }
 
-static int				shell(const char *addr, int port)
+static int				shell(int sock)
 {
-	int					sock;
 	fd_set				rdfs;
 	int					loop;
 	int					reload_bool;
 
 	loop = 0;
 	reload_bool = 0;
-	if ((sock = init_connection(addr, port)) == -1 || ft_init_parse(sock))
+	if (ft_init_parse(sock))
 		return (1);
 	get_term_raw_mode(1);
 	while (!loop)
@@ -128,8 +125,10 @@ static int				shell(const char *addr, int port)
 int						main(int ac, const char **av)
 {
 	int					ret;
+	int					sock;
+	int					port;
 
-	if (ac < 2 || !ft_atoi(av[2]))
+	if (ac < 2 || (port = ft_atoi(av[2])) <= 0)
 	{
 		fprintf(stderr, "Usage: %s <host> <port>\n", av[0]);
 		exit(EXIT_FAILURE);
@@ -139,7 +138,10 @@ int						main(int ac, const char **av)
 		ft_putstr("Taskmaster can't run in non-interactive mode.");
 		return (EXIT_FAILURE);
 	}
-	ret = shell(av[1], ft_atoi(av[2]));
+	if (!((sock = init_connection(av[1], port)) == -1))
+		ret = shell(sock) ? 1 : 0;
+	else
+		ret = 1;
 	exit_shell();
 	return (ret);
 }
