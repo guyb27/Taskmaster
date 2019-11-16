@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/04/29 05:34:53 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 02:46:24 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 04:19:58 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,6 @@ void		ft_handle_resize(int sig)
 	sh.prompt_len = g_cmd ? ft_strlen(g_cmd) : 0;
 	tmp_cursor = g_cursor_pos;
 	TERMCAP("cl");
-	//display_prompt(g_prompt);
 	ft_putstr(g_cl_prompt);
 	g_cursor_pos = 0;
 	g_cmd ? ft_reprint_cmd(&sh) : 0;

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/02 01:40:43 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:38:07 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 06:36:58 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -70,5 +70,9 @@ void			exit_shell(void);
 
 void			ft_handle_resize(int sig);
 void			ft_handle_sigint(int sig);
+int				read_server(int sock, char *buffer);
+int				write_server(int sock, const char *buffer);
+int				ft_init_parse(int sock);
+void			ft_get_tab_elems(char *str);
 
 #endif

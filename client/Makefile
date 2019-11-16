@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/15 10:18:41 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/16 04:53:16 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -31,7 +31,8 @@ LIB_PATH = ./libft/
 SRCS_NAME =	\
 			heart/sh42.c \
 			heart/signal.c \
-			heart/sh42_exit.c \
+			heart/utils.c \
+			heart/ft_get_tab_elems.c \
 			init/init_shell.c \
 			init/utils.c \
 			ft_select/ft_arrows.c \
