@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 10:56:07 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 10:24:48 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:54:50 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,11 +18,11 @@ int			search_bin_tab(t_shell **ed)
 	int		i;
 
 	i = 0;
-	while (g_tab.cmd[i].cmd[0])
+	while (g_cl.cmd_struct[i].cmd[0])
 	{
-		if (!(*ed)->t.word ||
-		!ft_strncmp((*ed)->t.word, g_tab.cmd[i].cmd, ft_strlen((*ed)->t.word)))
-			ft_malloc_cmd(&(*ed)->t.elem, g_tab.cmd[i].cmd);
+		if (!(*ed)->t.word || !ft_strncmp((*ed)->t.word,
+		g_cl.cmd_struct[i].cmd, ft_strlen((*ed)->t.word)))
+			ft_malloc_cmd(&(*ed)->t.elem, g_cl.cmd_struct[i].cmd);
 		i++;
 	}
 	return (0);
@@ -34,37 +34,22 @@ int			search_in_rep_tab(t_shell **ed)
 	int		found;
 	char	**cmd;
 
-	i = 0;
+	i = -1;
 	found = 0;
 	cmd = ft_strsplit((*ed)->t.cmd[0], ' ');
-	while (!found && g_tab.cmd[i].cmd[0])
-	{
-		if (!ft_strcmp(g_tab.cmd[i].cmd, cmd[0]) && g_tab.cmd[i].arg)
-			found = g_tab.cmd[i].arg;
-		i++;
-	}
-	i = 0;
-	while (found && g_tab.process[i][0])
-	{
+	while (!found && g_cl.cmd_struct[++i].cmd[0])
+		if (!ft_strcmp(g_cl.cmd_struct[i].cmd, cmd[0]) &&
+				g_cl.cmd_struct[i].arg)
+			found = g_cl.cmd_struct[i].arg;
+	i = -1;
+	while (found && g_cl.process[++i][0])
 		if (!(*ed)->t.word ||
-		!ft_strncmp((*ed)->t.word, g_tab.process[i], ft_strlen((*ed)->t.word)))
-			ft_malloc_cmd(&(*ed)->t.elem, g_tab.process[i]);
-		i++;
-	}
+		!ft_strncmp((*ed)->t.word, g_cl.process[i], ft_strlen((*ed)->t.word)))
+			ft_malloc_cmd(&(*ed)->t.elem, g_cl.process[i]);
 	if (found == 2 && (!(*ed)->t.word ||
 		!ft_strncmp((*ed)->t.word, "all", ft_strlen((*ed)->t.word))))
 		ft_malloc_cmd(&(*ed)->t.elem, "all");
 	return (ft_tabdel(&cmd));
-}
-
-char		**search_var_tab(char *word)
-{
-	char	**ret;
-
-	ret = NULL;
-	ft_malloc_cmd(&ret, "HELLO WORLD");
-	ft_malloc_cmd(&ret, "HELLO");
-	return (ret);
 }
 
 int			ft_search_big_param(t_line *line)

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/16 05:05:35 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:22:13 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:47:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,13 +26,13 @@ void			ft_get_tab_elems(char *str)
 	tablo = ft_strsplit(str, '\n');
 	while (j < 100)
 	{
-		ft_bzero(g_tab.cmd[j].cmd, sizeof(g_tab.cmd[j].cmd));
-		ft_bzero(g_tab.process[j], sizeof(g_tab.process[j]));
+		ft_bzero(g_cl.cmd_struct[j].cmd, sizeof(g_cl.cmd_struct[j].cmd));
+		ft_bzero(g_cl.process[j], sizeof(g_cl.process[j]));
 		j++;
 	}
 	j = 0;
-	ft_bzero(g_tab.cmd, sizeof(g_tab.cmd));
-	ft_bzero(g_tab.process, sizeof(g_tab.process));
+	ft_bzero(g_cl.cmd_struct, sizeof(g_cl.cmd_struct));
+	ft_bzero(g_cl.process, sizeof(g_cl.process));
 	while (tablo[i])
 	{
 		tab_tmp = ft_strsplit(tablo[i], ' ');
@@ -40,17 +40,17 @@ void			ft_get_tab_elems(char *str)
 		{
 			if (state == 2)//COMMANDE
 			{
-				ft_strcpy(g_tab.cmd[j].cmd, tab_tmp[0] + 1);//COMMANDE
+				ft_strcpy(g_cl.cmd_struct[j].cmd, tab_tmp[0] + 1);//COMMANDE
 				if (tab_tmp[1])//PROCESS
 				{
-					g_tab.cmd[j].arg = 1;
+					g_cl.cmd_struct[j].arg = 1;
 					if (tab_tmp[2] && tab_tmp[3])//ALL
-						g_tab.cmd[j].arg = 2;
+						g_cl.cmd_struct[j].arg = 2;
 				}
 				j++;
 			}
 			else//PROCESS
-				ft_strcpy(g_tab.process[k++], tab_tmp[0] + 1);
+				ft_strcpy(g_cl.process[k++], tab_tmp[0] + 1);
 		}
 		else//TITLE
 			state++;

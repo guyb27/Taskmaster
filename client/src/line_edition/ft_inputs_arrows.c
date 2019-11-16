@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 15:56:11 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:24:18 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:47:41 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -70,8 +70,8 @@ int			ft_pushed_key_altleft_altright(t_shell *sh, char key[])
 	while (!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ? i > 0 : i <
 			(int)ft_strlen(g_cl.cmd))
 	{
-		if ((i == 0 || ft_isspace(g_cl.cmd[i - 1])) && !ft_isspace(g_cl.cmd[i]) &&
-				ft_isprint(g_cl.cmd[i]) && i != g_cl.cursor_pos)
+		if ((i == 0 || ft_isspace(g_cl.cmd[i - 1])) &&
+	!ft_isspace(g_cl.cmd[i]) && ft_isprint(g_cl.cmd[i]) && i != g_cl.cursor_pos)
 			break ;
 		!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ? i-- : i++;
 	}

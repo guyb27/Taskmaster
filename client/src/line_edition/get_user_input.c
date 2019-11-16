@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/18 20:15:51 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:26:00 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:02:59 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -115,7 +115,7 @@ char		*ft_get_user_input(void)
 	char	buff[5];
 
 	ft_memset(&sh, 0, sizeof(sh));
-	if (ft_init_shell_struct(&sh, NULL) == -1)
+	if (ft_init_shell_struct(&sh) == -1)
 		return (g_cl.cmd = ft_strdup("exit\n"));
 	sh.prompt_len = 13;
 	ft_init_input_keys(&sh);

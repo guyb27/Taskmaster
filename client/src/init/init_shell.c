@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:19:50 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:59:32 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -71,7 +71,7 @@ char		*ft_envset_value(const char **envset, const char *name)
 	return (s);
 }
 
-int			ft_init_term(int ac, const char **av)
+static int		ft_init_term(const char **av)
 {
 	char		*path;
 	char		*str;
@@ -97,7 +97,7 @@ int			ft_init_term(int ac, const char **av)
 	return (EXIT_SUCCESS);
 }
 
-int			init_shell(int ac, const char **av)
+int			init_shell(const char **av)
 {
 	pid_t shell_pgid;
 	pid_t shell_pid;
@@ -106,11 +106,10 @@ int			init_shell(int ac, const char **av)
 	{
 		while (tcgetpgrp(STDIN_FILENO) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);
-//		signal(SIGINT, ft_handle_sigint);
 		signal(SIGWINCH, ft_handle_resize);
 		shell_pid = getpid();
 		tcsetpgrp(STDIN_FILENO, shell_pid);
-		ft_init_term(ac, av);
+		ft_init_term(av);
 		return (EXIT_SUCCESS);
 	}
 	else

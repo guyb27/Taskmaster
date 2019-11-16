@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:21:56 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:57:03 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -67,13 +67,13 @@ static int				ft_thread_read_input(int sock, int *reload_bool)
 	return (ft_strdel(&g_cl.cmd));
 }
 
-static int				ft_thread_read_server(int sock, fd_set *rdfs,\
-		int *reload_bool)
+static int				ft_thread_read_server(int sock, int *reload_bool)
 {
 	char				buffer[BUF_SIZE];
 	int					n;
 
 	ft_memset(buffer, 0, sizeof(buffer));
+	get_term_raw_mode(0);
 	if ((n = read_server(sock, buffer)) == 0 || n == -1)
 	{
 		get_term_raw_mode(0);
@@ -85,7 +85,6 @@ static int				ft_thread_read_server(int sock, fd_set *rdfs,\
 		ft_putstr(buffer);
 		if (*reload_bool)
 		{
-			printf("RELOADING\n\r");
 			*reload_bool = 0;
 			ft_get_tab_elems(buffer);
 		}
@@ -116,7 +115,7 @@ static int				shell(int sock)
 		if (FD_ISSET(STDIN_FILENO, &rdfs))
 			loop = ft_thread_read_input(sock, &reload_bool);
 		else if (FD_ISSET(sock, &rdfs))
-			loop = ft_thread_read_server(sock, &rdfs, &reload_bool);
+			loop = ft_thread_read_server(sock, &reload_bool);
 	}
 	close(sock);
 	return (loop == 1 || loop == 0 ? 0 : 1);
@@ -133,7 +132,7 @@ int						main(int ac, const char **av)
 		fprintf(stderr, "Usage: %s <host> <port>\n", av[0]);
 		exit(EXIT_FAILURE);
 	}
-	if (init_shell(ac, av))
+	if (init_shell(av))
 	{
 		ft_putstr("Taskmaster can't run in non-interactive mode.");
 		return (EXIT_FAILURE);

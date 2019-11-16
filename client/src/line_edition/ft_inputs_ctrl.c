@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 16:12:31 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:24:33 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:51:19 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,6 +27,7 @@ int		ft_pushed_key_ctrl_c(t_shell *sh, char key[])
 int		ft_pushed_key_ctrl_d(t_shell *sh, char key[])
 {
 	(void)key;
+	(void)sh;
 	if (!g_cl.cmd)
 	{
 		get_term_raw_mode(0);

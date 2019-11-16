@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 07:50:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:03:41 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,7 +59,7 @@ typedef struct	s_key
 	char		key[4];
 	int			(*f)(struct s_shell *sh, char key[3]);
 }				t_key;
-
+/*
 typedef enum	e_prompt
 {
 	PROMPT,
@@ -75,7 +75,7 @@ typedef enum	e_prompt
 	SUBST,
 	READ
 }				t_prompt;
-
+*/
 typedef struct	s_tab
 {
 	char		**cmd;
@@ -129,7 +129,7 @@ int				ft_pushed_key_tab(t_shell *sh, char key[]);
 int				ft_pushed_key_ctrl_c(t_shell *sh, char key[]);
 int				ft_pushed_key_ctrl_d(t_shell *sh, char key[]);
 int				ft_pushed_key_ctrl_l(t_shell *sh, char key[]);
-int				ft_init_shell_struct(t_shell *sh, t_prompt *prompt);
+int				ft_init_shell_struct(t_shell *sh);
 int				get_term_raw_mode(int mode);
 void			ft_get_cols(t_ws *ws);
 void			history_save(char ***history, char *news, int version, char *s);

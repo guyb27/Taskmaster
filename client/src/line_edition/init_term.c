@@ -6,14 +6,14 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 09:03:00 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:26:23 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 10:47:37 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-int						ft_init_shell_struct(t_shell *sh, t_prompt *prompt)
+int						ft_init_shell_struct(t_shell *sh)
 {
 	g_cl.cmd = NULL;
 	g_cl.cursor_pos = 0;

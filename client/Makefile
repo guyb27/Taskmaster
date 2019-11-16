@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/16 08:22:29 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/16 10:15:11 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -17,7 +17,7 @@ NAME = 42sh
 
 MAKE = make
 CC = gcc
-CFLAGS = #-lpthread -D_REENTRANT#-Wall -Werror -Wextra -Wunused -Wunreachable-code
+CFLAGS = -Wall -Werror -Wextra -Wunused -Wunreachable-code
 CPPFLAGS = -I ./include/
 LDLIBS = -lft -ltermcap
 LDFLAGS = -Llibft/
@@ -113,7 +113,7 @@ $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 val: lldb
-	valgrind --suppressions=.valgrind.supp --leak-check=full --track-origins=yes ./a.out
+	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 2022
 
 valgrind: lldb
 	valgrind --suppressions=.valgrind.supp --leak-check=full --track-origins=yes ./a.out

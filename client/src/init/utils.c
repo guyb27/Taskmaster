@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/08/23 06:42:06 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:23:17 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:49:35 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,8 +15,8 @@
 
 int					index_to_var(char *name, char **env)
 {
-	int		i;
-	int		j;
+	int				i;
+	int				j;
 
 	j = 0;
 	i = -1;
@@ -36,7 +36,7 @@ int					index_to_var(char *name, char **env)
 
 static char			*found_slash(int i[2], char *bin, char **tmp_1, char **tmp)
 {
-	char		*tmp_2;
+	char			*tmp_2;
 
 	if (i[0] > 0 && bin[i[0] - 1] == '/')
 	{
@@ -65,11 +65,11 @@ static char			*found_slash(int i[2], char *bin, char **tmp_1, char **tmp)
 
 char				*search_path_of_101sh(const char *bin)
 {
-	char		*tmp;
-	char		*tmp_1;
-	char		*tmp_2;
-	char		buff[4096];
-	int			i[2];
+	char			*tmp;
+	char			*tmp_1;
+	char			*tmp_2;
+	char			buff[4096];
+	int				i[2];
 
 	i[1] = 0;
 	tmp_1 = NULL;
@@ -91,10 +91,10 @@ char				*search_path_of_101sh(const char *bin)
 	return (tmp);
 }
 
-void		ft_handle_resize(int sig)
+void				ft_handle_resize(int sig)
 {
-	int		tmp_cursor;
-	t_shell	sh;
+	int				tmp_cursor;
+	t_shell			sh;
 
 	(void)sig;
 	ft_get_cols(&sh.ws);
