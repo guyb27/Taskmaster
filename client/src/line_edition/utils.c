@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/01 07:40:58 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:38:34 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:26:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,7 +18,7 @@ void		ft_putcmd(t_shell *sh, int new_pos)
 	int		cursor_tmp;
 	int		cursor_max;
 
-	if (g_cmd)
+	if (g_cl.cmd)
 	{
 		cursor_tmp = g_cl.cursor_pos;
 		while (g_cl.cursor_pos)
@@ -43,7 +43,7 @@ int			ft_count_line_cmd(t_shell *sh)
 	cmd = NULL;
 	while (++i < sh->prompt_len)
 		ft_add_to_str(&cmd, ' ', i);
-	cmd = g_cmd ? ft_strjoin_free(cmd, g_cmd) : cmd;
+	cmd = g_cl.cmd ? ft_strjoin_free(cmd, g_cl.cmd) : cmd;
 	i = -1;
 	while (cmd && cmd[++i])
 	{

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:50:33 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:21:56 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -45,26 +45,26 @@ static int				init_connection(const char *address, int port)
 static int				ft_thread_read_input(int sock, int *reload_bool)
 {
 	ft_get_user_input();
-	if (g_cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cmd, 4))
+	if (g_cl.cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cl.cmd, 4))
 	{
 		close(sock);
 		get_term_raw_mode(0);
-		return (-1 + ft_strdel(&g_cmd));
+		return (-1 + ft_strdel(&g_cl.cmd));
 	}
-	else if (g_cmd && !ft_str_isblank(g_cmd))
+	else if (g_cl.cmd && !ft_str_isblank(g_cl.cmd))
 	{
-		history_save((char ***)NULL, g_cmd, 1, (char *)NULL);
-		*reload_bool = !ft_strcmp("reload\n", g_cmd) ? 1 : *reload_bool;
-		if (write_server(sock, g_cmd) == -1)
-			return (1 + ft_strdel(&g_cmd));
+		history_save((char ***)NULL, g_cl.cmd, 1, (char *)NULL);
+		*reload_bool = !ft_strcmp("reload\n", g_cl.cmd) ? 1 : *reload_bool;
+		if (write_server(sock, g_cl.cmd) == -1)
+			return (1 + ft_strdel(&g_cl.cmd));
 	}
 	else
 	{
-		if (g_cmd && g_cmd[0] && g_cmd[1])
+		if (g_cl.cmd && g_cl.cmd[0] && g_cl.cmd[1])
 			ft_putstr(g_cl.prompt);
 		get_term_raw_mode(1);
 	}
-	return (ft_strdel(&g_cmd));
+	return (ft_strdel(&g_cl.cmd));
 }
 
 static int				ft_thread_read_server(int sock, fd_set *rdfs,\

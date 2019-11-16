@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/07 16:12:31 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/09 04:53:53 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:24:33 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,17 +20,17 @@ int		ft_pushed_key_ctrl_c(t_shell *sh, char key[])
 	TERMCAP("do");
 	TERMCAP("cr");
 	get_term_raw_mode(0);
-	ft_strdel(&g_cmd);
+	ft_strdel(&g_cl.cmd);
 	return (1);
 }
 
 int		ft_pushed_key_ctrl_d(t_shell *sh, char key[])
 {
 	(void)key;
-	if (!g_cmd)
+	if (!g_cl.cmd)
 	{
 		get_term_raw_mode(0);
-		g_cmd = ft_strdup(FT_KEY_CTRL_D);
+		g_cl.cmd = ft_strdup(FT_KEY_CTRL_D);
 		ft_putstr("\n");
 		return (1);
 	}

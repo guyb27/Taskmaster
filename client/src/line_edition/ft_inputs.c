@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:35:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:24:01 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -60,7 +60,7 @@ int		ft_pushed_key_home_end(t_shell *sh, char key[])
 		while (g_cl.cursor_pos > 0)
 			ft_pushed_left_right(sh, FT_KEY_LEFT);
 	if (!ft_strcmp(FT_KEY_END, key))
-		while (g_cl.cursor_pos < (int)ft_strlen(g_cmd))
+		while (g_cl.cursor_pos < (int)ft_strlen(g_cl.cmd))
 			ft_pushed_left_right(sh, FT_KEY_RIGHT);
 	return (0);
 }
@@ -70,13 +70,13 @@ int		ft_pushed_key_enter(t_shell *sh, char key[])
 	if (sh->tabu != -1)
 		return (ft_pushed_key_tab(sh, key));
 	ft_pushed_key_home_end(sh, FT_KEY_END);
-	if (g_cmd && ft_str_isblank(g_cmd))
+	if (g_cl.cmd && ft_str_isblank(g_cl.cmd))
 	{
-		free(g_cmd);
-		g_cmd = ft_strdup("\n");
+		free(g_cl.cmd);
+		g_cl.cmd = ft_strdup("\n");
 	}
 	else
-		g_cmd = ft_strjoin_free(g_cmd, "\n");
+		g_cl.cmd = ft_strjoin_free(g_cl.cmd, "\n");
 	get_term_raw_mode(0);
 	write(1, "\n", 1);
 	return (1);

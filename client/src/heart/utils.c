@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:36 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 07:51:19 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:22:29 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,7 +15,7 @@
 
 void		exit_shell(void)
 {
-	ft_strdel(&g_cmd);
+	ft_strdel(&g_cl.cmd);
 	history_save((char ***)NULL, (char *)NULL, 2, (char *)NULL);
 	get_next_line(-101, NULL);
 }

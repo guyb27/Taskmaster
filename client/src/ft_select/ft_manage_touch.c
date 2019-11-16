@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/04/27 13:28:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:32:30 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:18:33 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,8 +38,8 @@ int			replace_line_after_tab(t_shell **ed)
 	ft_strdel(&(*ed)->t.cmd[1]);
 	(*ed)->t.cmd[1] = (*ed)->sel->ret;
 	g_cl.cursor_pos = ft_strlen((*ed)->t.cmd[0]) + ft_strlen((*ed)->t.cmd[1]);
-	ft_strdel(&g_cmd);
-	ft_concat_tab_to_str((*ed)->t.cmd, &g_cmd);
+	ft_strdel(&g_cl.cmd);
+	ft_concat_tab_to_str((*ed)->t.cmd, &g_cl.cmd);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/27 09:50:31 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 08:35:07 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/16 09:23:47 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,7 @@ void	ft_pushed_right(t_shell *sh)
 	int		right_xpos;
 	int		zell;
 
-	if (g_cmd && g_cl.cursor_pos < (int)ft_strlen(g_cmd))
+	if (g_cl.cmd && g_cl.cursor_pos < (int)ft_strlen(g_cl.cmd))
 	{
 		pos = ft_recup_cursor_pos(sh, &zell, &right_xpos);
 		if (right_xpos > 0)
