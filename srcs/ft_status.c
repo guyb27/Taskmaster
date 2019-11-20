@@ -13,18 +13,6 @@
 
 #include "taskmaster.h"
 
-void		ft_debug_status(t_status *status)
-{
-	ft_printf("pid:\t[%d]\n", status->pid);
-	ft_printf("state:\t[%d]\n", status->state);
-	ft_printf("stime:\t[%d]\n", status->started_time);
-	ft_printf("ttime:\t[%d]\n", status->stopped_time);
-}
-
-/*
-**------------------------------------------------------------------------------
-*/
-
 void		ft_init_status(t_status *status)
 {
 	status->pid = 0;
@@ -56,30 +44,30 @@ static void	ft_get_htime(t_htime *htime, time_t time)
 void		ft_print_name_and_state(t_tm *tm, int id_job, t_status *status)
 {
 	if (status->state == stopped)
-		ft_printf("%s ", "\e[91m");
+		ft_sprintf(&tm->ret, "%s%s ", tm->ret, "\e[91m");
 	else if (status->state == starting)
-		ft_printf("%s ", "\e[38;5;208m");
+		ft_sprintf(&tm->ret, "%s%s ", tm->ret, "\e[38;5;208m");
 	else if (status->state == running)
-		ft_printf("%s ", "\e[92m");
+		ft_sprintf(&tm->ret, "%s%s ", tm->ret, "\e[92m");
 	else if (status->state == paused)
-		ft_printf("%s ", "\e[93m");
+		ft_sprintf(&tm->ret, "%s%s ", tm->ret, "\e[93m");
 	else if (status->state == error)
-		ft_printf("%s ", "\e[41m");
-	ft_printf("%-20s ", tm->jobs[id_job].name);
+		ft_sprintf(&tm->ret, "%s%s ", tm->ret, "\e[41m");
+	ft_sprintf(&tm->ret, "%s%-20s ", tm->ret, tm->jobs[id_job].name);
 	if (status->state == stopped)
-		ft_printf("%-8s ", "STOPPED");
+		ft_sprintf(&tm->ret, "%s%-8s ", tm->ret, "STOPPED");
 	else if (status->state == starting)
-		ft_printf("%-8s ", "STARTING");
+		ft_sprintf(&tm->ret, "%s%-8s ", tm->ret, "STARTING");
 	else if (status->state == running)
-		ft_printf("%-8s ", "RUNNING");
+		ft_sprintf(&tm->ret, "%s%-8s ", tm->ret, "RUNNING");
 	else if (status->state == paused)
-		ft_printf("%-8s ", "PAUSED");
+		ft_sprintf(&tm->ret, "%s%-8s ", tm->ret, "PAUSED");
 	else if (status->state == error)
-		ft_printf("%-8s ", "ERROR");
+		ft_sprintf(&tm->ret, "%s%-8s ", tm->ret, "ERROR");
 	if (status->retries)
-		ft_printf("(%2d retries)  ", status->retries);
+		ft_sprintf(&tm->ret, "%s(%d retries)  ", tm->ret, status->retries);
 	else
-		ft_printf("              ");
+		ft_sprintf(&tm->ret, "%s             ", tm->ret);
 }
 
 void		ft_get_job_status(t_tm *tm, int id_job, t_status *status)
@@ -88,22 +76,24 @@ void		ft_get_job_status(t_tm *tm, int id_job, t_status *status)
 
 	ft_print_name_and_state(tm, id_job, status);
 	if (status->pid > 0 && status->state && status->state != error)
-		ft_printf("pid %-10d", status->pid);
+		ft_sprintf(&tm->ret, "%spid %-10d", tm->ret, status->pid);
 	else
-		ft_printf("pid %-10s", "N/A");
+		ft_sprintf(&tm->ret, "%spid %-10s", tm->ret, "N/A");
 	if (status->state > stopped && status->state < error)
 	{
 		ft_get_htime(&htime, time(NULL) - status->started_time);
-		ft_printf("uptime    %02d:%02d:%02d", htime.h, htime.m, htime.s);
+		ft_sprintf(&tm->ret, "%suptime    %02d:%02d:%02d",
+											tm->ret, htime.h, htime.m, htime.s);
 	}
 	else if (status->stopped_time)
 	{
 		ft_get_htime(&htime, time(NULL) - status->stopped_time);
-		ft_printf("downtime  %02d:%02d:%02d", htime.h, htime.m, htime.s);
+		ft_sprintf(&tm->ret, "%sdowntime  %02d:%02d:%02d",
+											tm->ret, htime.h, htime.m, htime.s);
 	}
 	else
-		ft_printf("uptime    N/A");
-	ft_printf(" {eoc}\n");
+		ft_sprintf(&tm->ret, "%suptime    N/A", tm->ret);
+	ft_sprintf(&tm->ret, "%s {eoc}\n", tm->ret);
 	if (status->next)
 		ft_get_job_status(tm, id_job, status->next);
 }

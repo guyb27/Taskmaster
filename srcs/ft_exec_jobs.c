@@ -56,7 +56,6 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status,
 	pid_t	father;
 	char	**args;
 
-	args = NULL;
 	args = ft_strsplit(tm->jobs[id_job].cmd, ' ');
 	ft_change_fd(STDOUT_FILENO, tm->jobs[id_job].stdout);
 	ft_change_fd(STDERR_FILENO, tm->jobs[id_job].stderr);
@@ -64,12 +63,12 @@ static void	ft_exec_job_inner(t_tm *tm, int id_job, t_status *status,
 		umask(tm->jobs[id_job].stderr[0]);
 	if (tm->jobs[id_job].working_dir[0])
 		chdir(tm->jobs[id_job].working_dir);
-
 	if (!(father = fork()))
 	{
 		status->state = starting;
 		if (args && execve(args[0], args, tm->jobs[id_job].env) < 0)
-			ft_printf("{red}Error starting '%s'{eoc}\n", tm->jobs[id_job].name);
+			ft_sprintf(&tm->ret, "{red}Error starting '%s'{eoc}\n",
+														tm->jobs[id_job].name);
 		status->state = error;
 		exit(127);
 	}

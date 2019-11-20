@@ -18,7 +18,7 @@ void	ft_cmd_start(t_tm *tm, char *name)
 	int			i;
 	t_status	*status;
 
-	ft_printf("starting: [%s]\n", name);
+	ft_sprintf(&tm->ret, "starting: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
@@ -47,7 +47,7 @@ void	ft_cmd_pause(t_tm *tm, char *name)
 	int			i;
 	t_status	*status;
 
-	ft_printf("pausing: [%s]\n", name);
+	ft_sprintf(&tm->ret, "pausing: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")) &&
@@ -70,7 +70,7 @@ void	ft_cmd_restart(t_tm *tm, char *name)
 {
 	int i;
 
-	ft_printf("restarting: [%s]\n", name);
+	ft_sprintf(&tm->ret, "restarting: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")))
@@ -81,7 +81,7 @@ void	ft_cmd_status(t_tm *tm, char *name)
 {
 	int i;
 
-	ft_printf("getting status of: [%s]\n", name);
+	ft_sprintf(&tm->ret, "getting status of: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
@@ -92,7 +92,7 @@ void	ft_cmd_stop(t_tm *tm, char *name)
 {
 	int i;
 
-	ft_printf("stopping: [%s]\n", name);
+	ft_sprintf(&tm->ret, "stopping: [%s]\n", name);
 	i = -1;
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))

@@ -21,13 +21,58 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <unistd.h>
+# include <errno.h>
 
-/* typedef struct		s_keyval
+/*
+********************************************************************************
+** Server
+*/
+
+# include <sys/socket.h>
+# include <netdb.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+
+# define INVALID_SOCKET	-1
+# define SOCKET_ERROR	-1
+
+# define MAX_CLIENTS 	100
+# define BUF_SIZE		1024
+# define SERVER_PORT	2025
+
+# define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
+
+# define LOGO "\033[94m" \
+	" _            _                        _ \n" \
+	"| |          | |                      | |           \n" \
+	"| |_ __ _ ___| | ___ __ ___   __ _ ___| |_ ___ _ __ \n" \
+	"| __/ _` / __| |/ / '_ ` _ \\ / _` / __| __/ _ \\ '__|\n" \
+	"| || (_| \\__ \\   <| | | | | | (_| \\__ \\ ||  __/ |   \n" \
+	" \\__\\__,_|___/_|\\_\\_| |_| |_|\\__,_|___/\\__\\___|_|\n" \
+	"                                                 \n\n" \
+	"\033[0;m\0"
+
+typedef int					t_socket;
+typedef struct sockaddr_in	t_sockaddr_in;
+typedef struct sockaddr		t_sockaddr;
+typedef struct in_addr		t_in_addr;
+
+typedef struct		s_server
 {
-	char			*key;
-	char			*value;
-	struct s_keyval	*next;
-}					t_keyval; */
+	t_socket		sock;
+	t_sockaddr_in	sin;
+	t_socket		csock; // pas utile ds la struct ?
+	t_sockaddr_in	csin;  // meme chose ?
+	t_socket		clients[MAX_CLIENTS];
+	int				clients_cnt;
+	fd_set			rdfs;
+}					t_server;
+
+/*
+********************************************************************************
+** Main structs
+*/
 
 typedef struct		s_job
 {
@@ -45,7 +90,6 @@ typedef struct		s_job
 	int				stop_signal;
 	char			stdout[1000];
 	char			stderr[1000];
-//	t_keyval		*env; // not used anymore
 	char			**env;
 }					t_job;
 
@@ -80,15 +124,26 @@ typedef struct		s_htime
 
 typedef struct		s_tm
 {
+	t_server		server;
 	char			config[1000];
 	t_job			jobs[1000];
 	t_shared		*shared;
 	int				jobs_cnt;
 	char			**env;
-	char			*cmd;
+	char			cmd[BUF_SIZE];
 	pid_t			jobs_watcher;
 	char			**argv;
+	char			*ret;
 }					t_tm;
+
+/*
+********************************************************************************
+*/
+
+/*
+** ft_main.c
+*/
+void				ft_process_cmd(t_tm *tm);
 
 /*
 **  ft_commands.c
@@ -98,6 +153,7 @@ void				ft_cmd_pause(t_tm *tm, char *name);
 void				ft_cmd_restart(t_tm *tm, char *name);
 void				ft_cmd_status(t_tm *tm, char *name);
 void				ft_cmd_stop(t_tm *tm, char *name);
+char				*ft_cmd_help(t_tm *tm);
 
 /*
 **  ft_exec_jobs.c
@@ -119,6 +175,7 @@ void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 /*
 **  ft_utils.c
 */
+void				ft_perror(char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
 void				ft_megafree(void *var, int size);
@@ -127,9 +184,9 @@ void				ft_init_job(t_tm *tm, t_job *job);
 size_t				ft_tablen(char **tab);
 int					ft_tabdel(char ***tab);
 char				**ft_tabdup(char **tab);
-/*
-**void				ft_debug_job(t_tm *tm, int job_id);
-*/
+
+void				ft_debug_job(t_tm *tm, int job_id);
+
 
 /*
 **	ft_jobs_funcs.c
@@ -143,5 +200,12 @@ void				ft_autostart_jobs(t_tm *tm);
 */
 void				ft_append_int_val(int list[], int val);
 void				ft_append_env(t_job *job, char *key, char *value);
+
+/*
+**	ft_server.c
+*/
+void				ft_server_quit(t_server *server, char *error);
+t_server			ft_init_server(char *ip, int port);
+int					ft_server_loop(t_server *server, t_tm *tm);
 
 #endif
