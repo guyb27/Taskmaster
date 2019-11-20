@@ -7,6 +7,8 @@ LIBFT = libft
 INC = -I libft/ft_printf/srcs/ -I libft/get_next_line -I libft/srcs
 SRCS_PATH = srcs
 OBJS_PATH = objs
+CLIENT_PATH = client
+CLIENT = 42sh
 
 SRCS_NAME =	ft_main.c			\
 			ft_exec_jobs.c		\
@@ -26,7 +28,7 @@ NB_FILES = $(words $(SRCS_NAME))
 
 all: $(NAME)
 
-$(NAME): $(LIBFT)/libft.a $(OBJS)
+$(NAME): $(CLIENT_PATH)/$(CLIENT) $(LIBFT)/libft.a $(OBJS)
 	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) -L$(LIBFT) -lft
 	@(printf "\033[1A" && printf "\033[K") # remove last line
 	@echo "\033[92mCOMPILED:  taskmaster\033[0m [100%]"
@@ -51,13 +53,18 @@ sanitize:
 $(LIBFT)/libft.a:
 	@make -C $(LIBFT)
 
+$(CLIENT_PATH)/$(CLIENT):
+	@make -C $(CLIENT_PATH)
+
 clean:
 	@(cd $(LIBFT) && make clean)
+	@(cd $(CLIENT_PATH) && make clean)
 	@rm -rf srcs/list_dir_content.o
 	@rm -rf $(OBJS_PATH)
 
 fclean: clean
 	@rm -rf $(NAME)
 	@(cd $(LIBFT) && make fclean)
+	@(cd $(CLIENT_PATH) && make fclean)
 
 re: fclean all

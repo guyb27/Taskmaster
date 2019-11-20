@@ -1,0 +1,59 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   cursor.c                                         .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/27 09:50:31 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2019/11/16 09:23:47 by gmadec      ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
+#include "heart.h"
+
+void	ft_pushed_right(t_shell *sh)
+{
+	int		pos;
+	int		right_xpos;
+	int		zell;
+
+	if (g_cl.cmd && g_cl.cursor_pos < (int)ft_strlen(g_cl.cmd))
+	{
+		pos = ft_recup_cursor_pos(sh, &zell, &right_xpos);
+		if (right_xpos > 0)
+			TERMCAP("nd");
+		else if (right_xpos == 0)
+		{
+			TERMCAP("sf");
+			TERMCAP("cr");
+		}
+		g_cl.cursor_pos++;
+	}
+}
+
+void	ft_pushed_left(t_shell *sh)
+{
+	int		pos;
+	int		left_xpos;
+	int		zell;
+
+	zell = 0;
+	if (g_cl.cursor_pos > 0)
+	{
+		pos = ft_recup_cursor_pos(sh, &left_xpos, &zell);
+		if (pos == 0)
+		{
+			TERMCAP("up");
+			while (pos < left_xpos)
+			{
+				TERMCAP("nd");
+				pos++;
+			}
+		}
+		else
+			TERMCAP("le");
+		g_cl.cursor_pos--;
+	}
+}

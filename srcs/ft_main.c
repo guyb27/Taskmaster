@@ -142,6 +142,8 @@ void		ft_process_cmd(t_tm *tm)
 		//Ne pas oublier de close la socket
 		ft_shutdown(tm, server);
 	} */
+	else if (!ft_strcmp(tm->cmd, "json status"))
+		ft_send_json_status(tm);
 	else if (!strcmp(tm->cmd, "reload"))
 	{
 		ft_cmd_stop(tm, "all");
