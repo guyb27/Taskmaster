@@ -6,17 +6,17 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:59:32 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 08:12:33 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "heart.h"
 
-static int	init_builtins_history_read(int fd, int *i, char *path)
+static int		init_builtins_history_read(int fd, int *i, char *path)
 {
-	char	*str;
-	char	**tmp;
+	char		*str;
+	char		**tmp;
 
 	str = NULL;
 	tmp = NULL;
@@ -32,11 +32,11 @@ static int	init_builtins_history_read(int fd, int *i, char *path)
 	return (EXIT_SUCCESS);
 }
 
-static int	init_history(const char *path)
+static int		init_history(const char *path)
 {
-	char	*str;
-	int		fd;
-	int		i;
+	char		*str;
+	int			fd;
+	int			i;
 
 	str = NULL;
 	fd = -1;
@@ -50,11 +50,11 @@ static int	init_history(const char *path)
 	return (close(fd) == -1 ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
-char		*ft_envset_value(const char **envset, const char *name)
+char			*ft_envset_value(const char **envset, const char *name)
 {
-	int		i;
-	char	*tmp;
-	char	*s;
+	int			i;
+	char		*tmp;
+	char		*s;
 
 	i = -1;
 	tmp = NULL;
@@ -97,7 +97,7 @@ static int		ft_init_term(const char **av)
 	return (EXIT_SUCCESS);
 }
 
-int			init_shell(const char **av)
+int				init_shell(const char **av)
 {
 	pid_t shell_pgid;
 	pid_t shell_pid;

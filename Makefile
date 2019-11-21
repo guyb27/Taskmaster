@@ -21,7 +21,9 @@ SRCS_NAME =	ft_main.c			\
 			ft_server.c
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
+DEPS_NAME = $(SRCS_NAME:.c=.d)
 OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
+DEPS = $(addprefix $(OBJS_PATH)/,$(DEPS_NAME))
 SRCS = $(addprefix $(SRCS_PATH)/,$(SRCS_NAME))
 
 NB_FILES = $(words $(SRCS_NAME))
@@ -34,17 +36,22 @@ $(NAME): $(CLIENT_PATH)/$(CLIENT) $(LIBFT)/libft.a $(OBJS)
 	@echo "\033[92mCOMPILED:  taskmaster\033[0m [100%]"
 	@echo "\033[93m>> taskmaster is ready <<\033[0m"
 
+-include $(DEPS)
+
 $(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c
 	@$(eval CURSOR=$(shell echo $$(($(CURSOR) + 1))))
 	@$(eval PERCENT=$(shell echo $$(($(CURSOR) * 100 / $(NB_FILES)))))
 	@(printf "\033[1A" && printf "\033[K") # remove last line
 	@echo "\033[93mCOMPILING: taskmaster\033[0m [$(PERCENT)%]"
 	@mkdir -p $(OBJS_PATH)
-	@$(CC) $(FLAGS) $(INC) -o $@ -c $^
+	@$(CC) $(FLAGS) $(INC) -o $@ -c $^ -MMD
+
+val: lldb
+		valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4242
 
 lldb:
 	$(CC) -g $(FLAGS) $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
-	lldb -- a.out -lR /
+	lldb -- ./taskmaster configs/fonf.geo 127.0.0.1 4242
 
 sanitize:
 	$(CC) $(FLAGS) fsanitize=address srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c

@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/16 10:15:11 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/21 09:58:58 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -63,9 +63,11 @@ OBJS_FOLDERS = 	\
 				heart init ft_select line_edition
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
+DEPS_NAME = $(SRCS_NAME:.c=.d)
 
 SRCS = $(addprefix $(SRCS_PATH),$(SRCS_NAME))
 OBJS = $(addprefix $(OBJS_PATH),$(OBJS_NAME))
+DEPS = $(addprefix $(OBJS_PATH),$(DEPS_NAME))
 OBJS_FOLDERS_BIS = $(addprefix $(OBJS_PATH),$(OBJS_FOLDERS))
 
 NB_FILES = $(words $(SRCS_NAME))
@@ -94,6 +96,8 @@ init:
 	@echo ""
 	@tput cuu 4
 
+-include $(DEPS)
+
 $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	@$(eval CURSOR=$(shell echo $$(($(CURSOR) + 1))))
 	@$(eval PERCENT=$(shell printf "[%3d/%3d - \e[1m\e[93m%3d%%\e[0m]" $(CURSOR) $(NB_FILES) $$(($(CURSOR) * 100 / $(NB_FILES)))))
@@ -110,10 +114,10 @@ $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	@echo -n "$(PERCENT) $@"
 	@printf "\e[0K\n\e[u\e[?25h"
 	@mkdir $(OBJS_PATH) $(OBJS_FOLDERS_BIS) 2> /dev/null || true
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $< -MMD
 
 val: lldb
-	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 2022
+	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4242
 
 valgrind: lldb
 	valgrind --suppressions=.valgrind.supp --leak-check=full --track-origins=yes ./a.out

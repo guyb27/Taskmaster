@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/15 18:17:48 by gbarnay     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 10:08:24 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -154,6 +154,8 @@ void		ft_process_cmd(t_tm *tm)
 	//	for (int i = 0; i < tm->jobs_cnt; i++)
 	//		ft_debug_job(tm, i);
 		ft_autostart_jobs(tm);
+		ft_strdel(&tm->ret);
+		tm->ret = ft_cmd_help(tm);
 		ft_printf("Config file reloaded\n");
 	}
 	else if (!strcmp(tm->cmd, "shutdown"))
