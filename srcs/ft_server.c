@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/15 05:41:40 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 11:26:42 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -94,7 +94,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 {
 	int		max_fd;
 	int		i;
-	char	*start;
+	char	*tmp;
 
 	max_fd = server->sock;
 	while (1)
@@ -125,7 +125,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 		else if (FD_ISSET(server->sock, &server->rdfs))
 		{
 			// new client
-			start = NULL;
+			tmp = NULL;
 			server->csock = accept(server->sock, (t_sockaddr*)&server->csin,
 					&(socklen_t){ sizeof(server->csin) });
 			if (server->csock == SOCKET_ERROR)
@@ -138,10 +138,15 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 			if (send(server->csock, start, ft_strlen(start) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
 			*/
-			if (send(server->csock, LOGO, ft_strlen(LOGO) + 1, 0) < 0)
+			tmp = ft_get_logo();
+			//printf("LOGO: %s\n", tmp);
+			if (send(server->csock, tmp, ft_strlen(tmp) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
-			if (send(server->csock, ft_cmd_help(tm), ft_strlen(ft_cmd_help(tm)) + 1, 0) < 0)
+			ft_strdel(&tmp);
+			ft_sprintf(&tmp, ft_cmd_help(tm));
+			if (send(server->csock, tmp, ft_strlen(tmp) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");
+			ft_strdel(&tmp);
 			//Ne pas oublier le free
 			if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
 				ft_server_quit(server, "send() prompt");

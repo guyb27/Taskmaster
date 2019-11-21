@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/15 20:48:52 by gbarnay     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 11:16:02 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -186,6 +186,8 @@ int					ft_tabdel(char ***tab);
 char				**ft_tabdup(char **tab);
 
 void				ft_debug_job(t_tm *tm, int job_id);
+
+char				*ft_get_logo();
 
 
 /*
