@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/23 06:26:10 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/23 07:48:00 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/24 00:07:34 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,7 @@ void				ft_server_quit(t_server *server, char *error)
 	int				i;
 
 	err = errno;
-	printf("\nSERVER QUIT !!!\n");
+	ft_printf("\nServer quit !!!\n");
 	if (errno && error)
 		ft_perror(error);
 	i = -1;
@@ -54,7 +54,7 @@ t_server			ft_init_server(char *ip, int port)
 
 void				ft_remove_client(t_server *server, int client_id)
 {
-	printf("A client left\n");
+	ft_printf("A client left\n");
 	//	close(server->clients[client_id]);
 	ft_memmove(&server->clients[client_id], &server->clients[client_id + 1],
 			(server->clients_cnt - client_id - 1) * sizeof(t_socket));

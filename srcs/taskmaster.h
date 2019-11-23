@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/23 07:06:42 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/23 23:21:47 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -168,14 +168,15 @@ void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 void				ft_perror(char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
 void				*ft_megamalloc(int size);
-void				ft_megafree(void *var, int size);
 void				ft_init_job(t_tm *tm, t_job *job);
+void				ft_free_jobs(t_tm *tm);
 
 size_t				ft_tablen(char **tab);
 int					ft_tabdel(char ***tab);
 char				**ft_tabdup(char **tab);
-
-void				ft_debug_job(t_tm *tm, int job_id);
+void				ft_quit(t_tm *tm);
+void				ft_send_json_status(t_tm *tm);
+void				ft_get_user_input(t_tm *tm);
 
 char				*ft_get_logo();
 
