@@ -22,11 +22,8 @@ SRCS_NAME =	ft_main.c			\
 			ft_server_utils.c
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
-DEPS_NAME = $(SRCS_NAME:.c=.d)
 OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
-DEPS = $(addprefix $(OBJS_PATH)/,$(DEPS_NAME))
 SRCS = $(addprefix $(SRCS_PATH)/,$(SRCS_NAME))
-
 NB_FILES = $(words $(SRCS_NAME))
 
 all: $(NAME)
@@ -37,15 +34,13 @@ $(NAME): $(CLIENT_PATH)/$(CLIENT) $(LIBFT)/libft.a $(OBJS)
 	@echo "\033[92mCOMPILED:  taskmaster\033[0m [100%]"
 	@echo "\033[93m>> taskmaster is ready <<\033[0m"
 
--include $(DEPS)
-
-$(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c
+$(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c $(SRCS_PATH)/taskmaster.h
 	@$(eval CURSOR=$(shell echo $$(($(CURSOR) + 1))))
 	@$(eval PERCENT=$(shell echo $$(($(CURSOR) * 100 / $(NB_FILES)))))
 	@(printf "\033[1A" && printf "\033[K") # remove last line
 	@echo "\033[93mCOMPILING: taskmaster\033[0m [$(PERCENT)%]"
 	@mkdir -p $(OBJS_PATH)
-	@$(CC) $(FLAGS) $(INC) -o $@ -c $^
+	@$(CC) $(FLAGS) $(INC) -o $@ -c $<
 
 
 val:
