@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/21 11:16:02 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/23 07:06:42 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -14,9 +14,9 @@
 #ifndef TASKMASTER_H
 # define TASKMASTER_H
 
-# include "get_next_line.h"
-# include "libft.h"
-# include "ft_printf.h"
+# include "../libft/get_next_line/get_next_line.h"
+# include "../libft/srcs/libft.h"
+# include "../libft/ft_printf/srcs/ft_printf.h"
 # include <sys/mman.h>
 # include <signal.h>
 # include <sys/types.h>
@@ -43,16 +43,6 @@
 
 # define PROMPT	"\e[93mTaskmaster\e[0m \e[94m➜\e[0m "
 
-# define LOGO "\033[94m" \
-	" _            _                        _ \n" \
-	"| |          | |                      | |           \n" \
-	"| |_ __ _ ___| | ___ __ ___   __ _ ___| |_ ___ _ __ \n" \
-	"| __/ _` / __| |/ / '_ ` _ \\ / _` / __| __/ _ \\ '__|\n" \
-	"| || (_| \\__ \\   <| | | | | | (_| \\__ \\ ||  __/ |   \n" \
-	" \\__\\__,_|___/_|\\_\\_| |_| |_|\\__,_|___/\\__\\___|_|\n" \
-	"                                                 \n\n" \
-	"\033[0;m\0"
-
 typedef int					t_socket;
 typedef struct sockaddr_in	t_sockaddr_in;
 typedef struct sockaddr		t_sockaddr;
@@ -62,8 +52,8 @@ typedef struct		s_server
 {
 	t_socket		sock;
 	t_sockaddr_in	sin;
-	t_socket		csock; // pas utile ds la struct ?
-	t_sockaddr_in	csin;  // meme chose ?
+	t_socket		csock;
+	t_sockaddr_in	csin;
 	t_socket		clients[MAX_CLIENTS];
 	int				clients_cnt;
 	fd_set			rdfs;
@@ -189,7 +179,6 @@ void				ft_debug_job(t_tm *tm, int job_id);
 
 char				*ft_get_logo();
 
-
 /*
 **	ft_jobs_funcs.c
 */
@@ -209,5 +198,7 @@ void				ft_append_env(t_job *job, char *key, char *value);
 void				ft_server_quit(t_server *server, char *error);
 t_server			ft_init_server(char *ip, int port);
 int					ft_server_loop(t_server *server, t_tm *tm);
+void				ft_remove_client(t_server *server, int client_id);
+int					ft_cmd_check(char *cmd);
 
 #endif

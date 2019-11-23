@@ -18,7 +18,8 @@ SRCS_NAME =	ft_main.c			\
 			ft_utils.c			\
 			ft_jobs_funcs.c		\
 			ft_parse_utils.c	\
-			ft_server.c
+			ft_server_loop.c	\
+			ft_server_utils.c
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 DEPS_NAME = $(SRCS_NAME:.c=.d)
@@ -44,14 +45,12 @@ $(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c
 	@(printf "\033[1A" && printf "\033[K") # remove last line
 	@echo "\033[93mCOMPILING: taskmaster\033[0m [$(PERCENT)%]"
 	@mkdir -p $(OBJS_PATH)
-	@$(CC) $(FLAGS) $(INC) -o $@ -c $^ -MMD
+	@$(CC) $(FLAGS) $(INC) -o $@ -c $^
 
-val: lldb
-		valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4242
 
-lldb:
+val:
 	$(CC) -g $(FLAGS) $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
-	lldb -- ./taskmaster configs/fonf.geo 127.0.0.1 4242
+	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4242
 
 sanitize:
 	$(CC) $(FLAGS) fsanitize=address srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c
