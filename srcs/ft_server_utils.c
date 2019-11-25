@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/23 06:26:10 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 03:11:34 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 06:39:30 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,7 +27,7 @@ void				ft_server_error(t_tm *tm, char *error)
 void				ft_remove_client(t_server *server, int client_id)
 {
 	ft_printf("A client left\n");
-	//	close(server->clients[client_id]);
+	close(server->clients[client_id + 1]);
 	ft_memmove(&server->clients[client_id], &server->clients[client_id + 1],
 			(server->clients_cnt - client_id - 1) * sizeof(t_socket));
 	server->clients_cnt--;
