@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2042/02/19 22:41:54 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 03:09:08 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 08:26:45 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -42,17 +42,13 @@ static int	ft_new_client(t_server *server, int *max_fd, t_tm *tm)
 	return (0);
 }
 
-static void	ft_receive_request(t_server *server, t_tm *tm)
+static void	ft_receive_request(t_server *server, t_tm *tm, int i)
 {
-	int		i;
-
-	i = -1;
 	while (++i < server->clients_cnt)
-	{
 		if (FD_ISSET(server->clients[i], &server->rdfs))
 		{
 			if (recv(server->clients[i], tm->cmd, BUF_SIZE - 1, 0) <= 0)
-				ft_remove_client(server, i);
+				return (ft_remove_client(server, i));
 			else if (ft_cmd_check(tm->cmd))
 			{
 				ft_process_cmd(tm);
@@ -62,12 +58,15 @@ static void	ft_receive_request(t_server *server, t_tm *tm)
 					ft_strdel(&tm->ret);
 					ft_server_error(tm, "send()");
 				}
+				if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0)
+																			< 0)
+				{
+					ft_strdel(&tm->ret);
+					ft_server_error(tm, "send()");
+				}
+				break ;
 			}
-			if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) <= 0)
-				ft_remove_client(server, i);
-			break ;
 		}
-	}
 }
 
 static void	ft_init_server_loop(t_server *server, t_tm *tm)
@@ -99,7 +98,7 @@ static int	ft_server_loop(t_server *server, t_tm *tm)
 				continue;
 		}
 		else
-			ft_receive_request(server, tm);
+			ft_receive_request(server, tm, -1);
 	}
 	ft_server_error(tm, NULL);
 	return (0);

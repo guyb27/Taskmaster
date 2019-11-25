@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/08 16:21:29 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 04:10:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 08:29:30 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -55,8 +55,7 @@ static int				ft_thread_read_input(int sock, int *reload_bool)
 	{
 		history_save((char ***)NULL, g_cl.cmd, 1, (char *)NULL);
 		*reload_bool = !ft_strcmp("reload\n", g_cl.cmd) ? 1 : *reload_bool;
-		if (write_server(sock, g_cl.cmd) == -1 ||
-										!ft_strcmp("shutdown\n", g_cl.cmd))
+		if (write_server(sock, g_cl.cmd) == -1)
 			return (1 + ft_strdel(&g_cl.cmd));
 	}
 	else

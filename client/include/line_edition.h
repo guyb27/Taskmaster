@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/21 07:24:30 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 08:27:44 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,23 +59,7 @@ typedef struct	s_key
 	char		key[4];
 	int			(*f)(struct s_shell *sh, char key[3]);
 }				t_key;
-/*
-typedef enum	e_prompt
-{
-	PROMPT,
-	B_QUOTE,
-	S_QUOTE,
-	D_QUOTE,
-	DB_QUOTE,
-	E_HDOC,
-	E_PIPE,
-	BACKSLASH,
-	ORIF,
-	ANDIF,
-	SUBST,
-	READ
-}				t_prompt;
-*/
+
 typedef struct	s_tab
 {
 	char		**cmd;
