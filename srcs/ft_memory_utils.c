@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2060/00/00 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/23 23:16:12 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/24 03:11:54 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,6 +28,7 @@ void			ft_free_jobs(t_tm *tm)
 	int			i;
 
 	i = -1;
+	printf("JOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		ft_tabdel(&tm->jobs[i].env);
 	tm->jobs_cnt = 0;

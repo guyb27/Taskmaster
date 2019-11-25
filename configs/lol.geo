@@ -1,6 +1,6 @@
 # Geo easyparsing file format
-#
-# stopsignal: 0-31
+# #
+# # stopsignal: 0-31
 
 name: ls
 cmd: /bin/ls -laR /
@@ -13,7 +13,7 @@ exitcodes:
 -0
 -2 
 startretries: 3
-starttime: 3
+starttime: 300
 stopsignal: 4
 stoptime: 10
 stdout: /dev/ttys001
@@ -40,7 +40,7 @@ stdout: /tmp/my_ls.stdout
 stderr: /tmp/my_ls.stderr
 env:
 _FUCKER: jack
-_ANSWER: 42
+_ANSWER: 492
 
 name: segfault
 cmd: /Users/gbarnay/Documents/projects/taskmaster/segfault
@@ -63,7 +63,7 @@ _FUCKER: jack
 _ANSWER: 42
 
 name: loop
-cmd: /Users/gbarnay/Documents/projects/taskmaster/loop
+cmd: ./loop
 numprocs: 2
 umask: 022
 workingdir: .
@@ -79,5 +79,5 @@ stoptime: 10
 stdout: /tmp/nginx.stdout
 stderr: /tmp/nginx.stderr
 env:
-_STARTED_BY: taskmaster
+_STARTED_BY: ls
 _ANSWER: 42

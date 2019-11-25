@@ -47,7 +47,7 @@ $(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c $(SRCS_PATH)/taskmaster.h
 
 val:
 	$(CC) -g $(FLAGS) $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
-	valgrind --leak-check=full --track-origins=yes ./a.out configs/lol.geo 127.0.0.1 4242
+	valgrind --leak-check=full --track-origins=yes ./a.out configs/lol.geo
 
 sanitize:
 	$(CC) $(FLAGS) fsanitize=address srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c

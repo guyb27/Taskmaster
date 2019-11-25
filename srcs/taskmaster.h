@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/23 23:21:47 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 04:36:07 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -64,6 +64,8 @@ typedef struct		s_server
 ** Main structs
 */
 
+# define MAX_JOBS 250
+
 typedef struct		s_job
 {
 	char			name[1000];
@@ -102,7 +104,7 @@ typedef struct		s_status
 
 typedef struct		s_shared
 {
-	t_status		status[500];
+	t_status		status[MAX_JOBS];
 }					t_shared;
 
 typedef struct		s_htime
@@ -115,8 +117,8 @@ typedef struct		s_htime
 typedef struct		s_tm
 {
 	t_server		server;
-	char			config[1000];
-	t_job			jobs[1000];
+	char			config[4096];
+	t_job			jobs[MAX_JOBS];
 	t_shared		*shared;
 	int				jobs_cnt;
 	char			**env;

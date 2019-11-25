@@ -6,14 +6,14 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/21 09:58:58 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/25 04:21:40 by gmadec      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
 
 .PHONY: all re clean fclean lib
 
-NAME = 42sh
+NAME = cl_taskmaster
 
 MAKE = make
 CC = gcc
@@ -117,7 +117,7 @@ $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $< -MMD
 
 val: lldb
-	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4242
+	valgrind --leak-check=full --track-origins=yes ./a.out 127.0.0.1 4248
 
 valgrind: lldb
 	valgrind --suppressions=.valgrind.supp --leak-check=full --track-origins=yes ./a.out

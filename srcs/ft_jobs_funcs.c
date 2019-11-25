@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/19 22:41:54 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/15 20:48:52 by gbarnay     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/24 03:09:00 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -55,6 +55,7 @@ void	ft_autostart_jobs(t_tm *tm)
 	int i;
 
 	i = -1;
+	printf("JOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 	{
 		if (tm->jobs[i].autostart == 1)

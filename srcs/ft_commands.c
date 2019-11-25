@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2060/00/00 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2066/01/02 18:14:46 by gbarnay     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/24 03:04:45 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,6 +20,7 @@ void	ft_cmd_start(t_tm *tm, char *name)
 
 	ft_sprintf(&tm->ret, "starting: [%s]\n", name);
 	i = -1;
+	printf("\nJOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
 		{
@@ -49,6 +50,7 @@ void	ft_cmd_pause(t_tm *tm, char *name)
 
 	ft_sprintf(&tm->ret, "pausing: [%s]\n", name);
 	i = -1;
+	printf("\nJOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")) &&
 			tm->shared->status[i].pid > 0)
@@ -72,6 +74,7 @@ void	ft_cmd_restart(t_tm *tm, char *name)
 
 	ft_sprintf(&tm->ret, "restarting: [%s]\n", name);
 	i = -1;
+	printf("\nJOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		if ((!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all")))
 			ft_restart_job(tm, i, &tm->shared->status[i]);
@@ -83,6 +86,7 @@ void	ft_cmd_status(t_tm *tm, char *name)
 
 	ft_sprintf(&tm->ret, "getting status of: [%s]\n", name);
 	i = -1;
+	printf("\nJOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
 			ft_get_job_status(tm, i, &tm->shared->status[i]);
@@ -94,6 +98,7 @@ void	ft_cmd_stop(t_tm *tm, char *name)
 
 	ft_sprintf(&tm->ret, "stopping: [%s]\n", name);
 	i = -1;
+	printf("\nJOBS_COUNT: [%d]\n", tm->jobs_cnt);
 	while (++i < tm->jobs_cnt)
 		if (!ft_strcmp(name, tm->jobs[i].name) || !ft_strcmp(name, "all"))
 			ft_stop_job(tm, i, &tm->shared->status[i]);
