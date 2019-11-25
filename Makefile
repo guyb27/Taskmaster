@@ -8,7 +8,7 @@ INC = -I libft/ft_printf/srcs/ -I libft/get_next_line -I libft/srcs
 SRCS_PATH = srcs
 OBJS_PATH = objs
 CLIENT_PATH = client
-CLIENT = 42sh
+CLIENT = cl_taskmaster
 
 SRCS_NAME =	ft_main.c			\
 			ft_exec_jobs.c		\
