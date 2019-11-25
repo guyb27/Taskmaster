@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/21 08:12:33 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 08:39:29 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -79,7 +79,7 @@ static int		ft_init_term(const char **av)
 
 	if (!(path = search_path_of_101sh(av[0])))
 		return (EXIT_FAILURE);
-	if ((access((str = ft_strjoin(path, "/.101sh_history")), F_OK)) == -1)
+	if ((access((str = ft_strjoin(path, HISTFILE)), F_OK)) == -1)
 		creat(str, 0644);
 	ft_strdel(&str);
 	if (!(str = ft_envset_value((const char **)environ, "TERM")))

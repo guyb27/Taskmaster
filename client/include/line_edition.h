@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/26 08:10:15 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 08:27:44 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 08:39:46 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,7 +46,7 @@
 # define WHITE "\033[7;49;37"
 # define END "\033[0m"
 # define HISTSIZE 500
-# define HISTFILE "/.101sh_history"
+# define HISTFILE "/.taskmaster_history"
 # define HISTFILESIZE 500
 
 typedef struct termios		t_termios;
