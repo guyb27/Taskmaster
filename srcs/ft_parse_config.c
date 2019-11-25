@@ -60,7 +60,7 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 			ft_init_status(tmp);
 			while (++i < ft_atoi(value))
 			{
-				tmp->next = ft_megamalloc(sizeof(t_status));
+				tmp->next = ft_shared_malloc(sizeof(t_status));
 				tmp = tmp->next;
 				ft_init_status(tmp);
 			}

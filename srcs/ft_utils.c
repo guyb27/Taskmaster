@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_commands.c                                    .::    .:/ .      .::   */
+/*   ft_utils.c                                       .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
@@ -12,6 +12,29 @@
 /* ************************************************************************** */
 
 #include "taskmaster.h"
+
+void			ft_init_job(t_tm *tm, t_job *job)
+{
+	size_t i;
+
+	i = -1;
+	ft_bzero(job->name, sizeof(job->name));
+	ft_bzero(job->cmd, sizeof(job->cmd));
+	job->nb_procs = 0;
+	ft_bzero((char*)job->umask, 5);
+	ft_bzero(job->working_dir, sizeof(job->working_dir));
+	job->autostart = 0;
+	job->autorestart = 0;
+	while (++i < sizeof(job->exit_codes) / sizeof(int))
+		job->exit_codes[i] = -42;
+	job->start_retries = 0;
+	job->start_time = 0;
+	job->stop_time = 0;
+	job->stop_signal = 3;
+	ft_bzero(job->stdout, sizeof(job->stdout));
+	ft_bzero(job->stderr, sizeof(job->stderr));
+	job->env = ft_tabdup(tm->env);
+}
 
 char			*ft_get_logo(void)
 {
@@ -47,37 +70,4 @@ unsigned int	ft_sleep(unsigned int seconds)
 	if (nanosleep(&ts, &ts) == 0)
 		return (0);
 	return (ts.tv_sec);
-}
-
-size_t			ft_tablen(char **tab)
-{
-	size_t	i;
-
-	i = -1;
-	while (tab[++i])
-		;
-	return (i);
-}
-
-void			ft_init_job(t_tm *tm, t_job *job)
-{
-	size_t i;
-
-	i = -1;
-	ft_bzero(job->name, sizeof(job->name));
-	ft_bzero(job->cmd, sizeof(job->cmd));
-	job->nb_procs = 0;
-	ft_bzero((char*)job->umask, 5);
-	ft_bzero(job->working_dir, sizeof(job->working_dir));
-	job->autostart = 0;
-	job->autorestart = 0;
-	while (++i < sizeof(job->exit_codes) / sizeof(int))
-		job->exit_codes[i] = -42;
-	job->start_retries = 0;
-	job->start_time = 0;
-	job->stop_time = 0;
-	job->stop_signal = 3;
-	ft_bzero(job->stdout, sizeof(job->stdout));
-	ft_bzero(job->stderr, sizeof(job->stderr));
-	job->env = ft_tabdup(tm->env);
 }

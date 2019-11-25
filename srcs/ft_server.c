@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   server.c                                         .::    .:/ .      .::   */
+/*   ft_server.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
@@ -27,14 +27,14 @@ static int	ft_new_client(t_server *server, int *max_fd, t_tm *tm)
 	}
 	tmp = ft_get_logo();
 	if (send(server->csock, tmp, ft_strlen(tmp) + 1, 0) < 0)
-		ft_server_quit(server, "send() prompt");
+		ft_server_error(tm, "send() prompt");
 	ft_strdel(&tmp);
 	ft_sprintf(&tmp, ft_cmd_help(tm));
 	if (send(server->csock, tmp, ft_strlen(tmp) + 1, 0) < 0)
-		ft_server_quit(server, "send() prompt");
+		ft_server_error(tm, "send() prompt");
 	ft_strdel(&tmp);
 	if (send(server->csock, PROMPT, ft_strlen(PROMPT) + 1, 0) < 0)
-		ft_server_quit(server, "send() prompt");
+		ft_server_error(tm, "send() prompt");
 	*max_fd = server->csock > *max_fd ? server->csock : *max_fd;
 	FD_SET(server->csock, &server->rdfs);
 	server->clients[server->clients_cnt] = server->csock;
@@ -60,7 +60,7 @@ static void	ft_receive_request(t_server *server, t_tm *tm)
 																			< 0)
 				{
 					ft_strdel(&tm->ret);
-					ft_server_quit(server, "send()");
+					ft_server_error(tm, "send()");
 				}
 			}
 			if (send(server->clients[i], PROMPT, ft_strlen(PROMPT) + 1, 0) <= 0)
@@ -70,7 +70,7 @@ static void	ft_receive_request(t_server *server, t_tm *tm)
 	}
 }
 
-void		ft_init_server_loop(t_server *server, t_tm *tm)
+static void	ft_init_server_loop(t_server *server, t_tm *tm)
 {
 	ft_bzero(tm->cmd, sizeof(tm->cmd));
 	FD_ZERO(&server->rdfs);
@@ -78,7 +78,7 @@ void		ft_init_server_loop(t_server *server, t_tm *tm)
 	FD_SET(server->sock, &server->rdfs);
 }
 
-int			ft_server_loop(t_server *server, t_tm *tm)
+static int	ft_server_loop(t_server *server, t_tm *tm)
 {
 	int		max_fd;
 	int		i;
@@ -90,7 +90,7 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 		while (++i < server->clients_cnt)
 			FD_SET(server->clients[i], &server->rdfs);
 		if (select(max_fd + 1, &server->rdfs, NULL, NULL, NULL) == -1)
-			ft_server_quit(server, "select()");
+			ft_server_error(tm, "select()");
 		if (FD_ISSET(STDIN_FILENO, &server->rdfs))
 			break ;
 		else if (FD_ISSET(server->sock, &server->rdfs))
@@ -101,6 +101,25 @@ int			ft_server_loop(t_server *server, t_tm *tm)
 		else
 			ft_receive_request(server, tm);
 	}
-	ft_server_quit(server, NULL);
+	ft_server_error(tm, NULL);
 	return (0);
+}
+
+void		ft_server(t_tm *tm, char *ip, int port)
+{
+	tm->server.sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (tm->server.sock == INVALID_SOCKET)
+		ft_server_error(tm, "socket()");
+	tm->server.sin.sin_addr.s_addr = inet_addr(ip);
+	tm->server.sin.sin_port = htons(port);
+	tm->server.sin.sin_family = AF_INET;
+	if (setsockopt(tm->server.sock, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 },
+				sizeof(int)) < 0)
+		ft_server_error(tm, "setsockopt()");
+	if (bind(tm->server.sock, (t_sockaddr*)&tm->server.sin,
+												sizeof(tm->server.sin)) == -1)
+		ft_server_error(tm, "bind()");
+	if (listen(tm->server.sock, MAX_CLIENTS) == SOCKET_ERROR)
+		ft_server_error(tm, "listen()");
+	ft_server_loop(&tm->server, tm);
 }

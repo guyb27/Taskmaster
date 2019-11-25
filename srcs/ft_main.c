@@ -13,17 +13,6 @@
 
 #include "taskmaster.h"
 
-static void	ft_reload(t_tm *tm)
-{
-	ft_cmd_stop(tm, "all");
-	ft_free_jobs(tm);
-	ft_parse_config(tm);
-	ft_autostart_jobs(tm);
-	ft_strdel(&tm->ret);
-	tm->ret = ft_cmd_help(tm);
-	ft_printf("Config file reloaded\n");
-}
-
 void		ft_process_cmd(t_tm *tm)
 {
 	if (!ft_strncmp(tm->cmd, "start", 5) && (ft_strlen(tm->cmd) > 6))
@@ -40,37 +29,41 @@ void		ft_process_cmd(t_tm *tm)
 		ft_send_json_status(tm);
 	else if (!strcmp(tm->cmd, "reload"))
 		ft_reload(tm);
-	else if (!strcmp(tm->cmd, "shutdown"))
+	else if (!strcmp(tm->cmd, "exit"))
 	{
 		ft_cmd_stop(tm, "all");
 		ft_quit(tm);
 	}
-	else if (!ft_strcmp(tm->cmd, "exit"))
-		ft_quit(tm);
 	else if (!ft_strcmp(tm->cmd, "help"))
 		tm->ret = ft_cmd_help(tm);
 	else
 		ft_sprintf(&tm->ret, "[%s]: Command not found\n", tm->cmd);
 }
 
-void		ft_taskmaster(int argc, char *argv[], char *env[])
+static void	ft_get_user_input(t_tm *tm)
+{
+	char *cmd;
+
+	cmd = NULL;
+	ft_printf("$> ");
+	get_next_line(0, &cmd);
+	ft_strcpy(tm->cmd, cmd);
+	free(cmd);
+}
+
+static void	ft_taskmaster(int argc, char *argv[], char *env[])
 {
 	t_tm		tm;
 
 	ft_bzero(&tm, sizeof(t_tm));
 	tm.argv = argv;
-	tm.shared = ft_megamalloc(sizeof(t_shared));
+	tm.shared = ft_shared_malloc(sizeof(t_shared));
 	tm.env = env;
-	tm.jobs_cnt = 0;
 	ft_strcpy(tm.config, argv[1]);
 	ft_parse_config(&tm);
 	ft_autostart_jobs(&tm);
 	if (argc > 2)
-	{
-		tm.server = ft_init_server(argv[2],
-				argc > 3 ? ft_atoi(argv[3]) : SERVER_PORT);
-		ft_server_loop(&tm.server, &tm);
-	}
+		ft_server(&tm, argv[2], argc > 3 ? ft_atoi(argv[3]) : SERVER_PORT);
 	else
 		while (1)
 		{

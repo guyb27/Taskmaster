@@ -1,0 +1,140 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:map_images_nolock
+   fun:_ZN11objc_object21sidetable_retainCountEv
+   fun:_ZN4dyldL18notifyBatchPartialE17dyld_image_statesbPFPKcS0_jPK15dyld_image_infoEbb
+   fun:_ZN4dyld21registerObjCNotifiersEPFvjPKPKcPKPK11mach_headerEPFvS1_S6_ESC_
+   fun:_dyld_objc_notify_register
+   fun:_objc_init
+   fun:_os_object_init
+   fun:libdispatch_init
+   fun:libSystem_initializer
+   fun:_ZN16ImageLoaderMachO18doModInitFunctionsERKN11ImageLoader11LinkContextE
+   fun:_ZN16ImageLoaderMachO16doInitializationERKN11ImageLoader11LinkContextE
+}
+
+{
+   <putain de forks...........>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_monitor_process
+   fun:ft_exec_job_inner
+   fun:ft_exec_job
+   fun:ft_monitor_process
+   fun:ft_exec_job_inner
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_monitor_process
+   fun:ft_exec_job_inner
+   fun:ft_exec_job
+   fun:ft_autostart_jobs
+   fun:ft_taskmaster
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_autostart_jobs
+   fun:ft_taskmaster
+   fun:main
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_os_once
+   fun:_os_alloc_once
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_autostart_jobs
+   fun:ft_taskmaster
+   fun:main
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:class_createInstance
+   fun:_os_object_alloc_realized
+   fun:_xpc_pipe_create
+   fun:xpc_atfork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_monitor_process
+   fun:ft_exec_job_inner
+   fun:ft_exec_job
+   fun:ft_monitor_process
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:class_createInstance
+   fun:_os_object_alloc_realized
+   fun:_xpc_pipe_create
+   fun:xpc_atfork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_monitor_process
+   fun:ft_exec_job_inner
+   fun:ft_exec_job
+   fun:ft_autostart_jobs
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:class_createInstance
+   fun:_os_object_alloc_realized
+   fun:_xpc_pipe_create
+   fun:xpc_atfork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   fun:ft_exec_job
+   fun:ft_autostart_jobs
+   fun:ft_taskmaster
+   fun:main
+}

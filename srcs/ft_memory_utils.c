@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_commands.c                                    .::    .:/ .      .::   */
+/*   ft_memory_utils.c                                .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
@@ -13,7 +13,7 @@
 
 #include "taskmaster.h"
 
-void			*ft_megamalloc(int size)
+void			*ft_shared_malloc(int size)
 {
 	void *var;
 
@@ -23,14 +23,14 @@ void			*ft_megamalloc(int size)
 	return (var);
 }
 
-void			ft_free_jobs(t_tm *tm)
+size_t			ft_tablen(char **tab)
 {
-	int			i;
+	size_t	i;
 
 	i = -1;
-	while (++i < tm->jobs_cnt)
-		ft_tabdel(&tm->jobs[i].env);
-	tm->jobs_cnt = 0;
+	while (tab[++i])
+		;
+	return (i);
 }
 
 int				ft_tabdel(char ***tab)

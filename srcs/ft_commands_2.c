@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_main.c                                        .::    .:/ .      .::   */
+/*   ft_commands_2.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/15 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 04:44:42 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/24 03:22:43 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "taskmaster.h"
 
+static void	ft_free_jobs(t_tm *tm)
+{
+	int			i;
+	t_status	*status;
+	t_status	*tmp;
+
+	i = -1;
+	while (++i < tm->jobs_cnt)
+	{
+		ft_tabdel(&tm->jobs[i].env);
+		status = tm->shared->status[i].next;
+		while (status)
+		{
+			tmp = status->next;
+			munmap(status, sizeof(status));
+			status = tmp;
+		}
+	}
+	tm->jobs_cnt = 0;
+}
+
 void		ft_quit(t_tm *tm)
 {
-	int		i;
+	int			i;
 
 	ft_printf("Quitting taskmaster\n");
 	ft_free_jobs(tm);
-//	i = -1;
-//	while (++i < tm->jobs_cnt)
-//		if (tm->shared->status[i].next)
-//		{
-			// if encore un next ...
-			//munmap(tm->shared->status[i]);
-//		}
 	munmap(tm->shared, sizeof(t_shared));
 	ft_strdel(&tm->ret);
 	i = 0;
@@ -34,6 +48,17 @@ void		ft_quit(t_tm *tm)
 	close(tm->server.sock);
 	close(tm->server.csock);
 	exit(0);
+}
+
+void		ft_reload(t_tm *tm)
+{
+	ft_cmd_stop(tm, "all");
+	ft_free_jobs(tm);
+	ft_parse_config(tm);
+	ft_autostart_jobs(tm);
+	ft_strdel(&tm->ret);
+	tm->ret = ft_cmd_help(tm);
+	ft_printf("Config file reloaded\n");
 }
 
 void		ft_send_json_status(t_tm *tm)
@@ -80,21 +105,9 @@ char		*ft_cmd_help(t_tm *tm)
 	ft_sprintf(&ret, "%s\tpause [process | all]\n", ret);
 	ft_sprintf(&ret, "%s\tstatus [process | all]\n", ret);
 	ft_sprintf(&ret, "%s\treload\n", ret);
-	ft_sprintf(&ret, "%s\tshutdown\n", ret);
 	ft_sprintf(&ret, "%s\texit\n", ret);
 	ft_sprintf(&ret, "%sprocess list:\n", ret);
 	while (i < tm->jobs_cnt)
 		ft_sprintf(&ret, "%s\t%s\n", ret, tm->jobs[i++].name);
 	return (ret);
-}
-
-void		ft_get_user_input(t_tm *tm)
-{
-	char *cmd;
-
-	cmd = NULL;
-	ft_printf("$> ");
-	get_next_line(0, &cmd);
-	ft_strcpy(tm->cmd, cmd);
-	free(cmd);
 }

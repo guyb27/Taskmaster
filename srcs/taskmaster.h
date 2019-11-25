@@ -14,9 +14,9 @@
 #ifndef TASKMASTER_H
 # define TASKMASTER_H
 
-# include "../libft/get_next_line/get_next_line.h"
-# include "../libft/srcs/libft.h"
-# include "../libft/ft_printf/srcs/ft_printf.h"
+# include "get_next_line.h"
+# include "libft.h"
+# include "ft_printf.h"
 # include <sys/mman.h>
 # include <signal.h>
 # include <sys/types.h>
@@ -133,7 +133,7 @@ typedef struct		s_tm
 */
 
 /*
-** ft_main.c
+**	ft_main.c
 */
 void				ft_process_cmd(t_tm *tm);
 
@@ -145,6 +145,13 @@ void				ft_cmd_pause(t_tm *tm, char *name);
 void				ft_cmd_restart(t_tm *tm, char *name);
 void				ft_cmd_status(t_tm *tm, char *name);
 void				ft_cmd_stop(t_tm *tm, char *name);
+
+/*
+**  ft_commands_2.c
+*/
+void				ft_quit(t_tm *tm);
+void				ft_reload(t_tm *tm);
+void				ft_send_json_status(t_tm *tm);
 char				*ft_cmd_help(t_tm *tm);
 
 /*
@@ -167,20 +174,18 @@ void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 /*
 **  ft_utils.c
 */
+void				ft_init_job(t_tm *tm, t_job *job);
+char				*ft_get_logo();
 void				ft_perror(char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
-void				*ft_megamalloc(int size);
-void				ft_init_job(t_tm *tm, t_job *job);
-void				ft_free_jobs(t_tm *tm);
 
+/*
+**	ft_memory_utils.c
+*/
+void				*ft_shared_malloc(int size);
 size_t				ft_tablen(char **tab);
 int					ft_tabdel(char ***tab);
 char				**ft_tabdup(char **tab);
-void				ft_quit(t_tm *tm);
-void				ft_send_json_status(t_tm *tm);
-void				ft_get_user_input(t_tm *tm);
-
-char				*ft_get_logo();
 
 /*
 **	ft_jobs_funcs.c
@@ -196,11 +201,18 @@ void				ft_append_int_val(int list[], int val);
 void				ft_append_env(t_job *job, char *key, char *value);
 
 /*
+********************************************************************************
+*/
+
+/*
 **	ft_server.c
 */
-void				ft_server_quit(t_server *server, char *error);
-t_server			ft_init_server(char *ip, int port);
-int					ft_server_loop(t_server *server, t_tm *tm);
+void				ft_server(t_tm *tm, char *ip, int port);
+
+/*
+**	ft_server_utils.c
+*/
+void				ft_server_error(t_tm *tm, char *error);
 void				ft_remove_client(t_server *server, int client_id);
 int					ft_cmd_check(char *cmd);
 

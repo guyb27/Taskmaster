@@ -13,15 +13,16 @@ CLIENT = cl_taskmaster
 SRCS_NAME =	ft_main.c			\
 			ft_exec_jobs.c		\
 			ft_commands.c		\
+			ft_commands_2.c		\
 			ft_status.c			\
 			ft_parse_config.c	\
 			ft_utils.c			\
 			ft_memory_utils.c	\
 			ft_jobs_funcs.c		\
 			ft_parse_utils.c	\
-			ft_server_loop.c	\
-			the_bazard.c		\
+			ft_server.c			\
 			ft_server_utils.c
+			
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
@@ -44,10 +45,13 @@ $(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c $(SRCS_PATH)/taskmaster.h
 	@mkdir -p $(OBJS_PATH)
 	@$(CC) $(FLAGS) $(INC) -o $@ -c $<
 
-
 val:
-	$(CC) -g $(FLAGS) $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
-	valgrind --leak-check=full --track-origins=yes ./a.out configs/lol.geo
+	$(CC) -g $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
+	valgrind --suppressions=.valgrind.supp --leak-check=full --track-origins=yes ./a.out configs/lol.geo 
+
+valsupp:
+	$(CC) -g $(TERMFLAGS) srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c libft/get_next_line/*.c
+	valgrind --suppressions=.valgrind.supp --gen-suppressions=all --leak-check=full --track-origins=yes ./a.out configs/lol.geo 127.0.0.1 4242
 
 sanitize:
 	$(CC) $(FLAGS) fsanitize=address srcs/*.c $(INC) libft/srcs/*.c libft/ft_printf/srcs/*.c
