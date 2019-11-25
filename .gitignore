@@ -35,6 +35,8 @@
 *.i*86
 *.x86_64
 *.hex
+taskmaster
+cl_taskmaster
 
 # Debug files
 *.dSYM/
@@ -51,3 +53,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .DS_Store
+.vscode
