@@ -6,7 +6,7 @@
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/09/13 22:58:19 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 08:39:29 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/28 05:26:48 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -97,6 +97,11 @@ static int		ft_init_term(const char **av)
 	return (EXIT_SUCCESS);
 }
 
+/*
+** signal(SIGWINCH, ft_handle_resize); after the line number 112
+** for resize window
+*/
+
 int				init_shell(const char **av)
 {
 	pid_t shell_pgid;
@@ -106,7 +111,6 @@ int				init_shell(const char **av)
 	{
 		while (tcgetpgrp(STDIN_FILENO) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);
-		signal(SIGWINCH, ft_handle_resize);
 		shell_pid = getpid();
 		tcsetpgrp(STDIN_FILENO, shell_pid);
 		ft_init_term(av);

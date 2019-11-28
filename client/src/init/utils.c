@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/08/23 06:42:06 by gmadec       #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 09:49:35 by gmadec      ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/28 05:21:24 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -107,4 +107,5 @@ void				ft_handle_resize(int sig)
 	g_cl.cursor_pos = g_cl.cmd ? ft_strlen(g_cl.cmd) : 0;
 	while (tmp_cursor < g_cl.cursor_pos)
 		ft_pushed_left(&sh);
+	printf("ok\n\r");
 }

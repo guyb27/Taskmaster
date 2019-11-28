@@ -6,7 +6,7 @@
 /*   By: gbarnay <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2060/00/00 18:14:45 by gbarnay      #+#   ##    ##    #+#       */
-/*   Updated: 2066/01/02 18:14:46 by gbarnay     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/28 08:14:20 by gmadec      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -69,11 +69,9 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 	else
 		ft_parse_token2(tm, token, value, current_job);
 }
-
 static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 {
 	char	*token;
-
 	token = NULL;
 	if (ft_strlen(line) > 1 && line[0] == '-')
 		ft_append_int_val(tm->jobs[current_job].exit_codes, ft_atoi(line + 1));
@@ -82,45 +80,43 @@ static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 		ft_sprintf(&token, "%.*s", ft_strchr(line, ':') - line - 1, line + 1);
 		if (ft_strlen(line) > (ft_strlen(token) + 3))
 			ft_append_env(&tm->jobs[current_job], token,
-												line + ft_strlen(token) + 3);
+					line + ft_strlen(token) + 3);
 	}
 	else if (ft_strchr(line, ':'))
 	{
 		ft_sprintf(&token, "%.*s", ft_strchr(line, ':') - line, line);
 		if (ft_strlen(line) > (size_t)((ft_strchr(line, ':') - line) + 2))
 			ft_parse_token(tm, token, line + (ft_strchr(line, ':') - line) + 2,
-																current_job);
-		else
+					current_job);
+		else if (ft_strcmp(line, "exitcodes:") && ft_strcmp(line, "env:"))
 			ft_printf("bad token: [%s]\n", token);
 	}
 	free(token);
 }
-
 void		ft_parse_config(t_tm *tm)
 {
 	int		fd;
 	char	*line;
-	int		current_job;
 	int		empty_line;
-
+	line = NULL;
 	empty_line = 0;
-	current_job = 0;
-	ft_init_job(tm, &tm->jobs[current_job]);
+	tm->jobs_cnt = 0;
+	ft_init_job(tm, &tm->jobs[tm->jobs_cnt]);
 	fd = open(tm->config, O_RDONLY);
-	while (get_next_line(fd, &line))
+	while (get_next_line(fd, &line) > 0)
 	{
 		if (line && !line[0])
 			empty_line = 1;
 		else if (line[0] != '#')
 		{
-			if (empty_line && tm->jobs[current_job].name[0])
-				ft_init_job(tm, &tm->jobs[++current_job]);
-			ft_parse_next_token(tm, line, current_job);
+			if (empty_line && tm->jobs[tm->jobs_cnt].name[0])
+				ft_init_job(tm, &tm->jobs[++tm->jobs_cnt]);
+			ft_parse_next_token(tm, line, tm->jobs_cnt);
 			empty_line = 0;
 		}
 		free(line);
 	}
 	free(line);
 	close(fd);
-	tm->jobs_cnt = current_job + 1;
+	tm->jobs[0].name[0] ? tm->jobs_cnt++ : 0;
 }
