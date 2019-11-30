@@ -38,7 +38,7 @@ static void	ft_parse_token2(t_tm *tm, char *token, char *value, int current_job)
 	else if (!ft_strcmp(token, "stderr"))
 		ft_strcpy(tm->jobs[current_job].stderr, value);
 	else
-		ft_printf("Unknown token: [%s]\n", token);
+		ft_printf("Unknown token: [%s] or bad value: [%s]\n", token, value);
 }
 
 static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
@@ -69,9 +69,11 @@ static void	ft_parse_token(t_tm *tm, char *token, char *value, int current_job)
 	else
 		ft_parse_token2(tm, token, value, current_job);
 }
+
 static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 {
 	char	*token;
+
 	token = NULL;
 	if (ft_strlen(line) > 1 && line[0] == '-')
 		ft_append_int_val(tm->jobs[current_job].exit_codes, ft_atoi(line + 1));
@@ -93,11 +95,13 @@ static void	ft_parse_next_token(t_tm *tm, char *line, int current_job)
 	}
 	free(token);
 }
+
 void		ft_parse_config(t_tm *tm)
 {
 	int		fd;
 	char	*line;
 	int		empty_line;
+
 	line = NULL;
 	empty_line = 0;
 	tm->jobs_cnt = 0;

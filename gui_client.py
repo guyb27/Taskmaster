@@ -166,6 +166,13 @@ def init_table_header():
     Label(win, text='Start/Stop:', borderwidth=1, width=10, fg="midnight blue", font='Helvetica 13 bold', anchor="w").grid(row=1, column=7, sticky="W")
     win.update()
 
+def is_json(myjson):
+    try:
+        json_object = json.loads(myjson)
+    except ValueError as e:
+        return False
+    return True
+
 def client_loop(cnt, loop):
     status = ""
     if (cnt < 2):
@@ -179,8 +186,9 @@ def client_loop(cnt, loop):
                 time.sleep(0)
                 continue
             raise ex
-    if (status[0] == '['):
-        refresh_all(json.loads(readString(status)))
+    json_str = readString(status)
+    if (status[0] == '[' and is_json(json_str)):
+        refresh_all(json.loads(json_str))
     cnt = countStrings(status)
     if (loop):
         win.after(2000, client_loop, cnt, True)
