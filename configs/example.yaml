@@ -32,7 +32,7 @@ startretries: 3
 starttime: 300
 stopsignal: 4
 stoptime: 10
-stdout: /dev/ttys001
+stdout: /dev/ttys003
 stderr: /tmp/my_ls.stderr
 env:
 _STARTED_BY: taskmaster
