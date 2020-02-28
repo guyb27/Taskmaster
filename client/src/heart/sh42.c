@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:00 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:00 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:05:26 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int				init_connection(const char *address, int port)
 static int				ft_thread_read_input(int sock, int *reload_bool)
 {
 	ft_get_user_input();
-	if (g_cl.cmd && !ft_strncmp(FT_KEY_CTRL_D, g_cl.cmd, 4))
+	if (g_cl.cmd && !ft_strncmp((char[4]){4, 0, 0, 0}, g_cl.cmd, 4))
 	{
 		close(sock);
 		get_term_raw_mode(0);

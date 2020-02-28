@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:10 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:25:46 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		ft_pushed_key_ctrl_c(t_shell *sh, char key[])
 {
 	(void)key;
-	ft_pushed_key_home_end(sh, FT_KEY_END);
+	ft_pushed_key_home_end(sh, (char[4]){27, 91, 70, 0});
 	TERMCAP("do");
 	TERMCAP("cr");
 	get_term_raw_mode(0);
@@ -30,7 +30,7 @@ int		ft_pushed_key_ctrl_d(t_shell *sh, char key[])
 	if (!g_cl.cmd)
 	{
 		get_term_raw_mode(0);
-		g_cl.cmd = ft_strdup(FT_KEY_CTRL_D);
+		g_cl.cmd = ft_strdup((char[4]){4, 0, 0, 0});
 		ft_putstr("\n");
 		return (1);
 	}

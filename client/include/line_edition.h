@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:00:23 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 06:00:23 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:30:44 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,6 @@
 
 # include "heart.h"
 
-# define FT_KEY_CTRL_C		(char[4]){   3,   0,   0,   0 }
-# define FT_KEY_CTRL_D		(char[4]){   4,   0,   0,   0 }
-# define FT_KEY_CTRL_L		(char[4]){  12,   0,   0,   0 }
-# define FT_KEY_TAB			(char[4]){   9,   0,   0,   0 }
-# define FT_KEY_ENTER		(char[4]){  10,   0,   0,   0 }
-# define FT_KEY_BCKSPACE	(char[4]){ 127,   0,   0,   0 }
-# define FT_KEY_DEL			(char[4]){  27,  91,  51, 126 }
-# define FT_KEY_HOME		(char[4]){  27,  91,  72,   0 }
-# define FT_KEY_END			(char[4]){  27,  91,  70,   0 }
-# define FT_KEY_UP			(char[4]){  27,  91,  65,   0 }
-# define FT_KEY_DOWN		(char[4]){  27,  91,  66,   0 }
-# define FT_KEY_LEFT		(char[4]){  27,  91,  68,   0 }
 # define FT_KEY_RIGHT		(char[4]){  27,  91,  67,   0 }
 
 # define FT_KEY_ALT_UP		(char[4]){  27,  27,  91,  65 }

@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:10 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:29:22 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,23 @@ int		ft_input_check(char key[], char buf[])
 
 void	ft_init_input_keys(t_shell *sh)
 {
-	ft_memcpy(sh->keys[0].key, FT_KEY_BCKSPACE, 4);
+	ft_memcpy(sh->keys[0].key, (char[4]){127, 0, 0, 0}, 4);
 	sh->keys[0].f = &ft_pushed_key_backspace;
-	ft_memcpy(sh->keys[1].key, FT_KEY_ENTER, 4);
+	ft_memcpy(sh->keys[1].key, (char[4]){10, 0, 0, 0}, 4);
 	sh->keys[1].f = &ft_pushed_key_enter;
 	ft_memcpy(sh->keys[2].key, FT_KEY_LEFTRIGHT, 4);
 	sh->keys[2].f = &ft_pushed_left_right;
 	ft_memcpy(sh->keys[3].key, FT_KEY_UPDOWN, 4);
 	sh->keys[3].f = &ft_pushed_up_down;
-	ft_memcpy(sh->keys[4].key, FT_KEY_CTRL_C, 4);
+	ft_memcpy(sh->keys[4].key, (char[4]){3, 0, 0, 0}, 4);
 	sh->keys[4].f = &ft_pushed_key_ctrl_c;
-	ft_memcpy(sh->keys[5].key, FT_KEY_CTRL_D, 4);
+	ft_memcpy(sh->keys[5].key, (char[4]){4, 0, 0, 0}, 4);
 	sh->keys[5].f = &ft_pushed_key_ctrl_d;
-	ft_memcpy(sh->keys[6].key, FT_KEY_CTRL_L, 4);
+	ft_memcpy(sh->keys[6].key, (char[4]){12, 0, 0, 0}, 4);
 	sh->keys[6].f = &ft_pushed_key_ctrl_l;
-	ft_memcpy(sh->keys[7].key, FT_KEY_TAB, 4);
+	ft_memcpy(sh->keys[7].key, (char[4]){9, 0, 0, 0}, 4);
 	sh->keys[7].f = &ft_pushed_key_tab;
-	ft_memcpy(sh->keys[8].key, FT_KEY_DEL, 4);
+	ft_memcpy(sh->keys[8].key, (char[4]){27, 91, 51, 126}, 4);
 	sh->keys[8].f = &ft_pushed_key_del;
 	ft_memcpy(sh->keys[9].key, FT_KEY_ALT_UD, 4);
 	sh->keys[9].f = &ft_pushed_key_altup_altdown;
@@ -55,10 +55,10 @@ void	ft_init_input_keys(t_shell *sh)
 
 int		ft_pushed_key_home_end(t_shell *sh, char key[])
 {
-	if (!ft_strcmp(FT_KEY_HOME, key))
+	if (!ft_strcmp((char[4]){27, 91, 72, 0}, key))
 		while (g_cl.cursor_pos > 0)
-			ft_pushed_left_right(sh, FT_KEY_LEFT);
-	if (!ft_strcmp(FT_KEY_END, key))
+			ft_pushed_left_right(sh, (char[4]){27, 91, 68, 0});
+	if (!ft_strcmp((char[4]){27, 91, 70, 0}, key))
 		while (g_cl.cursor_pos < (int)ft_strlen(g_cl.cmd))
 			ft_pushed_left_right(sh, FT_KEY_RIGHT);
 	return (0);
@@ -68,7 +68,7 @@ int		ft_pushed_key_enter(t_shell *sh, char key[])
 {
 	if (sh->tabu != -1)
 		return (ft_pushed_key_tab(sh, key));
-	ft_pushed_key_home_end(sh, FT_KEY_END);
+	ft_pushed_key_home_end(sh, (char[4]){27, 91, 70, 0});
 	if (g_cl.cmd && ft_str_isblank(g_cl.cmd))
 	{
 		free(g_cl.cmd);

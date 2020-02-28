@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:06 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:06 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:12:45 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,4 @@ void				ft_handle_resize(int sig)
 	g_cl.cursor_pos = g_cl.cmd ? ft_strlen(g_cl.cmd) : 0;
 	while (tmp_cursor < g_cl.cursor_pos)
 		ft_pushed_left(&sh);
-	printf("ok\n\r");
 }

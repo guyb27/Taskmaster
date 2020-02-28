@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:10 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/28 07:30:19 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int			ft_pushed_key_altleft_altright(t_shell *sh, char key[])
 		return (0);
 	while (g_cl.cursor_pos != i)
 		!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ?
-		ft_pushed_left_right(sh, FT_KEY_LEFT) :
+		ft_pushed_left_right(sh, (char[4]){27, 91, 68, 0}) :
 		ft_pushed_left_right(sh, FT_KEY_RIGHT);
 	return (0);
 }
@@ -88,7 +88,7 @@ int			ft_pushed_left_right(t_shell *sh, char key[])
 {
 	if (sh->tabu != -1)
 		return (ft_pushed_key_tab(sh, key));
-	else if (!ft_strcmp(FT_KEY_LEFT, key))
+	else if (!ft_strcmp((char[4]){27, 91, 68, 0}, key))
 		ft_pushed_left(sh);
 	else if (!ft_strcmp(FT_KEY_RIGHT, key))
 		ft_pushed_right(sh);
