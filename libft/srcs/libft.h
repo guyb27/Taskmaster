@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:06:20 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 06:06:20 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:39:16 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ extern int		g_log_lvl;
 # define FUNC		__func__
 # define LINE		__LINE__
 # define LOG(log, msg)		ft_log_var(log, FUNC, msg""KRESET, "")
-# define LOGX(log, msg, x)	ft_log_var(log, FUNC, msg""KRESET, (void*)(size_t)x)
-# define LOGINIT()			ft_get_log_params(&argc, argv)
+//# define LOGX(log, msg, x)	ft_log_var(log, FUNC, msg""KRESET, (void*)(size_t)x)
 
 # define FT_ABS(x)	(x < 0 ? -n : x)
 
@@ -252,5 +251,6 @@ int					ft_get_log_params(int *argc, char *argv[]);
 char				*ft_str_replace(char *haystack, char *needle,
 									char *new_word);
 int					ft_strstr_int(const char *haystack, const char *needle);
+void				ft_logx(int log_level, char *msg, char *x);
 
 #endif
