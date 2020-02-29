@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:54:41 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:54:41 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:20:57 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ void			place_cursor_before(t_shell *sh)
 	while (g_cl.cursor_pos)
 		ft_pushed_left(sh);
 	g_cl.cursor_pos = i;
-	TERMCAP("cr");
+	termcap("cr");
 	i = ft_count_line_cmd(sh);
 	while (i + 1)
 	{
-		TERMCAP("dl");
+		termcap("dl");
 		i--;
 	}
 }
@@ -62,7 +62,7 @@ void			place_cursor_after(t_shell *sh)
 	i = ft_count_line_cmd(sh);
 	while (i + 1)
 	{
-		TERMCAP("al");
+		termcap("al");
 		i--;
 	}
 	ft_putstr(g_cl.prompt);

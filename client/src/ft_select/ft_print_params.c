@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:54:42 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:54:42 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:20:57 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void		ft_print_params(t_select *t)
 	{
 		if (i[0] < t->ws.ws_row + t->pose_min)
 		{
-			i[0] > t->pose_min ? TERMCAP("sf") : 0;
-			TERMCAP("cr");
+			i[0] > t->pose_min ? termcap("sf") : 0;
+			termcap("cr");
 		}
 		i[1] = -1;
 		while (++i[1] < t->pbl && i[0] + (t->nbl * i[1]) < t->nbp)
@@ -102,6 +102,6 @@ void		ft_print_params(t_select *t)
 		}
 		i[0]++;
 	}
-	TERMCAP("cr");
+	termcap("cr");
 	ft_place_cursor(i[0] - 1, 0, 0);
 }

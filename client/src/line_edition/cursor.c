@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:10 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:20:01 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	ft_pushed_right(t_shell *sh)
 	{
 		pos = ft_recup_cursor_pos(sh, &zell, &right_xpos);
 		if (right_xpos > 0)
-			TERMCAP("nd");
+			termcap("nd");
 		else if (right_xpos == 0)
 		{
-			TERMCAP("sf");
-			TERMCAP("cr");
+			termcap("sf");
+			termcap("cr");
 		}
 		g_cl.cursor_pos++;
 	}
@@ -44,15 +44,15 @@ void	ft_pushed_left(t_shell *sh)
 		pos = ft_recup_cursor_pos(sh, &left_xpos, &zell);
 		if (pos == 0)
 		{
-			TERMCAP("up");
+			termcap("up");
 			while (pos < left_xpos)
 			{
-				TERMCAP("nd");
+				termcap("nd");
 				pos++;
 			}
 		}
 		else
-			TERMCAP("le");
+			termcap("le");
 		g_cl.cursor_pos--;
 	}
 }

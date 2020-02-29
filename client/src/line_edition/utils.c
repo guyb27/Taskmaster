@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/29 03:12:35 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:22:49 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		ft_putcmd(t_shell *sh, int new_pos)
 
 int			termcap(char *str)
 {
-	tputs(tputs(tgetstr(str, NULL), 1, ft_putchar));
+	return (tputs(tgetstr(str, NULL), 1, ft_putchar));
 }
 
 int			ft_count_line_cmd(t_shell *sh)

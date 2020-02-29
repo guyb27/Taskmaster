@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:54:42 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:54:42 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:20:57 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			tabulator(t_shell **ed, int version, char key[])
 	else if (version == 0 ||
 			(version == 1 && key[0] == 10 && key[1] == 0 && (*ed)->tabu >= 0))
 	{
-		TERMCAP("cd");
+		termcap("cd");
 		ft_free_t_tab(&(*ed)->t);
 		ft_free_t_select(&(*ed)->sel);
 		(*ed)->tabu = -1;

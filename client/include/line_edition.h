@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:00:23 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/29 03:13:07 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:23:07 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "heart.h"
 
-# define TERMCAP(x) tputs(tgetstr(x, NULL), 1, ft_putchar)
 # define WHITE "\033[7;49;37"
 # define END "\033[0m"
 # define HISTSIZE 500

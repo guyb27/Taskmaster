@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:06 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 07:12:45 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:21:06 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void				ft_handle_resize(int sig)
 	ft_get_cols(&sh.ws);
 	sh.prompt_len = g_cl.cmd ? ft_strlen(g_cl.cmd) : 0;
 	tmp_cursor = g_cl.cursor_pos;
-	TERMCAP("cl");
+	termcap("cl");
 	ft_putstr(g_cl.prompt);
 	g_cl.cursor_pos = 0;
 	g_cl.cmd ? ft_reprint_cmd(&sh) : 0;

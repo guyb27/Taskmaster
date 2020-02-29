@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:55:10 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:21:10 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		ft_pushed_key_backspace(t_shell *sh, char key[])
 		while (g_cl.cursor_pos)
 			ft_pushed_left(sh);
 		ft_chardel_at(&g_cl.cmd, tmp_cursor - 1);
-		TERMCAP("cd");
+		termcap("cd");
 		if (g_cl.cmd)
 		{
 			ft_reprint_cmd(sh);
@@ -47,7 +47,7 @@ int		ft_pushed_key_del(t_shell *sh, char key[])
 		while (g_cl.cursor_pos)
 			ft_pushed_left(sh);
 		ft_chardel_at(&g_cl.cmd, tmp_cursor);
-		TERMCAP("cd");
+		termcap("cd");
 		if (g_cl.cmd)
 		{
 			ft_reprint_cmd(sh);

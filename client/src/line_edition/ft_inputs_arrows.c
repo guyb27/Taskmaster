@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/29 03:01:25 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:24:54 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ft_pushed_key_altup_altdown_check(t_shell *sh, char *key, int lr[2],
 	if (!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ?
 												!g_cl.cursor_pos : lr[1] == -1)
 	{
-		TERMCAP("rc");
+		termcap("rc");
 		return (1);
 	}
 	else
@@ -34,8 +34,8 @@ static int	ft_pushed_key_altup_altdown_check(t_shell *sh, char *key, int lr[2],
 		while (ft_recup_cursor_pos(sh, &lr[0], &lr[1]) != target &&
 		(!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ? g_cl.cursor_pos :
 		lr[1] != -1 && lr[1] != 0))
-			!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ? ft_pushed_left(sh) :
-				ft_pushed_right(sh);
+			!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ? ft_pushed_left(sh)
+														: ft_pushed_right(sh);
 	}
 	return (0);
 }
@@ -48,7 +48,7 @@ int			ft_pushed_key_altup_altdown(t_shell *sh, char key[])
 
 	ft_memset(lr, 0, sizeof(lr));
 	cur_pos = g_cl.cursor_pos;
-	TERMCAP("sc");
+	termcap("sc");
 	target = ft_recup_cursor_pos(sh, &lr[0], &lr[1]);
 	while (!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ?
 	g_cl.cursor_pos && lr[1] != 0 : (lr[1] != -1 && lr[1] != 0))

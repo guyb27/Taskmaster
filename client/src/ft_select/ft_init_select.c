@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:54:41 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 05:54:41 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:20:56 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ void			ft_init_select(t_shell **ed)
 		i = (*ed)->sel->nbl;
 		while (i > 0)
 		{
-			TERMCAP("sf");
+			termcap("sf");
 			i--;
 		}
 		i = (*ed)->sel->nbl;
 		while (i > 0)
 		{
-			TERMCAP("up");
+			termcap("up");
 			i--;
 		}
 	}

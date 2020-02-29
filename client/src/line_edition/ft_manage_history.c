@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 07:22:48 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:21:10 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void		the_last_of_dowm(t_shell *sh)
 {
 	sh->hist = -2;
 	ft_pushed_key_home_end(sh, (char[4]){27, 91, 72, 0});
-	TERMCAP("cd");
+	termcap("cd");
 	ft_strdel(&g_cl.cmd);
 	if (sh->tmp_line)
 	{
@@ -53,7 +53,7 @@ static void		heart_of_hist_search(t_shell *sh, char **history, char key[])
 	else
 		sh->hist--;
 	ft_pushed_key_home_end(sh, (char[4]){27, 91, 72, 0});
-	TERMCAP("cd");
+	termcap("cd");
 	if (sh->hist >= 0)
 	{
 		ft_strdel(&g_cl.cmd);
