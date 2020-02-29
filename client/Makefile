@@ -6,7 +6,7 @@
 #    By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/11/24 18:33:54 by dzonda       #+#   ##    ##    #+#        #
-#    Updated: 2019/11/25 04:21:40 by gmadec      ###    #+. /#+    ###.fr      #
+#    Updated: 2020/02/29 03:28:49 by gmadec           ###   ########lyon.fr    #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -29,7 +29,7 @@ INCS_PATH = ./include/
 LIB_PATH = ./libft/
 
 SRCS_NAME =	\
-			heart/sh42.c \
+			heart/cl_task.c \
 			heart/utils.c \
 			heart/ft_get_tab_elems.c \
 			init/init_shell.c \
