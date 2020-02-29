@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:05:20 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 06:05:20 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 04:21:40 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ char		*ftpf_dtoa(double n, unsigned int precision)
 	unsigned int	prec;
 
 	prec = precision ? precision : 6;
-	int_part = (intmax_t)FT_ABS(n);
-	dec_part = (float)(FT_ABS(n) - (float)int_part) * ft_math_pow(10, prec);
+	int_part = (intmax_t)ft_abs(n);
+	dec_part = (float)(ft_abs(n) - (float)int_part) * ft_math_pow(10, prec);
 	if (dec_part < 0)
-		dec_part = (FT_ABS(n) - (long)FT_ABS(n)) * ft_math_pow(10, prec);
+		dec_part = (ft_abs(n) - (long)ft_abs(n)) * ft_math_pow(10, prec);
 	tmp = int_part;
 	len = 0;
 	while (tmp && ++len)

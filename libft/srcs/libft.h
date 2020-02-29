@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:06:20 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/29 03:39:16 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 04:19:59 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,6 @@ extern int		g_log_lvl;
 
 # define FUNC		__func__
 # define LINE		__LINE__
-# define LOG(log, msg)		ft_log_var(log, FUNC, msg""KRESET, "")
-//# define LOGX(log, msg, x)	ft_log_var(log, FUNC, msg""KRESET, (void*)(size_t)x)
-
-# define FT_ABS(x)	(x < 0 ? -n : x)
-
-# define HI_NIBBLE(b)	(((b) >> 4) & 0x0F)
-# define LO_NIBBLE(b)	((b) & 0x0F)
 
 /*
 **	Console Text Style
