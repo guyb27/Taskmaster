@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 06:00:23 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 07:30:44 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:13:07 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,7 @@
 
 # include "heart.h"
 
-# define FT_KEY_RIGHT		(char[4]){  27,  91,  67,   0 }
-
-# define FT_KEY_ALT_UP		(char[4]){  27,  27,  91,  65 }
-# define FT_KEY_ALT_DOWN	(char[4]){  27,  27,  91,  66 }
-# define FT_KEY_ALT_LEFT	(char[4]){  27,  27,  91,  68 }
-# define FT_KEY_ALT_RIGHT	(char[4]){  27,  27,  91,  67 }
-
-# define FT_KEY_UPDOWN		(char[4]){  27,  91, -101,    0 }
-# define FT_KEY_LEFTRIGHT	(char[4]){  27,  91, -102,    0 }
-# define FT_KEY_HOME_END	(char[4]){  27,  91, -103,    0 }
-# define FT_KEY_ALT_UD		(char[4]){  27,  27,   91, -101 }
-# define FT_KEY_ALT_LR		(char[4]){  27,  27,   91, -102 }
-
 # define TERMCAP(x) tputs(tgetstr(x, NULL), 1, ft_putchar)
-# define TERMCAPGO(x, y) tputs(tgoto(tgetstr(x, NULL), 0, y), 1, ft_putchar)
 # define WHITE "\033[7;49;37"
 # define END "\033[0m"
 # define HISTSIZE 500
@@ -105,5 +91,6 @@ int				get_term_raw_mode(int mode);
 void			ft_get_cols(t_ws *ws);
 void			history_save(char ***history, char *news, int version, char *s);
 void			history_get(t_shell *sh, char key[]);
+int				termcap(char *str);
 
 #endif

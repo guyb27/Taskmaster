@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 07:29:22 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:04:18 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	ft_init_input_keys(t_shell *sh)
 	sh->keys[0].f = &ft_pushed_key_backspace;
 	ft_memcpy(sh->keys[1].key, (char[4]){10, 0, 0, 0}, 4);
 	sh->keys[1].f = &ft_pushed_key_enter;
-	ft_memcpy(sh->keys[2].key, FT_KEY_LEFTRIGHT, 4);
+	ft_memcpy(sh->keys[2].key, (char[4]){ 27, 91, -102, 0}, 4);
 	sh->keys[2].f = &ft_pushed_left_right;
-	ft_memcpy(sh->keys[3].key, FT_KEY_UPDOWN, 4);
+	ft_memcpy(sh->keys[3].key, (char[4]){ 27, 91, -101, 0}, 4);
 	sh->keys[3].f = &ft_pushed_up_down;
 	ft_memcpy(sh->keys[4].key, (char[4]){3, 0, 0, 0}, 4);
 	sh->keys[4].f = &ft_pushed_key_ctrl_c;
@@ -44,11 +44,11 @@ void	ft_init_input_keys(t_shell *sh)
 	sh->keys[7].f = &ft_pushed_key_tab;
 	ft_memcpy(sh->keys[8].key, (char[4]){27, 91, 51, 126}, 4);
 	sh->keys[8].f = &ft_pushed_key_del;
-	ft_memcpy(sh->keys[9].key, FT_KEY_ALT_UD, 4);
+	ft_memcpy(sh->keys[9].key, (char[4]){ 27, 27, 91, -101}, 4);
 	sh->keys[9].f = &ft_pushed_key_altup_altdown;
-	ft_memcpy(sh->keys[10].key, FT_KEY_ALT_LR, 4);
+	ft_memcpy(sh->keys[10].key, (char[4]){ 27, 27, 91, -102}, 4);
 	sh->keys[10].f = &ft_pushed_key_altleft_altright;
-	ft_memcpy(sh->keys[11].key, FT_KEY_HOME_END, 4);
+	ft_memcpy(sh->keys[11].key, (char[4]){ 27, 91, -103, 0}, 4);
 	sh->keys[11].f = &ft_pushed_key_home_end;
 	sh->keys[12].f = NULL;
 }
@@ -60,7 +60,7 @@ int		ft_pushed_key_home_end(t_shell *sh, char key[])
 			ft_pushed_left_right(sh, (char[4]){27, 91, 68, 0});
 	if (!ft_strcmp((char[4]){27, 91, 70, 0}, key))
 		while (g_cl.cursor_pos < (int)ft_strlen(g_cl.cmd))
-			ft_pushed_left_right(sh, FT_KEY_RIGHT);
+			ft_pushed_left_right(sh, (char[4]){27, 91, 67, 0});
 	return (0);
 }
 

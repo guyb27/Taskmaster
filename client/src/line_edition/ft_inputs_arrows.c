@@ -6,7 +6,7 @@
 /*   By: gmadec <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 05:55:10 by gmadec            #+#    #+#             */
-/*   Updated: 2020/02/28 07:30:19 by gmadec           ###   ########lyon.fr   */
+/*   Updated: 2020/02/29 03:01:25 by gmadec           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 static int	ft_pushed_key_altup_altdown_check(t_shell *sh, char *key, int lr[2],
 		int target)
 {
-	if (!ft_strncmp(FT_KEY_ALT_UP, key, 4) ? !g_cl.cursor_pos : lr[1] == -1)
+	if (!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ?
+												!g_cl.cursor_pos : lr[1] == -1)
 	{
 		TERMCAP("rc");
 		return (1);
 	}
 	else
 	{
-		if (!ft_strncmp(FT_KEY_ALT_UP, key, 4))
+		if (!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4))
 		{
 			if (lr[0] < target)
 				target = lr[0];
@@ -31,9 +32,9 @@ static int	ft_pushed_key_altup_altdown_check(t_shell *sh, char *key, int lr[2],
 		else
 			ft_pushed_right(sh);
 		while (ft_recup_cursor_pos(sh, &lr[0], &lr[1]) != target &&
-		(!ft_strncmp(FT_KEY_ALT_UP, key, 4) ? g_cl.cursor_pos :
+		(!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ? g_cl.cursor_pos :
 		lr[1] != -1 && lr[1] != 0))
-			!ft_strncmp(FT_KEY_ALT_UP, key, 4) ? ft_pushed_left(sh) :
+			!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ? ft_pushed_left(sh) :
 				ft_pushed_right(sh);
 	}
 	return (0);
@@ -49,10 +50,10 @@ int			ft_pushed_key_altup_altdown(t_shell *sh, char key[])
 	cur_pos = g_cl.cursor_pos;
 	TERMCAP("sc");
 	target = ft_recup_cursor_pos(sh, &lr[0], &lr[1]);
-	while (!ft_strncmp(FT_KEY_ALT_UP, key, 4) ?
+	while (!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ?
 	g_cl.cursor_pos && lr[1] != 0 : (lr[1] != -1 && lr[1] != 0))
 	{
-		!ft_strncmp(FT_KEY_ALT_UP, key, 4) ?
+		!ft_strncmp((char[4]){27, 27, 91, 65}, key, 4) ?
 		ft_pushed_left(sh) : ft_pushed_right(sh);
 		ft_recup_cursor_pos(sh, &lr[0], &lr[1]);
 	}
@@ -66,21 +67,21 @@ int			ft_pushed_key_altleft_altright(t_shell *sh, char key[])
 	int i;
 
 	i = g_cl.cursor_pos;
-	while (!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ? i > 0 : i <
+	while (!ft_strncmp((char[4]){27, 27, 91, 68}, key, 4) ? i > 0 : i <
 			(int)ft_strlen(g_cl.cmd))
 	{
 		if ((i == 0 || ft_isspace(g_cl.cmd[i - 1])) &&
 	!ft_isspace(g_cl.cmd[i]) && ft_isprint(g_cl.cmd[i]) && i != g_cl.cursor_pos)
 			break ;
-		!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ? i-- : i++;
+		!ft_strncmp((char[4]){27, 27, 91, 68}, key, 4) ? i-- : i++;
 	}
 	if (!((i == 0 || ft_isspace(g_cl.cmd[i - 1])) && !ft_isspace(g_cl.cmd[i]) &&
 				ft_isprint(g_cl.cmd[i]) && i != g_cl.cursor_pos))
 		return (0);
 	while (g_cl.cursor_pos != i)
-		!ft_strncmp(FT_KEY_ALT_LEFT, key, 4) ?
+		!ft_strncmp((char[4]){27, 27, 91, 68}, key, 4) ?
 		ft_pushed_left_right(sh, (char[4]){27, 91, 68, 0}) :
-		ft_pushed_left_right(sh, FT_KEY_RIGHT);
+		ft_pushed_left_right(sh, (char[4]){27, 91, 67, 0});
 	return (0);
 }
 
@@ -90,7 +91,7 @@ int			ft_pushed_left_right(t_shell *sh, char key[])
 		return (ft_pushed_key_tab(sh, key));
 	else if (!ft_strcmp((char[4]){27, 91, 68, 0}, key))
 		ft_pushed_left(sh);
-	else if (!ft_strcmp(FT_KEY_RIGHT, key))
+	else if (!ft_strcmp((char[4]){27, 91, 67, 0}, key))
 		ft_pushed_right(sh);
 	return (0);
 }
