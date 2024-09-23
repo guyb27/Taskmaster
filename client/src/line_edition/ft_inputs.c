@@ -26,7 +26,11 @@ int		ft_input_check(char key[], char buf[])
 
 void	ft_init_input_keys(t_shell *sh)
 {
-	ft_memcpy(sh->keys[0].key, (char[4]){127, 0, 0, 0}, 4);
+	//TERM_PROGRAM=vscode
+	if (ft_getenv("TERM_PROGRAM", __environ) && !strcmp(ft_getenv("TERM_PROGRAM", __environ), "vscode"))
+		ft_memcpy(sh->keys[0].key, (char[4]){127, 0, 0, 0}, 4);
+	else
+		ft_memcpy(sh->keys[0].key, (char[4]){8, 0, 0, 0}, 4);
 	sh->keys[0].f = &ft_pushed_key_backspace;
 	ft_memcpy(sh->keys[1].key, (char[4]){10, 0, 0, 0}, 4);
 	sh->keys[1].f = &ft_pushed_key_enter;

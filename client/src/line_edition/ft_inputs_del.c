@@ -39,6 +39,7 @@ int		ft_pushed_key_del(t_shell *sh, char key[])
 {
 	int		tmp_cursor;
 
+	printf("DEL\n");
 	(void)key;
 	if (g_cl.cmd && g_cl.cursor_pos >= 0 &&
 			g_cl.cursor_pos != (int)ft_strlen(g_cl.cmd))
