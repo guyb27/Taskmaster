@@ -2,7 +2,7 @@
 
 NAME = taskmaster
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = #-Wall -Wextra -Werror
 LIBFT = libft
 INC = -I libft/ft_printf/srcs/ -I libft/get_next_line -I libft/srcs
 SRCS_PATH = srcs

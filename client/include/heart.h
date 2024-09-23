@@ -59,7 +59,7 @@ typedef struct	s_cl
 	char		process[100][100];
 }				t_cl;
 
-t_cl			g_cl;
+extern t_cl			g_cl;
 
 int				heart_of_101sh(char *line, int fd_base);
 void			signal_shell(void);

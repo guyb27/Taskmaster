@@ -12,6 +12,8 @@
 
 #include "heart.h"
 
+t_cl g_cl;
+
 static int				init_connection(const char *address, int port)
 {
 	int					sock;

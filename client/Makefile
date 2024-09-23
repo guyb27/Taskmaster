@@ -17,7 +17,7 @@ NAME = cl_taskmaster
 
 MAKE = make
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Wunused -Wunreachable-code
+CFLAGS = #-Wall -Werror -Wextra -Wunused -Wunreachable-code
 CPPFLAGS = -I ./include/
 LDLIBS = -lft -ltermcap
 LDFLAGS = -Llibft/

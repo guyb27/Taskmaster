@@ -60,7 +60,7 @@ static int		lex_blank(const char *s, int i, int *find, int *cursor)
 
 int				lex_tab(const char *s, int i, int *find, int *cursor)
 {
-	t_tab_lex	t;
+	t_tab_lex       t;
 
 	t.c = s[i];
 	t.i = i;
