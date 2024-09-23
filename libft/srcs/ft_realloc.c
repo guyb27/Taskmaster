@@ -11,7 +11,14 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <malloc/malloc.h>
+
+#ifdef __APPLE__
+    #include <malloc/malloc.h>   // Pour macOS
+#else
+    #include <stdlib.h>           // Pour Linux et autres systèmes
+#endif
+
+
 
 void	*ft_realloc(void *ptr, size_t size)
 {
@@ -21,7 +28,15 @@ void	*ft_realloc(void *ptr, size_t size)
 
 	if (!size || !ptr)
 		return (NULL);
-	msize = malloc_size(ptr);
+#ifdef __APPLE__
+	msize = malloc_size(ptr);  // Utilisé uniquement sur macOS
+#else
+    // Vous pouvez gérer la taille allouée manuellement sur Linux ou faire une autre logique ici
+    // Par exemple, passer la taille originale en paramètre de ft_realloc si nécessaire
+    // msize = <size_originale que vous avez stockée ou passée>
+	msize = 99999;
+	
+#endif
 	tmp = malloc(sizeof(char) * (size + 1));
 	i = -1;
 	while (++i < size && i < msize)

@@ -14,7 +14,7 @@
 
 int			ftpf_concat(t_flags *flags, const char *str, size_t size)
 {
-	if (!(*flags->buff = ft_realloc(*flags->buff,
+	if (!(*flags->buff = realloc(*flags->buff,
 					(g_bufflen + size + 3) * sizeof(char))))
 		return (0);
 	ft_memcpy(*flags->buff + g_bufflen, str, size);

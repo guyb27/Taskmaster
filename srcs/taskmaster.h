@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <errno.h>
+# include <time.h>
 
 /*
 ********************************************************************************
@@ -175,7 +176,7 @@ void				ft_get_job_status(t_tm *tm, int id_job, t_status *status);
 */
 void				ft_init_job(t_tm *tm, t_job *job);
 char				*ft_get_logo();
-void				ft_perror(char *msg);
+void				ft_perror(const char *msg);
 unsigned int		ft_sleep(unsigned int seconds);
 
 /*
